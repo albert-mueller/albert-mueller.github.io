@@ -1,70 +1,54 @@
-/* 主样式文件 - 优化性能和兼容性 */
-:root {
-    --day-bg: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
-    --night-bg: linear-gradient(120deg, #434343 0%, #000000 100%);
-    --day-text: #333;
-    --night-text: #fff;
-    --transition: all 0.5s ease;
-    --highlight-color: #66a6ff;
-    --highlight-color-night: #89f7fe;
+/* ===== PyQuick Page Styles - Simplified ===== */
+
+/* Import Unified Variables */
+@import url('/static/css/variables.css');
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    margin: 0;
+    background: var(--bg-gradient);
+    color: var(--text-primary);
     font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
     min-height: 100vh;
-    background-size: 200% 200%; /* 减少背景尺寸，提高性能 */
-    animation: gradientBG 20s ease infinite; /* 延长动画时间，减少CPU使用 */
-    color: var(--day-text);
-    transition: var(--transition);
-    background: var(--day-bg);
-    /* 优化字体渲染 */
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* 优化渲染性能 */
-    will-change: background, color;
 }
 
-/* 页面头部样式 */
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    animation: fadeIn 0.5s ease;
+}
+
+/* Page Header */
 .page-header {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    margin-bottom: 3rem;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-    will-change: transform, backdrop-filter;
-    opacity: 0;
-    transform: translateY(-20px);
-    animation: slideDown 0.8s ease-out 0.5s forwards;
-}
-
-.page-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(102, 166, 255, 0.1), transparent);
-    transition: left 0.8s ease;
-}
-
-.page-header:hover::before {
-    left: 100%;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-xl);
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-sm);
 }
 
 .header-icon {
-    font-size: 4rem;
-    color: var(--highlight-color);
-    animation: float 3s ease-in-out infinite;
-    will-change: transform;
+    font-size: 3rem;
+    color: var(--primary-color);
 }
 
 .header-content {
@@ -72,59 +56,147 @@ body {
 }
 
 .page-title {
-    font-size: 3rem;
-    margin: 0 0 0.5rem 0;
-    background: linear-gradient(135deg, var(--highlight-color), #66a6ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 2.5rem;
+    margin: 0 0 var(--space-sm) 0;
+    color: var(--text-primary);
 }
 
 .page-subtitle {
-    font-size: 1.2rem;
-    margin: 0 0 1rem 0;
-    color: var(--day-text);
-    opacity: 0.8;
+    font-size: 1.1rem;
+    margin: 0 0 var(--space-md) 0;
+    color: var(--text-secondary);
 }
 
 .version-badge {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--space-sm);
 }
 
 .badge {
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .badge.project {
-    background: linear-gradient(135deg, var(--highlight-color), #66a6ff);
+    background: var(--primary-color);
     color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .badge.version {
-    background: rgba(102, 166, 255, 0.1);
-    color: var(--highlight-color);
-    border: 2px solid rgba(102, 166, 255, 0.3);
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
-/* 响应式设计 */
+/* Sections */
+.section {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin: var(--space-lg) 0;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+}
+
+.section:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+}
+
+.section p {
+    margin-bottom: var(--space-md);
+    color: var(--text-secondary);
+}
+
+.section ul {
+    margin-left: var(--space-xl);
+    margin-bottom: var(--space-md);
+}
+
+.section li {
+    margin-bottom: var(--space-sm);
+    color: var(--text-secondary);
+}
+
+/* Features Grid */
+.features {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.feature {
+    flex: 1 1 30%;
+    min-width: 200px;
+    padding: var(--space-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+}
+
+.feature:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.feature h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-sm);
+    color: var(--text-primary);
+}
+
+.feature ul {
+    margin-left: var(--space-md);
+}
+
+.feature li {
+    font-size: 0.9rem;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: var(--space-xl);
+    margin-top: var(--space-2xl);
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--card-border);
+}
+
+.footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color var(--transition-normal);
+}
+
+.footer a:hover {
+    color: var(--primary-hover);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .page-header {
         flex-direction: column;
         text-align: center;
-        gap: 1rem;
-        padding: 1.5rem;
+        gap: var(--space-md);
+        padding: var(--space-lg);
     }
     
     .header-icon {
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
     
     .page-title {
@@ -138,296 +210,43 @@ body {
     .version-badge {
         justify-content: center;
     }
+    
+    .container {
+        padding: var(--space-lg);
+    }
+    
+    .section {
+        padding: var(--space-lg);
+    }
+    
+    .feature {
+        flex: 1 1 45%;
+    }
 }
 
 @media (max-width: 480px) {
     .page-header {
-        padding: 1rem;
+        padding: var(--space-md);
     }
     
     .header-icon {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
     
     .page-title {
         font-size: 1.5rem;
     }
     
-    .badge {
-        font-size: 0.8rem;
-        padding: 0.2rem 0.6rem;
-    }
-}
-
-body.night {
-    background: var(--night-bg);
-    color: var(--night-text);
-}
-
-.header {
-    text-align: center;
-    padding: 2rem;
-    background-color: rgba(102, 166, 255, 0.3); /* 修改为浅蓝色半透明背景 */
-    color: #ffffff;
-    opacity: 0;
-    transform: translateY(-20px);
-    animation: slideDown 0.8s ease-out 0.5s forwards;
-    border-radius: 15px; /* 添加圆角 */
-    max-width: 80%; /* 添加此行，将标题宽度调整为80% */
-    margin: 0 auto; /* 添加此行，使标题居中 */
-    /* 优化渲染性能 */
-    will-change: transform, opacity;
-    transform: translateZ(0);
-}
-
-@keyframes slideDown {
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.logo {
-    width: 100px;
-    height: 100px;
-    margin: 1rem 0;
-    animation: rotateLogo 2s ease-in-out 1, breathingLogo 4s ease-in-out infinite; /* 延长呼吸动画时间 */
-    /* 优化渲染性能 */
-    will-change: transform;
-    transform: translateZ(0);
-}
-
-@keyframes rotateLogo {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes breathingLogo {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05); /* 减少缩放幅度，提高性能 */
-    }
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 1s forwards;
-    /* 优化渲染性能 */
-    will-change: transform, opacity;
-}
-
-@keyframes fadeInUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.section {
-    background: rgba(137, 247, 254, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 2rem;
-    margin: 2rem 0;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: breathingSection 4s ease-in-out infinite; /* 延长动画时间 */
-    /* 优化渲染性能 */
-    will-change: transform, box-shadow;
-    transform: translateZ(0);
-}
-
-.section:hover {
-    transform: translateY(-3px); /* 减少移动距离，提高性能 */
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* 简化阴影效果 */
-}
-
-.feature {
-    flex: 1 1 30%;
-    margin: 1rem;
-    padding: 1rem;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: breathingFeature 4s ease-in-out infinite; /* 延长动画时间 */
-    /* 优化渲染性能 */
-    will-change: transform, box-shadow;
-    transform: translateZ(0);
-}
-
-.feature:hover {
-    transform: translateY(-3px); /* 减少移动距离，提高性能 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* 简化阴影效果 */
-}
-
-.features {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.footer {
-    text-align: center;
-    padding: 2rem 1rem;
-    margin-top: 4rem;
-    background-color: rgba(102, 166, 255, 0.3);
-    color: #ffffff;
-    opacity: 0;
-    animation: fadeIn 1s ease-out 1.5s forwards;
-    border-radius: 15px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-    /* 优化渲染性能 */
-    will-change: transform, box-shadow, background-color;
-    transform: translateZ(0);
-}
-
-.footer:hover {
-    transform: translateY(-3px); /* 减少移动距离，提高性能 */
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* 简化阴影效果 */
-    background-color: rgba(102, 166, 255, 0.35);
-}
-
-.footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.8s ease; /* 延长过渡时间，减少CPU使用 */
-}
-
-.footer:hover::before {
-    left: 100%;
-}
-
-.footer a {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: float 4s ease-in-out infinite; /* 延长动画时间 */
-    transition: opacity 1s ease, transform 1s ease, color 0.3s ease;
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: bold;
-    position: relative;
-    /* 优化渲染性能 */
-    will-change: transform, opacity;
-}
-
-.footer a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--highlight-color);
-    transition: width 0.3s ease;
-}
-
-.footer a:hover {
-    color: var(--highlight-color);
-}
-
-.footer a:hover::after {
-    width: 100%;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-8px); /* 减少浮动幅度，提高性能 */
-    }
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* 媒体查询优化 - 响应式设计 */
-@media (max-width: 768px) {
-    .header {
-        padding: 1.5rem;
-        max-width: 90%;
-    }
-    
-    .logo {
-        width: 80px;
-        height: 80px;
-    }
-    
     .container {
-        padding: 30px 15px;
+        padding: var(--space-md);
     }
     
     .section {
-        padding: 1.5rem;
-        margin: 1.5rem 0;
-    }
-    
-    .feature {
-        flex: 1 1 45%;
-        margin: 0.5rem;
-    }
-    
-    .footer {
-        padding: 1.5rem 1rem;
-        margin-top: 3rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        padding: 1rem;
-        max-width: 95%;
-    }
-    
-    .logo {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .container {
-        padding: 20px 10px;
-    }
-    
-    .section {
-        padding: 1rem;
-        margin: 1rem 0;
+        padding: var(--space-md);
+        margin: var(--space-md) 0;
     }
     
     .feature {
         flex: 1 1 100%;
-        margin: 0.5rem 0;
-    }
-    
-    .footer {
-        padding: 1rem 0.5rem;
-        margin-top: 2rem;
     }
 }

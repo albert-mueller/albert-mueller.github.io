@@ -1,82 +1,49 @@
-// 主题切换功能 - 优化性能和错误处理
+// Theme Manager - Simplified
 const ThemeManager = {
-    // 主题状态
     currentTheme: null,
-    
-    // 初始化主题 - 添加错误处理
+    toggleBtn: null,
+
     init() {
-        try {
-            // 创建主题切换按钮
-            this.createToggleButton();
-            
-            // 尝试从本地存储加载主题
-            const savedTheme = localStorage.getItem('theme');
-            
-            if (savedTheme && (savedTheme === 'dark' || savedTheme === 'light')) {
-                // 使用保存的主题 - 验证主题值
-                this.setTheme(savedTheme);
+        this.createToggleButton();
+        const savedTheme = localStorage.getItem('theme');
+        
+        if (savedTheme && (savedTheme === 'dark' || savedTheme === 'light')) {
+            this.setTheme(savedTheme);
+        } else {
+            const systemPreference = this.checkSystemPreference();
+            if (systemPreference) {
+                this.setTheme(systemPreference);
             } else {
-                // 检查系统主题偏好
-                const systemPreference = this.checkSystemPreference();
-                if (systemPreference) {
-                    // 如果有系统偏好设置，使用系统偏好
-                    this.setTheme(systemPreference);
-                } else {
-                    // 否则根据时间自动设置主题
-                    this.setThemeByTime();
-                }
+                this.setThemeByTime();
             }
-            
-            // 监听系统主题变化
-            this.listenForSystemPreferenceChanges();
-            
-            // 每小时检查一次时间，以便自动切换主题 - 优化性能
-            this.setupThemeCheckInterval();
-            
-        } catch (error) {
-            console.warn('主题初始化失败:', error);
-            // 设置默认主题作为后备
-            this.setTheme('light');
         }
+        
+        this.listenForSystemPreferenceChanges();
     },
-    
-    // 创建主题切换按钮
+
     createToggleButton() {
         const toggleBtn = document.createElement('div');
         toggleBtn.classList.add('theme-toggle');
         toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-        toggleBtn.setAttribute('title', '切换主题');
+        toggleBtn.setAttribute('title', 'Toggle theme');
         
-        // 点击切换主题
-        toggleBtn.addEventListener('click', () => {
-            this.toggleTheme();
-        });
-        
+        toggleBtn.addEventListener('click', () => this.toggleTheme());
         document.body.appendChild(toggleBtn);
         this.toggleBtn = toggleBtn;
     },
-    
-    // 根据时间设置主题
+
     setThemeByTime() {
         const hour = new Date().getHours();
-        // 晚上6点到早上6点使用深色模式
         const theme = (hour >= 18 || hour < 6) ? 'dark' : 'light';
         this.setTheme(theme);
     },
-    
-    // 切换主题
+
     toggleTheme() {
         const newTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
         this.setTheme(newTheme);
-        
-        // 保存到本地存储
         localStorage.setItem('theme', newTheme);
-        
-        // 显示主题变更提示
-        this.showThemeChangeNotification(newTheme);
     },
-    
-    // 设置主题
+
     setTheme(theme) {
         this.currentTheme = theme;
         
@@ -84,30 +51,24 @@ const ThemeManager = {
             document.documentElement.setAttribute('data-theme', 'dark');
             if (this.toggleBtn) {
                 this.toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-                this.toggleBtn.setAttribute('title', '切换到浅色模式');
             }
-            // 更新浏览器主题色
             this.updateThemeColor('#1a1a2e');
         } else {
             document.documentElement.removeAttribute('data-theme');
             if (this.toggleBtn) {
                 this.toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-                this.toggleBtn.setAttribute('title', '切换到深色模式');
             }
-            // 更新浏览器主题色
             this.updateThemeColor('#f3f9ff');
         }
     },
-    
-    // 更新浏览器主题色
+
     updateThemeColor(color) {
         const themeColorMeta = document.getElementById('theme-color');
         if (themeColorMeta) {
             themeColorMeta.setAttribute('content', color);
         }
     },
-    
-    // 检查系统主题偏好
+
     checkSystemPreference() {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             return 'dark';
@@ -116,483 +77,151 @@ const ThemeManager = {
         }
         return null;
     },
-    
-    // 设置主题检查间隔 - 优化性能
-    setupThemeCheckInterval() {
-        // 使用更高效的间隔检查
-        this.themeCheckInterval = setInterval(() => {
-            if (!localStorage.getItem('theme')) {
-                this.setThemeByTime();
-            }
-        }, 60 * 60 * 1000); // 每小时检查一次
-        
-        // 保存间隔ID以便清理
-        this.intervalId = this.themeCheckInterval;
-    },
-    
-    // 监听系统主题变化 - 优化性能
+
     listenForSystemPreferenceChanges() {
         if (window.matchMedia) {
             const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            
-            // 添加变化监听器 - 使用弱引用避免内存泄漏
-            this.mediaQueryListener = (e) => {
-                // 如果没有用户设置的主题偏好，则跟随系统变化
+            darkModeMediaQuery.addEventListener('change', (e) => {
                 if (!localStorage.getItem('theme')) {
                     this.setTheme(e.matches ? 'dark' : 'light');
                 }
-            };
-            
-            darkModeMediaQuery.addEventListener('change', this.mediaQueryListener);
+            });
         }
-    },
-    
-    // 显示主题变更提示
-    showThemeChangeNotification(theme) {
-        // 创建提示元素
-        const notification = document.createElement('div');
-        notification.style.position = 'fixed';
-        notification.style.bottom = '80px';
-        notification.style.left = '50%';
-        notification.style.transform = 'translateX(-50%)';
-        notification.style.padding = '10px 20px';
-        notification.style.borderRadius = '20px';
-        notification.style.background = 'var(--card-bg)';
-        notification.style.backdropFilter = 'blur(10px)';
-        notification.style.boxShadow = 'var(--shadow-light)';
-        notification.style.zIndex = '1000';
-        notification.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        notification.style.opacity = '0';
-        notification.style.color = 'var(--text-color)';
-        
-        // 设置提示内容
-        notification.textContent = theme === 'dark' ? '已切换到深色模式' : '已切换到浅色模式';
-        
-        // 添加到文档中
-        document.body.appendChild(notification);
-        
-        // 显示提示
-        setTimeout(() => {
-            notification.style.opacity = '1';
-        }, 10);
-        
-        // 自动隐藏提示
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateX(-50%) translateY(20px)';
-            
-            // 移除元素
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 2000);
     }
 };
 
-// 页面启动时的动态效果 - 优化性能和资源管理
-document.addEventListener('DOMContentLoaded', () => {
-    // 初始化主题管理
-    ThemeManager.init();
-
-    // 初始化邮件弹窗
-    setTimeout(() => {
-        EmailPopup.init();
-    }, 100);
-    
-    // 添加页面卸载时的清理功能
-    window.addEventListener('beforeunload', () => {
-        // 清理主题管理器资源
-        if (ThemeManager.cleanup) {
-            ThemeManager.cleanup();
-        }
-        
-        // 清理邮件弹窗资源
-        if (EmailPopup.cleanup) {
-            EmailPopup.cleanup();
-        }
-    });
-    
-    // 创建页面加载动画
-    const loader = document.createElement('div');
-    loader.classList.add('page-loader');
-    loader.innerHTML = `
-        <div class="loader-content">
-            <div class="loader-icon"><i class="fas fa-rocket"></i></div>
-            <div class="loader-text">PyQuick 加载中...</div>
-        </div>
-    `;
-    document.body.appendChild(loader);
-
-    // 使用更简单的动画过渡
-    setTimeout(() => {
-        // 隐藏加载动画
-        loader.style.opacity = '0';
-        loader.style.pointerEvents = 'none';
-
-        // 页面元素渐入效果 - 简化动画
-        const container = document.querySelector('.container');
-        if (container) {
-            container.style.opacity = '0';
-            container.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                container.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                container.style.opacity = '1';
-                container.style.transform = 'translateY(0)';
-            }, 50);
-        }
-
-        // 标题浮动效果 - 简化动画
-        const h1 = document.querySelector('h1');
-        if (h1) {
-            h1.style.opacity = '0';
-            setTimeout(() => {
-                h1.style.transition = 'opacity 0.8s ease';
-                h1.style.opacity = '1';
-                // 使用更轻量的动画
-                setTimeout(() => {
-                    h1.style.animation = 'float 5s ease-in-out infinite';
-                }, 800);
-            }, 100);
-        }
-
-        // 卡片显示效果 - 简化成批量显示
-        const cards = document.querySelectorAll('.card');
-        setTimeout(() => {
-            cards.forEach(card => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            });
-        }, 300);
-
-        // 移除加载动画
-        setTimeout(() => {
-            document.body.removeChild(loader);
-        }, 600);
-    }, 600); // 减少加载动画时间
-
-    // 视差背景元素已移除以提高性能
-    function createParallaxBackground() {
-        // 空函数，不再创建视差背景
-        return null;
-    }
-
-    // 简化的滚动显示逻辑
-    function initScrollReveal() {
-        // 获取所有需要监视的元素
-        const cards = document.querySelectorAll('.card');
-        let revealElements = [];
-
-        // 初始化，使用数组存储而不是重复查询DOM
-        cards.forEach(card => {
-            card.classList.add('scroll-reveal');
-            revealElements.push(card);
-        });
-
-        // 优化的视口检查
-        function checkIfInView() {
-            // 如果没有要显示的元素了，移除滚动监听器
-            if (revealElements.length === 0) {
-                window.removeEventListener('scroll', throttledCheck);
-                return;
-            }
-
-            const windowHeight = window.innerHeight;
-            const windowTop = window.scrollY;
-            const windowBottom = windowTop + windowHeight;
-
-            // 使用倒序循环，这样可以安全地从数组中移除元素
-            for (let i = revealElements.length - 1; i >= 0; i--) {
-                const element = revealElements[i];
-                const rect = element.getBoundingClientRect();
-
-                // 使用更高效的方式检查元素是否在视口中
-                if (rect.top < windowHeight && rect.bottom > 0) {
-                    element.classList.add('visible');
-                    // 从监视数组中移除已显示的元素
-                    revealElements.splice(i, 1);
-                }
-            }
-        }
-
-        // 创建节流版本的检查函数
-        const throttledCheck = throttle(checkIfInView, 200);
-
-        // 初始检查
-        checkIfInView();
-
-        // 滚动时检查，使用passive参数提高性能
-        window.addEventListener('scroll', throttledCheck, { passive: true });
-    }
-
-    // 节流函数 - 优化性能
-    function throttle(func, limit) {
-        let inThrottle;
-        return function() {
-            const args = arguments;
-            const context = this;
-            if (!inThrottle) {
-                func.apply(context, args);
-                inThrottle = true;
-                setTimeout(() => inThrottle = false, limit);
-            }
-        };
-    }
-
-    // 优化滚动效果，使用更低频率的节流
-    const handleScroll = throttle(() => {
-        // 只在必要时才使用requestAnimationFrame
-        // 移除视差效果，只保留基本的滚动显示功能
-        const currentScroll = window.scrollY;
-
-        // 使用更简单的区段效果，提高性能
-        document.querySelectorAll('section').forEach(section => {
-            const rect = section.getBoundingClientRect();
-            // 只有当元素接近可视区域时才处理它
-            if (rect.top < window.innerHeight + 100 && rect.bottom > -100) {
-                const speed = section.dataset.speed || 0.03;
-                section.style.transform = `translateY(${currentScroll * speed}px)`;
-            }
-        });
-    }, 50); // 降低为20fps，减少计算量
-
-    // 添加平滑滚动效果
-    function initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    }
-
-    // 优化初始化，延迟执行非关键任务
-    window.addEventListener('load', () => {
-        // 延迟初始化滚动效果，先让页面渲染完成
-        setTimeout(() => {
-            // 不再创建视差背景
-            initScrollReveal();
-        }, 100);
-    });
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-});
-
-// 简化的邮件弹窗功能 - 优化性能和错误处理
+// Email Popup - Simplified
 const EmailPopup = {
     popup: null,
     isVisible: false,
-    eventListeners: [], // 存储事件监听器以便清理
 
-    // 初始化邮件弹窗 - 添加错误处理
     init() {
-        try {
-            // 监听邮件图标点击
-            const emailIcon = document.getElementById('email-icon');
-            if (emailIcon) {
-                const clickHandler = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation(); // 阻止事件冒泡
-                    this.show(e);
-                };
-                
-                emailIcon.addEventListener('click', clickHandler);
-                this.eventListeners.push({ element: emailIcon, handler: clickHandler });
-
-                // 确保内部图标也能触发点击事件
-                const iconElement = emailIcon.querySelector('i');
-                if (iconElement) {
-                    const iconClickHandler = (e) => {
-                        e.preventDefault();
-                        e.stopPropagation(); // 阻止事件冒泡
-                        this.show(e);
-                    };
-                    
-                    iconElement.addEventListener('click', iconClickHandler);
-                    this.eventListeners.push({ element: iconElement, handler: iconClickHandler });
-                }
+        const emailIcon = document.getElementById('email-icon');
+        if (emailIcon) {
+            emailIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.show(e);
+            });
         }
 
-        // 点击其他区域关闭弹窗
         document.addEventListener('click', (e) => {
             if (this.popup && !this.popup.contains(e.target) && e.target.id !== 'email-icon') {
                 this.hide();
             }
         });
-    } catch (error) {
-        console.warn('邮件弹窗初始化失败:', error);
-    }
-},
-
-    // 清理邮件弹窗资源
-    cleanup() {
-        // 移除所有事件监听器
-        this.eventListeners.forEach(({ element, handler }) => {
-            element.removeEventListener('click', handler);
-        });
-        this.eventListeners = [];
-        
-        // 移除弹窗元素
-        if (this.popup && this.popup.parentNode) {
-            this.popup.parentNode.removeChild(this.popup);
-            this.popup = null;
-        }
-        
-        this.isVisible = false;
     },
 
-    // 显示弹窗
     show(e) {
-        try {
-            if (this.isVisible) return;
-            this.isVisible = true;
+        if (this.isVisible) return;
+        this.isVisible = true;
 
-            // 获取点击的元素
-            const target = e.target.closest('#email-icon') || e.target;
-            const popup = document.createElement('div');
-            popup.classList.add('email-popup');
+        const target = e.target.closest('#email-icon') || e.target;
+        const popup = document.createElement('div');
+        popup.classList.add('email-popup');
 
-            // 获取图标位置
-            const iconRect = target.getBoundingClientRect();
-            // 计算弹窗位置，确保在图标上方且居中
-            const viewportHeight = window.innerHeight;
-            const popupTop = iconRect.top - 250 < 10 ? iconRect.top + iconRect.height + 10 : iconRect.top - 250;
+        const iconRect = target.getBoundingClientRect();
+        const popupTop = iconRect.top - 220 < 10 ? iconRect.top + iconRect.height + 10 : iconRect.top - 220;
 
-            Object.assign(popup.style, {
-                position: 'fixed',
-                top: `${popupTop}px`,
-                left: `${iconRect.left + (iconRect.width / 2)}px`,
-                transform: 'translateX(-50%)',
-                opacity: '0'
-            });
+        Object.assign(popup.style, {
+            position: 'fixed',
+            top: `${popupTop}px`,
+            left: `${iconRect.left + (iconRect.width / 2)}px`,
+            transform: 'translateX(-50%)',
+            opacity: '0'
+        });
 
-            // 填充弹窗内容
-            popup.innerHTML = `
-                <div class="email-popup-header">
-                    <i class="fas fa-envelope"></i>
-                    <h3>联系我</h3>
-                </div>
-                <div class="email-content">
-                    <div class="email-main">
-                        <div class="email-address">
-                            <span class="email-label">邮箱地址:</span>
-                            <div class="email-value">
-                                <span class="email-text">fairzlq@gmail.com</span>
-                                <button class="copy-button" data-email="fairzlq@gmail.com">
-                                    <i class="fas fa-copy"></i>
-                                    <span>复制</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="email-info">
-                            <i class="fas fa-info-circle"></i>
-                            <span>点击复制按钮将邮箱地址复制到剪贴板</span>
+        popup.innerHTML = `
+            <div class="email-popup-header">
+                <i class="fas fa-envelope"></i>
+                <h3>Contact Me</h3>
+            </div>
+            <div class="email-content">
+                <div class="email-main">
+                    <div class="email-address">
+                        <span class="email-label">Email:</span>
+                        <div class="email-value">
+                            <span class="email-text">fairzlq@gmail.com</span>
+                            <button class="copy-button" data-email="fairzlq@gmail.com">
+                                <i class="fas fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
                         </div>
                     </div>
+                    <div class="email-info">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Click copy button to copy email</span>
+                    </div>
                 </div>
-                <div class="email-popup-footer">
-                    <button class="close-button">
-                        <i class="fas fa-times"></i>
-                        关闭
-                    </button>
-                </div>
-            `;
+            </div>
+            <div class="email-popup-footer">
+                <button class="close-button">
+                    <i class="fas fa-times"></i>
+                    Close
+                </button>
+            </div>
+        `;
 
-            // 添加到页面
-            document.body.appendChild(popup);
-            this.popup = popup;
+        document.body.appendChild(popup);
+        this.popup = popup;
 
-            // 显示动画
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    popup.style.opacity = '1';
-                    popup.style.transform = 'translateX(-50%)'; // 保持水平居中
+        requestAnimationFrame(() => {
+            popup.style.opacity = '1';
+        });
+
+        popup.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const email = button.dataset.email;
+                navigator.clipboard.writeText(email).then(() => {
+                    this.showNotification('Email copied');
                 });
             });
+        });
 
-            // 添加复制功能
-            popup.querySelectorAll('.copy-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const email = button.dataset.email;
-                    navigator.clipboard.writeText(email).then(() => {
-                        this.showCopyNotification('邮箱已复制到剪贴板');
-                    });
-                });
-            });
-
-            // 添加关闭功能
-            popup.querySelector('.close-button').addEventListener('click', () => {
-                this.hide();
-            });
-        } catch (error) {
-            console.warn('显示邮件弹窗失败:', error);
-        }
+        popup.querySelector('.close-button').addEventListener('click', () => this.hide());
     },
 
-    // 隐藏弹窗
     hide() {
         if (!this.isVisible || !this.popup) return;
-
-        // 隐藏动画
         this.popup.style.opacity = '0';
-        this.popup.style.transform = 'translateX(-50%) translateY(10px)';
-
-        // 使用requestAnimationFrame来优化性能
+        
         let popup = this.popup;
-        requestAnimationFrame(() => {
-            // 移除元素
-            setTimeout(() => {
-                if (popup && popup.parentNode) {
-                    document.body.removeChild(popup);
-                }
-                this.popup = null;
-                this.isVisible = false;
-            }, 250);
-        });
+        setTimeout(() => {
+            if (popup && popup.parentNode) {
+                document.body.removeChild(popup);
+            }
+            this.popup = null;
+            this.isVisible = false;
+        }, 200);
     },
 
-    // 显示复制通知
-    showCopyNotification(message) {
+    showNotification(message) {
         const notification = document.createElement('div');
-        notification.style.position = 'fixed';
-        notification.style.bottom = '20px';
-        notification.style.left = '50%';
-        notification.style.transform = 'translateX(-50%)';
-        notification.style.padding = '10px 20px';
-        notification.style.background = 'var(--primary-color)';
-        notification.style.color = 'white';
-        notification.style.borderRadius = '5px';
-        notification.style.zIndex = '1001';
-        notification.style.opacity = '0';
-        notification.style.transition = 'opacity 0.3s ease';
+        Object.assign(notification.style, {
+            position: 'fixed',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            padding: '10px 20px',
+            background: 'var(--primary-color)',
+            color: 'white',
+            borderRadius: '5px',
+            zIndex: '1001',
+            opacity: '0',
+            transition: 'opacity 0.2s ease'
+        });
         notification.textContent = message;
-
-        // 添加到页面
         document.body.appendChild(notification);
 
-        // 显示动画
-        setTimeout(() => {
-            notification.style.opacity = '1';
-        }, 10);
-
-        // 自动隐藏
+        setTimeout(() => notification.style.opacity = '1', 10);
         setTimeout(() => {
             notification.style.opacity = '0';
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 2000);
+            setTimeout(() => document.body.removeChild(notification), 200);
+        }, 1500);
     }
 };
 
-// 优化的节流函数实现
+// Throttle function - Single definition
 function throttle(func, limit) {
     let lastFunc;
     let lastRan;
@@ -613,16 +242,26 @@ function throttle(func, limit) {
     };
 }
 
-// 清理重复的EmailPopup定义
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    ThemeManager.init();
+    EmailPopup.init();
 
-// 页面加载完成后初始化
-window.addEventListener('load', function() {
-    // 确保所有功能正确初始化
-    if (typeof ThemeManager !== 'undefined') {
-        ThemeManager.init();
+    // Simple fade in animation
+    const container = document.querySelector('.container');
+    if (container) {
+        container.style.opacity = '0';
+        setTimeout(() => {
+            container.style.transition = 'opacity 0.3s ease';
+            container.style.opacity = '1';
+        }, 50);
     }
-    
-    if (typeof EmailPopup !== 'undefined') {
-        EmailPopup.init();
-    }
+
+    // Card reveal
+    const cards = document.querySelectorAll('.card');
+    setTimeout(() => {
+        cards.forEach(card => {
+            card.style.opacity = '1';
+        });
+    }, 200);
 });
