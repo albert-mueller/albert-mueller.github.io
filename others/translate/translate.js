@@ -66,7 +66,7 @@ const TranslateApp = {
         this.checkApiStatus();
 
         // 显示欢迎消息
-        this.elements.translatedText.value = '请在左侧输入要翻译的文本，翻译会实时显示...';
+        this.elements.translatedText.value = 'Bitte geben Sie den zu übersetzenden Text auf der linken Seite ein. Die Übersetzung wird in Echtzeit angezeigt...';
 
         // 初始化API配置对话框
         this.initApiConfigModal();
@@ -80,7 +80,7 @@ const TranslateApp = {
                 this.openApiConfigModal();
             });
         } else {
-            console.warn('API状态指示器元素未找到');
+            console.warn('API-Statusindikator-Element nicht gefunden');
         }
 
         // 关闭对话框
@@ -89,7 +89,7 @@ const TranslateApp = {
                 this.closeApiConfigModal();
             });
         } else {
-            console.warn('对话框关闭按钮元素未找到');
+            console.warn('Schließen-Button-Element des Dialogs nicht gefunden');
         }
 
         // 点击对话框外部关闭对话框
@@ -109,7 +109,7 @@ const TranslateApp = {
                 }
             });
         } else {
-            console.warn('API配置选项卡元素未找到');
+            console.warn('API-Konfigurationstab-Element nicht gefunden');
         }
 
         // 保存API配置
@@ -118,7 +118,7 @@ const TranslateApp = {
                 this.saveAllApiConfig();
             });
         } else {
-            console.warn('保存API配置按钮元素未找到');
+            console.warn('Button zum Speichern der API-Konfiguration nicht gefunden');
         }
 
         // 取消API配置
@@ -127,7 +127,7 @@ const TranslateApp = {
                 this.closeApiConfigModal();
             });
         } else {
-            console.warn('取消API配置按钮元素未找到');
+            console.warn('Button zum Abbrechen der API-Konfiguration nicht gefunden');
         }
 
         // 填充当前配置到表单
@@ -163,7 +163,7 @@ const TranslateApp = {
                 }
             }
         } catch (e) {
-            console.error('加载API配置失败:', e);
+            console.error('API-Konfiguration konnte nicht geladen werden:', e);
         }
     },
 
@@ -196,7 +196,7 @@ const TranslateApp = {
 
             return true;
         } catch (e) {
-            console.error('保存API配置失败:', e);
+            console.error('API-Konfiguration konnte nicht gespeichert werden:', e);
             return false;
         }
     },
@@ -220,17 +220,17 @@ const TranslateApp = {
 
             // 验证必填字段
             if (currentService === 'baidu' && (!baiduAppId || !baiduSecretKey)) {
-                this.showNotification('请填写百度翻译API的完整配置');
+                this.showNotification('Bitte füllen Sie die vollständige Konfiguration der Baidu-Übersetzungs-API aus');
                 return false;
             }
             
             if (currentService === 'youdao' && (!youdaoAppId || !youdaoSecretKey)) {
-                this.showNotification('请填写有道翻译API的完整配置');
+                this.showNotification('Bitte füllen Sie die vollständige Konfiguration der Youdao-Übersetzungs-API aus');
                 return false;
             }
             
             if (currentService === 'google' && !googleApiKey) {
-                this.showNotification('请填写Google翻译API密钥');
+                this.showNotification('Bitte füllen Sie den Google-Übersetzungs-API-Schlüssel aus');
                 return false;
             }
 
@@ -279,15 +279,15 @@ const TranslateApp = {
             this.checkApiStatus();
 
             // 显示成功提示
-            this.showNotification('API配置已保存');
+            this.showNotification('API-Konfiguration gespeichert');
 
             // 关闭对话框
             this.closeApiConfigModal();
 
             return true;
         } catch (e) {
-            console.error('保存API配置失败:', e);
-            this.showNotification('保存API配置失败');
+            console.error('API-Konfiguration konnte nicht gespeichert werden:', e);
+            this.showNotification('API-Konfiguration konnte nicht gespeichert werden');
             return false;
         }
     },
@@ -354,15 +354,15 @@ const TranslateApp = {
             this.checkApiStatus();
 
             // 显示成功提示
-            this.showNotification('API配置已保存');
+            this.showNotification('API-Konfiguration gespeichert');
 
             // 关闭对话框
             this.closeApiConfigModal();
 
             return true;
         } catch (e) {
-            console.error('保存API配置失败:', e);
-            this.showNotification('保存API配置失败');
+            console.error('API-Konfiguration konnte nicht gespeichert werden:', e);
+            this.showNotification('API-Konfiguration konnte nicht gespeichert werden');
             return false;
         }
     },
@@ -393,7 +393,7 @@ const TranslateApp = {
         if (this.elements.apiConfigModal) {
             this.elements.apiConfigModal.style.display = 'block';
         } else {
-            console.warn('API配置模态框元素未找到');
+            console.warn('API-Konfigurationsmodal-Element nicht gefunden');
         }
 
         // 设置当前选项卡
@@ -405,7 +405,7 @@ const TranslateApp = {
         if (this.elements.apiConfigModal) {
             this.elements.apiConfigModal.style.display = 'none';
         } else {
-            console.warn('API配置模态框元素未找到');
+            console.warn('API-Konfigurationsmodal-Element nicht gefunden');
         }
     },
 
@@ -417,7 +417,7 @@ const TranslateApp = {
                 if (tab && tab.classList && tab.dataset) {
                     tab.classList.toggle('active', tab.dataset.tab === tabId);
                 } else {
-                    console.warn('API配置选项卡元素或其属性不存在');
+                    console.warn('API-Konfigurationstab-Element oder dessen Eigenschaften existieren nicht');
                 }
             });
         }
@@ -429,7 +429,7 @@ const TranslateApp = {
                     const configId = config.id.replace('-config', '');
                     config.style.display = configId === tabId ? 'block' : 'none';
                 } else {
-                    console.warn('API服务配置元素或其id属性不存在');
+                    console.warn('API-Dienstkonfigurationselement oder dessen ID-Eigenschaft existieren nicht');
                 }
             });
         }
@@ -467,7 +467,7 @@ const TranslateApp = {
                 if (googleApiKey) googleApiKey.value = apiConfig.google.apiKey || '';
             }
         } catch (e) {
-            console.error('填充API配置表单失败:', e);
+            console.error('Ausfüllen des API-Konfigurationsformulars fehlgeschlagen:', e);
         }
     },
 
@@ -517,42 +517,42 @@ const TranslateApp = {
         if (this.elements.swapButton) {
             this.elements.swapButton.addEventListener('click', this.swapLanguages.bind(this));
         } else {
-            console.warn('交换语言按钮元素未找到');
+            console.warn('Sprachwechsel-Button-Element nicht gefunden');
         }
 
         // 清空源文本
         if (this.elements.clearSource) {
             this.elements.clearSource.addEventListener('click', this.clearSourceText.bind(this));
         } else {
-            console.warn('清空源文本按钮元素未找到');
+            console.warn('Button zum Löschen des Quelltextes nicht gefunden');
         }
 
         // 复制源文本
         if (this.elements.copySource) {
             this.elements.copySource.addEventListener('click', () => this.copyText(this.elements.sourceText));
         } else {
-            console.warn('复制源文本按钮元素未找到');
+            console.warn('Button zum Kopieren des Quelltextes nicht gefunden');
         }
 
         // 复制翻译结果
         if (this.elements.copyTranslation) {
             this.elements.copyTranslation.addEventListener('click', () => this.copyText(this.elements.translatedText));
         } else {
-            console.warn('复制翻译结果按钮元素未找到');
+            console.warn('Button zum Kopieren des Übersetzungsergebnisses nicht gefunden');
         }
 
         // 朗读翻译结果
         if (this.elements.speakTranslation) {
             this.elements.speakTranslation.addEventListener('click', this.speakTranslation.bind(this));
         } else {
-            console.warn('朗读翻译结果按钮元素未找到');
+            console.warn('Button zum Vorlesen des Übersetzungsergebnisses nicht gefunden');
         }
 
         // 自动调整文本区高度
         if (this.elements.sourceText) {
             this.elements.sourceText.addEventListener('input', () => this.adjustTextareaHeight(this.elements.sourceText));
         } else {
-            console.warn('源文本输入框元素未找到');
+            console.warn('Quelltext-Eingabefeld-Element nicht gefunden');
         }
     },
 
@@ -568,7 +568,7 @@ const TranslateApp = {
     // 翻译文本
     translateText() {
         if (!this.elements.sourceText || !this.elements.sourceLanguage || !this.elements.targetLanguage || !this.elements.translatedText) {
-            console.warn('翻译所需的元素未找到');
+            console.warn('Für die Übersetzung erforderliche Elemente nicht gefunden');
             return;
         }
 
@@ -584,7 +584,7 @@ const TranslateApp = {
 
         // 限制文本长度
         if (sourceText.length > 5000) {
-            this.elements.translatedText.value = '文本过长，请控制在5000字符以内';
+            this.elements.translatedText.value = 'Text ist zu lang. Bitte auf 5000 Zeichen beschränken.';
             return;
         }
 
@@ -608,7 +608,7 @@ const TranslateApp = {
      */
     shouldRetry(error) {
         const retryableErrors = [
-            '网络', '超时', '请求失败', 'API请求失败', 'AbortError', 'timeout', 'network'
+            'Netzwerk', 'Zeitüberschreitung', 'Anfrage fehlgeschlagen', 'API-Anfrage fehlgeschlagen', 'AbortError', 'timeout', 'network'
         ];
         
         return retryableErrors.some(keyword => 
@@ -623,7 +623,7 @@ const TranslateApp = {
      */
     shouldSwitchApi(error) {
         const switchableErrors = [
-            'API密钥', '配置', '认证', '权限', 'quota', 'limit', 'invalid'
+            'API-Schlüssel', 'Konfiguration', 'Authentifizierung', 'Berechtigung', 'quota', 'limit', 'invalid'
         ];
         
         return switchableErrors.some(keyword => 
@@ -672,7 +672,7 @@ const TranslateApp = {
                     return false;
             }
         } catch (e) {
-            console.error('检查API可用性失败:', e);
+            console.error('Überprüfung der API-Verfügbarkeit fehlgeschlagen:', e);
             return false;
         }
     },
@@ -689,12 +689,12 @@ const TranslateApp = {
     // 使用API进行实际翻译
     async simulateTranslation(text, sourceLanguage, targetLanguage) {
         if (!this.elements.translatedText) {
-            console.warn('翻译结果文本框元素未找到');
+            console.warn('Textbox-Element für Übersetzungsergebnis nicht gefunden');
             return;
         }
 
         // 设置加载状态
-        this.elements.translatedText.value = '翻译中...';
+        this.elements.translatedText.value = 'Übersetzung läuft...';
 
         try {
             let translatedText = '';
@@ -714,7 +714,7 @@ const TranslateApp = {
             // 更新API状态为在线
             this.updateApiStatus('online');
         } catch (error) {
-            console.error('翻译失败:', error);
+            console.error('Übersetzung fehlgeschlagen:', error);
             // 更新API状态为离线
             this.updateApiStatus('offline');
 
@@ -732,7 +732,7 @@ const TranslateApp = {
     // 本地模拟翻译（作为API不可用时的后备方案）
     async fallbackTranslation(text, sourceLanguage, targetLanguage) {
         if (!this.elements.translatedText) {
-            console.warn('翻译结果文本框元素未找到');
+            console.warn('Textbox-Element für Übersetzungsergebnis nicht gefunden');
             return;
         }
 
@@ -741,24 +741,24 @@ const TranslateApp = {
             const translatedText = LocalTranslate.translate(text, sourceLanguage, targetLanguage);
 
             // 如果本地翻译有结果，更新UI
-            if (translatedText && this.elements.translatedText.value.includes('翻译服务暂不可用')) {
+            if (translatedText && this.elements.translatedText.value.includes('Übersetzungsdienst vorübergehend nicht verfügbar')) {
                 this.elements.translatedText.value = `${translatedText}\n(使用本地翻译，API服务不可用)`;
             }
         } catch (error) {
-            console.error('本地翻译失败:', error);
+            console.error('Lokale Übersetzung fehlgeschlagen:', error);
         }
     },
 
     // 交换语言
     swapLanguages() {
         if (!this.elements.sourceLanguage || !this.elements.targetLanguage || !this.elements.sourceText || !this.elements.translatedText) {
-            console.warn('交换语言所需的元素未找到');
+            console.warn('Für den Sprachwechsel erforderliche Elemente nicht gefunden');
             return;
         }
 
         // 只有当源语言不是自动检测时才能交换
         if (this.elements.sourceLanguage.value === 'auto') {
-            this.showNotification('自动检测模式下无法交换语言');
+            this.showNotification('Sprachwechsel im automatischen Erkennungsmodus nicht möglich');
             return;
         }
 
@@ -785,18 +785,18 @@ const TranslateApp = {
                 if (this.elements.swapButton && this.elements.swapButton.classList) {
                     this.elements.swapButton.classList.remove('active');
                 } else {
-                    console.warn('交换按钮元素或其classList属性不存在');
+                    console.warn('Sprachwechsel-Button-Element oder dessen classList-Eigenschaft existieren nicht');
                 }
             }, 500);
         } else {
-            console.warn('交换按钮元素未找到');
+            console.warn('Sprachwechsel-Button-Element nicht gefunden');
         }
     },
 
     // 清空源文本
     clearSourceText() {
         if (!this.elements.sourceText || !this.elements.translatedText) {
-            console.warn('清空文本所需的元素未找到');
+            console.warn('Zum Löschen des Textes erforderliche Elemente nicht gefunden');
             return;
         }
 
@@ -813,11 +813,11 @@ const TranslateApp = {
 
         navigator.clipboard.writeText(textArea.value).then(
             () => {
-                this.showNotification('已复制到剪贴板');
+                this.showNotification('In die Zwischenablage kopiert');
             },
             (err) => {
-                console.error('无法复制文本: ', err);
-                this.showNotification('复制失败，请手动复制');
+                console.error('Kopieren des Textes fehlgeschlagen: ', err);
+                this.showNotification('Kopieren fehlgeschlagen, bitte manuell kopieren.');
             }
         );
     },
@@ -828,7 +828,7 @@ const TranslateApp = {
 
         // 检查浏览器是否支持语音合成
         if (!this.speechSynthesis) {
-            this.showNotification('您的浏览器不支持语音合成');
+            this.showNotification('Ihr Browser unterstützt die Sprachsynthese nicht.');
             return;
         }
 
@@ -864,7 +864,7 @@ const TranslateApp = {
     // 调整文本区域高度
     adjustTextareaHeight(textarea) {
         if (!textarea) {
-            console.warn('文本区域元素未找到');
+            console.warn('Textbereich-Element nicht gefunden.');
             return;
         }
         
@@ -876,7 +876,7 @@ const TranslateApp = {
             const newHeight = Math.max(200, textarea.scrollHeight);
             textarea.style.height = newHeight + 'px';
         } else {
-            console.warn('textarea元素或其style属性不存在');
+            console.warn('Textarea-Element oder dessen Style-Attribut fehlt.');
         }
     },
 
@@ -887,7 +887,7 @@ const TranslateApp = {
             notification.className = `notification ${type}`;
             notification.textContent = message;
         } else {
-            console.warn('notification元素或其className属性不存在');
+            console.warn('Benachrichtigungs-Element oder dessen className-Attribut fehlt.');
             return;
         }
 
@@ -900,7 +900,7 @@ const TranslateApp = {
                     notification.style.opacity = '1';
                     notification.style.transform = 'translateX(-50%) translateY(0)';
                 } else {
-                    console.warn('notification元素或其style属性不存在');
+                    console.warn('Benachrichtigungs-Element oder dessen Style-Attribut fehlt.');
                 }
             });
         });
@@ -914,7 +914,7 @@ const TranslateApp = {
                 notification.style.opacity = '0';
                 notification.style.transform = 'translateX(-50%) translateY(20px)';
             } else {
-                console.warn('notification元素或其style属性不存在');
+                console.warn('Benachrichtigungs-Element oder dessen Style-Attribut fehlt.');
             }
 
             setTimeout(() => {
@@ -949,30 +949,30 @@ const TranslateApp = {
     // 模拟英译中
     fakeTranslateToZh(text) {
         const translations = {
-            'hello': '你好',
-            'world': '世界',
-            'good': '好的',
-            'morning': '早上',
-            'evening': '晚上',
-            'welcome': '欢迎',
-            'thanks': '谢谢',
-            'thank you': '谢谢你',
-            'translate': '翻译',
-            'language': '语言',
-            'english': '英语',
-            'chinese': '中文',
-            'programming': '编程',
-            'website': '网站',
-            'code': '代码',
-            'developer': '开发者',
-            'user': '用户',
-            'interface': '界面',
-            'experience': '体验',
-            'design': '设计',
-            'feature': '功能',
-            'application': '应用',
-            'real-time': '实时',
-            'service': '服务'
+            'hello': 'Hallo',
+            'world': 'Welt',
+            'good': 'Okay',
+            'morning': 'Morgen',
+            'evening': 'Abend',
+            'welcome': 'Willkommen',
+            'thanks': 'Danke',
+            'thank you': 'Danke dir',
+            'translate': 'Übersetzen',
+            'language': 'Sprache',
+            'english': 'Englisch',
+            'chinese': 'Chinesisch',
+            'programming': 'Programmierung',
+            'website': 'Webseite',
+            'code': 'Code',
+            'developer': 'Entwickler',
+            'user': 'Benutzer',
+            'interface': 'Benutzeroberfläche',
+            'experience': 'Erlebnis',
+            'design': 'Design',
+            'feature': 'Funktion',
+            'application': 'Anwendung',
+            'real-time': 'Echtzeit',
+            'service': 'Dienst'
         };
 
         // 简单替换
@@ -994,30 +994,30 @@ const TranslateApp = {
     // 模拟中译英
     fakeTranslateToEn(text) {
         const translations = {
-            '你好': 'hello',
-            '世界': 'world',
-            '好的': 'good',
-            '早上': 'morning',
-            '晚上': 'evening',
-            '欢迎': 'welcome',
-            '谢谢': 'thanks',
-            '谢谢你': 'thank you',
-            '翻译': 'translate',
-            '语言': 'language',
-            '英语': 'english',
-            '中文': 'chinese',
-            '编程': 'programming',
-            '网站': 'website',
-            '代码': 'code',
-            '开发者': 'developer',
-            '用户': 'user',
-            '界面': 'interface',
-            '体验': 'experience',
-            '设计': 'design',
-            '功能': 'feature',
-            '应用': 'application',
-            '实时': 'real-time',
-            '服务': 'service'
+            'Hallo': 'hello',
+            'Welt': 'world',
+            'Okay': 'good',
+            'Morgen': 'morning',
+            'Abend': 'evening',
+            'Willkommen': 'welcome',
+            'Danke': 'thanks',
+            'Danke dir': 'thank you',
+            'Übersetzen': 'translate',
+            'Sprache': 'language',
+            'Englisch': 'english',
+            'Chinesisch': 'chinese',
+            'Programmierung': 'programming',
+            'Webseite': 'website',
+            'Code': 'code',
+            'Entwickler': 'developer',
+            'Benutzer': 'user',
+            'Benutzeroberfläche': 'interface',
+            'Erlebnis': 'experience',
+            'Design': 'design',
+            'Funktion': 'feature',
+            'Anwendung': 'application',
+            'Echtzeit': 'real-time',
+            'Dienst': 'service'
         };
 
         // 简单替换
@@ -1042,7 +1042,7 @@ const TranslateApp = {
             this.elements.statusIndicator.className = status === 'online' ? 'status-online' : 'status-offline';
         }
         if (this.elements.statusText) {
-            this.elements.statusText.textContent = status === 'online' ? 'API服务正常' : 'API服务异常';
+            this.elements.statusText.textContent = status === 'online' ? 'API-Dienst funktioniert einwandfrei' : 'API-Dienst ist fehlerhaft';
         }
     },
 
@@ -1061,11 +1061,11 @@ const TranslateApp = {
         try {
             const preferences = JSON.parse(localStorage.getItem('translatePreferences'));
             if (preferences) {
-                this.elements.sourceLanguage.value = preferences.sourceLanguage || 'en';
+                this.elements.sourceLanguage.value = preferences.sourceLanguage || 'de';
                 this.elements.targetLanguage.value = preferences.targetLanguage || 'zh';
             }
         } catch (e) {
-            console.error('加载偏好设置失败:', e);
+            console.error('Laden der Voreinstellungen fehlgeschlagen:', e);
         }
     }
 };
@@ -1206,7 +1206,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (apiConfigDialog && apiConfigDialog.className !== undefined) {
         apiConfigDialog.className = 'api-config-dialog';
     } else {
-        console.warn('apiConfigDialog元素或其className属性不存在');
+        console.warn('apiConfigDialog-Element oder dessen className-Attribut fehlt.');
         return;
     }
     apiConfigDialog.innerHTML = `
@@ -1228,11 +1228,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>百度翻译设置</h3>
                     <div class="form-group">
                         <label for="baidu-app-id">百度应用ID (AppID)</label>
-                        <input type="text" id="baidu-app-id" placeholder="请输入百度翻译API的AppID">
+                        <input type="text" id="baidu-app-id" placeholder="Bitte geben Sie die AppID der Baidu-Übersetzungs-API ein.">
                     </div>
                     <div class="form-group">
                         <label for="baidu-secret-key">百度密钥 (SecretKey)</label>
-                        <input type="password" id="baidu-secret-key" placeholder="请输入百度翻译API的SecretKey">
+                        <input type="password" id="baidu-secret-key" placeholder="Bitte geben Sie den SecretKey der Baidu-Übersetzungs-API ein.">
                     </div>
                 </div>
 
@@ -1240,11 +1240,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>有道翻译设置</h3>
                     <div class="form-group">
                         <label for="youdao-app-id">有道应用ID (AppID)</label>
-                        <input type="text" id="youdao-app-id" placeholder="请输入有道翻译API的AppID">
+                        <input type="text" id="youdao-app-id" placeholder="Bitte geben Sie die AppID der Youdao-Übersetzungs-API ein.">
                     </div>
                     <div class="form-group">
                         <label for="youdao-secret-key">有道密钥 (SecretKey)</label>
-                        <input type="password" id="youdao-secret-key" placeholder="请输入有道翻译API的SecretKey">
+                        <input type="password" id="youdao-secret-key" placeholder="Bitte geben Sie den SecretKey der Youdao-Übersetzungs-API ein.">
                     </div>
                 </div>
 
@@ -1276,14 +1276,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 youdaoConfig.style.display = 'block';
             }
         } else {
-            console.warn('API配置元素未找到');
+            console.warn('API-Konfigurationselement nicht gefunden.');
         }
     });
 
     // 保存API设置
     saveBtn.addEventListener('click', () => {
         if (!apiConfigDialog || !apiConfigDialog.classList) {
-            console.warn('API配置对话框元素未找到');
+            console.warn('API-Konfigurationsdialog-Element nicht gefunden.');
             return;
         }
 
@@ -1321,7 +1321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (apiConfigDialog && apiConfigDialog.classList) {
             apiConfigDialog.classList.remove('active');
         } else {
-            console.warn('apiConfigDialog元素或其classList属性不存在');
+            console.warn('apiConfigDialog-Element oder dessen classList-Attribut fehlt.');
             return;
         }
 
@@ -1329,7 +1329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         TranslateApp.checkApiStatus();
 
         // 显示通知
-        TranslateApp.showNotification('API设置已保存');
+        TranslateApp.showNotification('API-Einstellungen wurden gespeichert.');
     });
 
     // 取消按钮
@@ -1337,7 +1337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (apiConfigDialog && apiConfigDialog.classList) {
             apiConfigDialog.classList.remove('active');
         } else {
-            console.warn('API配置对话框元素未找到');
+            console.warn('API-Konfigurationsdialog-Element nicht gefunden.');
         }
     });
 
@@ -1346,7 +1346,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (apiConfigDialog && apiConfigDialog.classList) {
             apiConfigDialog.classList.remove('active');
         } else {
-            console.warn('API配置对话框元素未找到');
+            console.warn('API-Konfigurationsdialog-Element nicht gefunden.');
         }
     });
 
@@ -1369,7 +1369,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     youdaoConfig.style.display = 'block';
                 }
             } else {
-                console.warn('API配置元素未找到');
+                console.warn('API-Konfigurationselement nicht gefunden.');
             }
 
             // 设置百度API密钥
@@ -1388,14 +1388,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (youdaoSecretKey) youdaoSecretKey.value = apiConfig.youdao.secretKey || '';
             }
         } catch (e) {
-            console.error('加载API配置到表单失败:', e);
+            console.error('Laden der API-Konfiguration ins Formular fehlgeschlagen:', e);
         }
 
         // 显示对话框
         if (apiConfigDialog && apiConfigDialog.classList) {
             apiConfigDialog.classList.add('active');
         } else {
-            console.warn('API配置对话框元素未找到');
+            console.warn('API-Konfigurationsdialog-Element nicht gefunden.');
         }
     });
 });
