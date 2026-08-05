@@ -229,12 +229,12 @@
 
             appendConsoleOutput(message, type = 'log') {
                 const timestamp = new Date().toLocaleTimeString();
-                this.consoleOutput.innerHTML += `[${timestamp}] ${message}\n`;
+                this.consoleOutput.textContent += `[${timestamp}] ${message}\n`;
                 this.consoleOutput.scrollTop = this.consoleOutput.scrollHeight;
             }
 
             clearConsole() {
-                this.consoleOutput.innerHTML = '控制台已清空...\n';
+                this.consoleOutput.textContent = '控制台已清空...\n';
             }
 
             addTestResult(title, success, message, details = '') {
