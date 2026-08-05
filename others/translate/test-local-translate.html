@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>本地翻译测试</title>
+    <title>Lokaler Übersetzungstest</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -66,37 +66,36 @@
 </head>
 <body>
     <div class="container">
-        <h1>本地翻译功能测试</h1>
+        <h1>Test der lokalen Übersetzungsfunktion</h1>
         
         <div class="test-section">
-            <h3>测试1: 检查本地翻译对象</h3>
-            <button onclick="checkLocalTranslate()">检查 window.LocalTranslate</button>
+            <h3>Test 1: Überprüfen des lokalen Übersetzungsobjekts</h3>
+            <button onclick="checkLocalTranslate()">Überprüfe window.LocalTranslate</button>
             <div id="test1-result" class="test-result"></div>
         </div>
         
         <div class="test-section">
-            <h3>测试2: 简单翻译测试</h3>
-            <button onclick="testSimpleTranslation()">测试简单翻译</button>
+            <h3>Test 2: Einfacher Übersetzungstest</h3>
+            <button onclick="testSimpleTranslation()">Einfachen Übersetzungstest</button>
             <div id="test2-result" class="test-result"></div>
         </div>
         
         <div class="test-section">
-            <h3>测试3: 批量翻译测试</h3>
-            <button onclick="testBatchTranslation()">测试批量翻译</button>
+            <h3>Test 3: Batch-Übersetzungstest</h3>
+            <button onclick="testBatchTranslation()">Batch-Übersetzung testen</button>
             <div id="test3-result" class="test-result"></div>
         </div>
         
         <div class="test-section">
-            <h3>控制台输出</h3>
+            <h3>Konsolenausgabe</h3>
             <div id="console-output" class="console-output"></div>
         </div>
     </div>
 
-    <!-- 首先加载本地翻译 -->
+    <!-- Zuerst lokale Übersetzung laden -->
     <script src="local-translate.js"></script>
-    
     <script>
-        // 重定向console.log到页面
+// Umleiten von console.log zur Seite
         const consoleOutput = document.getElementById('console-output');
         const originalLog = console.log;
         console.log = function(...args) {
@@ -105,35 +104,35 @@
             consoleOutput.scrollTop = consoleOutput.scrollHeight;
         };
         
-        console.log('测试页面加载完成');
-        console.log('立即检查 window.LocalTranslate:', window.LocalTranslate);
+        console.log('Testseite geladen');
+        console.log('Sofort prüfen window.LocalTranslate:', window.LocalTranslate);
         
         function checkLocalTranslate() {
             const resultDiv = document.getElementById('test1-result');
             try {
-                console.log('=== 检查本地翻译对象 ===');
+                console.log('=== Prüfe lokales Übersetzungsobjekt ===');
                 console.log('window.LocalTranslate:', window.LocalTranslate);
                 console.log('typeof window.LocalTranslate:', typeof window.LocalTranslate);
                 
                 if (window.LocalTranslate) {
-                    console.log('LocalTranslate.translate 类型:', typeof window.LocalTranslate.translate);
+                    console.log('LocalTranslate.translate Typ:', typeof window.LocalTranslate.translate);
                     resultDiv.innerHTML = `
-                        <strong>✅ 本地翻译对象存在</strong><br>
+                        <strong>✅ Lokales Übersetzungsobjekt vorhanden</strong><br>
                         typeof: ${typeof window.LocalTranslate}<br>
-                        translate方法: ${typeof window.LocalTranslate.translate}
+                        translate-Methode: ${typeof window.LocalTranslate.translate}
                     `;
                 } else {
                     resultDiv.innerHTML = `
-                        <strong>❌ 本地翻译对象不存在</strong><br>
+                        <strong>❌ Lokales Übersetzungsobjekt nicht vorhanden</strong><br>
                         window.LocalTranslate: ${window.LocalTranslate}
                     `;
                     resultDiv.className = 'test-result error';
                 }
             } catch (error) {
-                console.error('检查失败:', error);
+                console.error('Prüfung fehlgeschlagen:', error);
                 resultDiv.innerHTML = `
-                    <strong>❌ 检查失败</strong><br>
-                    错误: ${error.message}
+                    <strong>❌ Prüfung fehlgeschlagen</strong><br>
+                    Fehler: ${error.message}
                 `;
                 resultDiv.className = 'test-result error';
             }
@@ -142,37 +141,37 @@
         function testSimpleTranslation() {
             const resultDiv = document.getElementById('test2-result');
             try {
-                console.log('=== 简单翻译测试 ===');
+                console.log('=== Einfacher Übersetzungstest ===');
                 
                 if (!window.LocalTranslate || !window.LocalTranslate.translate) {
-                    throw new Error('本地翻译不可用');
+                    throw new Error('Lokale Übersetzung nicht verfügbar');
                 }
                 
-                // 测试几个简单的翻译
+                // Teste einige einfache Übersetzungen
                 const tests = [
-                    { text: 'hello', from: 'en', to: 'zh' },
-                    { text: '你好', from: 'zh', to: 'en' },
-                    { text: 'thank you', from: 'en', to: 'zh' },
-                    { text: '谢谢', from: 'zh', to: 'en' }
+                    { text: 'hallo', from: 'de', to: 'zh' },
+                    { text: '你好', from: 'zh', to: 'de' },
+                    { text: 'danke', from: 'de', to: 'zh' },
+                    { text: '谢谢', from: 'zh', to: 'de' }
                 ];
                 
                 let results = [];
                 for (const test of tests) {
-                    console.log(`测试: ${test.text} (${test.from} -> ${test.to})`);
+                    console.log(`Test: ${test.text} (${test.from} -> ${test.to})`);
                     const result = window.LocalTranslate.translate(test.text, test.from, test.to);
-                    console.log(`结果: ${result}`);
+console.log(`Ergebnis: ${result}`);
                     results.push(`${test.text} → ${result}`);
                 }
                 
                 resultDiv.innerHTML = `
-                    <strong>✅ 翻译测试成功</strong><br>
+                    <strong>✅ Übersetzungstest erfolgreich</strong><br>
                     ${results.join('<br>')}
                 `;
             } catch (error) {
-                console.error('翻译测试失败:', error);
+                console.error('Übersetzungstest fehlgeschlagen:', error);
                 resultDiv.innerHTML = `
-                    <strong>❌ 翻译测试失败</strong><br>
-                    错误: ${error.message}
+                    <strong>❌ Übersetzungstest fehlgeschlagen</strong><br>
+                    Fehler: ${error.message}
                 `;
                 resultDiv.className = 'test-result error';
             }
@@ -181,47 +180,45 @@
         function testBatchTranslation() {
             const resultDiv = document.getElementById('test3-result');
             try {
-                console.log('=== 批量翻译测试 ===');
+                console.log('=== Batch-Übersetzungstest ===');
                 
                 if (!window.LocalTranslate || !window.LocalTranslate.translate) {
-                    throw new Error('本地翻译不可用');
+                    throw new Error('Lokale Übersetzung nicht verfügbar');
                 }
                 
-                // 测试批量翻译
+                // Batch-Übersetzungstest
                 const sentences = [
-                    'good morning world',
-                    'how are you today',
-                    'i love programming',
-                    'this is a test'
+                    'guten morgen welt',
+                    'wie geht es dir heute',
+                    'ich liebe programmieren',
+                    'das ist ein test'
                 ];
                 
                 let results = [];
                 for (const sentence of sentences) {
-                    console.log(`翻译句子: ${sentence}`);
-                    const result = window.LocalTranslate.translate(sentence, 'en', 'zh');
-                    console.log(`翻译结果: ${result}`);
+                    console.log(`Satz übersetzen: ${sentence}`);
+                    const result = window.LocalTranslate.translate(sentence, 'de', 'zh');
+                    console.log(`Übersetzungsergebnis: ${result}`);
                     results.push(`${sentence} → ${result}`);
                 }
                 
                 resultDiv.innerHTML = `
-                    <strong>✅ 批量翻译测试成功</strong><br>
+                    <strong>✅ Batch-Übersetzungstest erfolgreich</strong><br>
                     ${results.join('<br>')}
                 `;
             } catch (error) {
-                console.error('批量翻译测试失败:', error);
+                console.error('Batch-Übersetzungstest fehlgeschlagen:', error);
                 resultDiv.innerHTML = `
-                    <strong>❌ 批量翻译测试失败</strong><br>
-                    错误: ${error.message}
+                    <strong>❌ Batch-Übersetzungstest fehlgeschlagen</strong><br>
+                    Fehler: ${error.message}
                 `;
                 resultDiv.className = 'test-result error';
             }
         }
         
-        // 页面加载完成后自动检查
+        // Nach dem Laden der Seite automatisch prüfen
         window.addEventListener('load', function() {
-            console.log('页面完全加载，自动检查本地翻译...');
+            console.log('Seite vollständig geladen, automatische Überprüfung der lokalen Übersetzung...');
             setTimeout(checkLocalTranslate, 500);
         });
     </script>
-</body>
-</html>
