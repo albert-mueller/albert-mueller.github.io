@@ -1,123 +1,123 @@
-# 智能翻译系统
+# Intelligentes Übersetzungssystem
 
-一个功能强大的网页版翻译应用，支持中英互译、智能翻译和文档翻译。
+Eine leistungsstarke webbasierte Übersetzungsanwendung, die Chinesisch-Deutsch-Übersetzung, intelligente Übersetzung und Dokumentenübersetzung unterstützt.
 
-## 功能特点
+## Funktionsmerkmale
 
-### 核心翻译功能
-- **多模式翻译**：支持标准翻译、智能翻译（考虑上下文）和文档翻译
-- **中英互译**：专门优化的中英文翻译，包含大量词汇映射和语境处理
-- **本地翻译**：内置本地翻译服务，无需联网即可使用基本翻译功能
-- **API集成**：支持Google翻译、百度翻译和自定义API服务
+### Kernübersetzungsfunktion
+- **Mehrmodi-Übersetzung**: Unterstützt Standardübersetzung, intelligente Übersetzung (unter Berücksichtigung des Kontexts) und Dokumentenübersetzung
+- **Chinesisch-Deutsch-Übersetzung**: Speziell optimierte Chinesisch-Deutsch-Übersetzung, enthält umfangreiche Wortzuordnungen und Kontextverarbeitung
+- **Lokale Übersetzung**: Eingebauter lokaler Übersetzungsdienst, grundlegende Übersetzungsfunktionen ohne Internetverbindung nutzbar
+- **API-Integration**: Unterstützt Google Translate, Baidu Translate und benutzerdefinierte API-Dienste
 
-### 智能功能
-- **近义词替换**：提供近义词选择，优化翻译结果
-- **翻译质量评估**：自动评估翻译质量，提供0-100分评分
-- **翻译信息面板**：提供词典、语法和上下文信息
-- **对比视图**：可对比原始翻译和近义词翻译结果
+### Intelligente Funktionen
+- **Synonymersatz**: Bietet Synonymauswahl zur Optimierung der Übersetzungsergebnisse
+- **Übersetzungsqualitätsbewertung**: Automatische Bewertung der Übersetzungsqualität, liefert eine Punktzahl von 0-100
+- **Übersetzungsinformationspanel**: Stellt Wörterbuch-, Grammatik- und Kontextinformationen bereit
+- **Vergleichsansicht**: Ermöglicht den Vergleich von Originalübersetzung und Synonymübersetzung
 
-### 用户体验
-- **响应式设计**：适配各种屏幕尺寸
-- **深色/浅色主题**：支持主题切换，适应不同使用环境
-- **语音功能**：支持语音合成（朗读）和语音识别
-- **历史记录**：自动保存翻译历史，支持搜索和过滤
-- **收藏功能**：收藏常用翻译，方便快速访问
+### Benutzererlebnis
+- **Responsive Design**: Passt sich an verschiedene Bildschirmgrößen an
+- **Dunkles/Helles Thema**: Unterstützt Themenwechsel, passt sich unterschiedlichen Nutzungsszenarien an
+- **Sprachfunktion**: Unterstützt Sprachsynthese (Vorlesen) und Spracherkennung
+- **Verlauf**: Speichert Übersetzungsverlauf automatisch, unterstützt Suche und Filter
+- **Favoritenfunktion**: Speichert häufig genutzte Übersetzungen für schnellen Zugriff
 
-### 文档处理
-- **文档翻译**：支持上传文档进行翻译
-- **格式保持**：尽量保持原文档格式和结构
-- **多格式支持**：支持文本、PDF、Word等格式
+### Dokumentenverarbeitung
+- **Dokumentenübersetzung**: Unterstützt das Hochladen von Dokumenten zur Übersetzung
+- **Format beibehalten**: Versucht, das ursprüngliche Dokumentformat und die Struktur zu erhalten
+- **Mehrformatunterstützung**: Unterstützt Text, PDF, Word und andere Formate
 
-## 技术实现
+## Technische Umsetzung
 
-### 前端技术
-- **HTML5**：语义化标签，提高可访问性
-- **CSS3**：现代样式，支持CSS变量和响应式设计
-- **JavaScript ES6+**：模块化代码，使用现代JavaScript特性
-- **本地存储**：使用localStorage保存用户设置和历史记录
+### Frontend-Technologien
+- **HTML5**: semantische Tags, verbessert die Zugänglichkeit
+- **CSS3**: modernes Styling, unterstützt CSS-Variablen und responsives Design
+- **JavaScript ES6+**: modularer Code, Nutzung moderner JavaScript-Features
+- **Lokaler Speicher**: Verwendung von localStorage zum Speichern von Benutzereinstellungen und Verlauf
 
-### 翻译引擎
-- **本地翻译服务**（local-translate.js）：
-  - 包含大量中英词汇映射
-  - 支持语境感知翻译
-  - 处理常见句式和语法结构
-  - 智能分词和短语匹配
+### Übersetzungs-Engine
+- **Lokaler Übersetzungsdienst** (local-translate.js): 
+ - Enthält umfangreiche Chinesisch-Deutsch-Wortschatzzuordnungen
+ - Unterstützt kontextbewusste Übersetzung
+ - Verarbeitet gängige Satzstrukturen und Grammatik
+ - Intelligente Tokenisierung und Phrasenerkennung
 
-### 项目结构
+### Projektstruktur
 ```
 translate/
-├── index.html          # 主页面
-├── style.css           # 样式文件
-├── app.js              # 主应用逻辑
-└── local-translate.js  # 本地翻译服务
+├── index.html # Hauptseite
+├── style.css # Stildatei
+├── app.js # Hauptanwendungslogik
+└── local-translate.js # Lokaler Übersetzungsdienst
 ```
 
-## 使用方法
+## Anleitung
 
-### 基本翻译
-1. 选择源语言和目标语言
-2. 在文本框中输入要翻译的内容
-3. 点击"翻译"按钮或使用快捷键（Ctrl+Enter）
-4. 查看翻译结果
+### Grundübersetzung
+1. Wählen Sie die Quell- und Zielsprache aus
+2. Geben Sie den zu übersetzenden Text in das Textfeld ein
+3. Klicken Sie auf die Schaltfläche „Übersetzen“ oder verwenden Sie die Tastenkombination (Ctrl+Enter)
+4. Sehen Sie sich das Übersetzungsergebnis an
 
-### 智能翻译
-1. 切换到"智能翻译"模式
-2. 输入文本并翻译
-3. 点击高亮词汇查看近义词
-4. 选择合适的近义词优化翻译
+### Intelligente Übersetzung
+1. Wechseln Sie in den Modus „Intelligente Übersetzung“
+2. Geben Sie den Text ein und übersetzen Sie ihn
+3. Klicken Sie auf hervorgehobene Wörter, um Synonyme zu sehen
+4. Wählen Sie passende Synonyme, um die Übersetzung zu optimieren
 
-### 文档翻译
-1. 切换到"文档翻译"模式
-2. 上传要翻译的文档
-3. 选择翻译选项
-4. 点击"开始翻译"按钮
+### Dokumentenübersetzung
+1. Wechseln Sie in den Modus „Dokumentenübersetzung“
+2. Laden Sie das zu übersetzende Dokument hoch
+3. Wählen Sie Übersetzungsoptionen
+4. Klicken Sie auf die Schaltfläche „Übersetzung starten“
 
-### 历史记录和收藏
-- 点击底部状态栏的"历史记录"或"收藏夹"按钮
-- 使用搜索框过滤结果
-- 点击历史记录或收藏项可快速填充文本框
+### Verlauf und Favoriten
+- Klicken Sie auf die Schaltfläche „Verlauf“ oder „Favoriten“ in der unteren Statusleiste
+- Verwenden Sie das Suchfeld, um Ergebnisse zu filtern
+- Klicken Sie auf einen Verlaufseintrag oder Favoriten, um das Textfeld schnell zu füllen
 
-### 设置
-- 点击右上角的设置按钮
-- 切换主题（深色/浅色）
-- 调整字体大小
-- 配置API服务
-- 设置自动朗读和保存历史记录
+### Einstellungen
+- Klicken Sie auf die Einstellungsschaltfläche oben rechts
+- Wechseln Sie das Thema (dunkel/hell)
+- Schriftgröße anpassen
+- API-Dienst konfigurieren
+- Automatisches Vorlesen und das Speichern des Verlaufs aktivieren
 
-## 快捷键
+## Tastenkombinationen
 
-- `Ctrl+Enter`：翻译文本
-- `Ctrl+L`：清空文本
-- `Ctrl+C`：复制翻译结果
-- `Ctrl+S`：朗读翻译结果
-- `Ctrl+H`：显示/隐藏历史记录
-- `Ctrl+F`：显示/隐藏收藏夹
-- `Ctrl+,`：打开设置
+- `Ctrl+Enter`: Text übersetzen
+- `Ctrl+L`: Text leeren
+- `Ctrl+C`: Übersetzungsergebnis kopieren
+- `Ctrl+S`: Übersetzungsergebnis vorlesen
+- `Ctrl+H`: Verlauf anzeigen/ausblenden
+- `Ctrl+F`: Lesezeichen anzeigen/ausblenden
+- `Ctrl+,`: Einstellungen öffnen
 
-## 浏览器兼容性
+## Browser-Kompatibilität
 
 - Chrome 60+
 - Firefox 55+
 - Safari 12+
 - Edge 79+
 
-## 开发和定制
+## Entwicklung und Anpassung
 
-### 添加新词汇
-编辑`local-translate.js`文件中的`enToZhDict`和`zhToEnDict`对象，添加新的词汇映射。
+### Neue Wörter hinzufügen
+Bearbeiten Sie die Objekte `deToZhDict` und `zhToDeDict` in der Datei `local-translate.js` und fügen Sie neue Wortzuordnungen hinzu.
 
-### 添加新API服务
-1. 在`app.js`中的`apiServices`对象中添加新服务配置
-2. 在`translate`函数中添加新服务的调用逻辑
-3. 在设置面板中添加新服务的选项
+### Neuen API-Dienst hinzufügen
+1. Fügen Sie in der Datei `app.js` im Objekt `apiServices` eine neue Dienstkonfiguration hinzu.
+2. Fügen Sie in der Funktion `translate` die Aufruflogik für den neuen Dienst hinzu.
+3. Fügen Sie im Einstellungs‑Panel eine Option für den neuen Dienst hinzu.
 
-### 自定义主题
-编辑`style.css`文件中的CSS变量，或添加新的主题类。
+### Benutzerdefiniertes Thema
+Bearbeiten Sie die CSS‑Variablen in der Datei `style.css` oder fügen Sie neue Theme‑Klassen hinzu.
 
-## 许可证
+## Lizenz
 
 MIT License
 
-## 贡献
+## Mitwirken
 
-欢迎提交Issue和Pull Request来改进这个项目。
+Bitte reichen Sie Issues und Pull Requests ein, um dieses Projekt zu verbessern.
