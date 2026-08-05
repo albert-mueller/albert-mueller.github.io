@@ -3,7 +3,7 @@
 // ===== 全局变量 =====
 let currentTranslationMode = 'standard'; // 当前翻译模式: standard, smart, document
 let currentSourceLanguage = 'auto'; // 当前源语言
-let currentTargetLanguage = 'en'; // 当前目标语言
+let currentTargetLanguage = 'de'; // Aktuelle Zielsprache
 let isTranslating = false; // 是否正在翻译
 let translationHistory = []; // 翻译历史
 let favoriteTranslations = []; // 收藏的翻译
@@ -121,7 +121,7 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             speakText(sourceText.value, currentSourceLanguage);
         });
     } else {
-        console.warn('朗读原文按钮元素未找到');
+        console.warn('Element für die Schaltfläche „Originaltext vorlesen“ nicht gefunden');
     }
     
     // 监听按钮
@@ -130,7 +130,7 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             startListening();
         });
     } else {
-        console.warn('语音输入按钮元素未找到');
+        console.warn('Element für die Schaltfläche „Sprachinput“ nicht gefunden');
     }
     
     // 文档按钮
@@ -145,7 +145,7 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             handleDocumentTranslation();
         });
     } else {
-        console.warn('文档翻译按钮元素未找到');
+        console.warn('Element für die Schaltfläche „Dokument übersetzen“ nicht gefunden');
     }
     
     // 设置按钮
@@ -179,14 +179,14 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             navigator.clipboard.readText().then(text => {
                 sourceText.value = text;
                 updateCharCount();
-                showNotification('已粘贴文本');
+                showNotification('Text eingefügt');
             }).catch(err => {
-                console.error('粘贴失败:', err);
-                showNotification('粘贴失败，请检查浏览器权限');
+                console.error('Einfügen fehlgeschlagen:', err);
+                showNotification('Einfügen fehlgeschlagen, bitte prüfen Sie die Browserberechtigungen');
             });
         });
     } else {
-        console.warn('粘贴按钮元素未找到');
+        console.warn('Element für die Schaltfläche „Einfügen“ nicht gefunden');
     }
     
     // 收藏按钮
@@ -194,13 +194,13 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
         favoriteOutputButton.addEventListener('click', function() {
             if (targetText.value.trim() !== '') {
                 addToFavorites(sourceText.value, targetText.value, currentSourceLanguage, currentTargetLanguage);
-                showNotification('已添加到收藏夹');
+                showNotification('Zu den Favoriten hinzugefügt');
             } else {
-                showNotification('请先完成翻译');
+                showNotification('Bitte schließen Sie zuerst die Übersetzung ab');
             }
         });
     } else {
-        console.warn('收藏按钮元素未找到');
+        console.warn('Element für die Schaltfläche „Favorisieren“ nicht gefunden');
     }
     
     // 近义词选择按钮
@@ -210,11 +210,11 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             if (sourceText.value.trim() !== '') {
                 detectSynonyms(sourceText.value.trim());
             } else {
-                showNotification('请输入要翻译的文本');
+                showNotification('Bitte geben Sie den zu übersetzenden Text ein');
             }
         });
     } else {
-        console.warn('近义词选择按钮元素未找到');
+        console.warn('Element für die Schaltfläche „Synonyme auswählen“ nicht gefunden');
     }
     
     // 关闭对比视图按钮
@@ -223,7 +223,7 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             hideComparisonView();
         });
     } else {
-        console.warn('关闭对比视图按钮元素未找到');
+        console.warn('Element für die Schaltfläche „Vergleichsansicht schließen“ nicht gefunden');
     }
     
     // 翻译模式选择
@@ -245,7 +245,7 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             filterHistory(this.value);
         });
     } else {
-        console.warn('历史记录过滤输入框未找到');
+        console.warn('Eingabefeld für die Verlaufssuche nicht gefunden');
     }
     
     if (favoritesFilter) {
@@ -253,7 +253,7 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             filterFavorites(this.value);
         });
     } else {
-        console.warn('收藏夹过滤输入框未找到');
+        console.warn('Eingabefeld für die Favoritenfilterung nicht gefunden');
     }
     
     // 模态框关闭按钮
@@ -340,7 +340,7 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
             e.preventDefault();
             saveSettings();
             closeModal(settingsModal);
-            showNotification('设置已保存');
+            showNotification('Einstellungen gespeichert');
         });
     }
     
@@ -349,7 +349,7 @@ const qualityScore = document.getElementById('quality-score'); // 可能不存�
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             saveApiConfig(this.getAttribute('data-service'));
-            showNotification('API配置已保存');
+            showNotification('API-Konfiguration gespeichert');
         });
     });
     
@@ -449,14 +449,14 @@ function performTranslation() {
     const targetLanguageSelect = document.getElementById('target-language');
     
     if (!inputText || !sourceLanguageSelect || !targetLanguageSelect) {
-        console.warn('翻译所需的输入元素未找到');
+        console.warn('Eingabeelement für die Übersetzung nicht gefunden');
         return;
     }
     
     const sourceText = inputText.value.trim();
     
     if (sourceText === '') {
-        showNotification('请输入要翻译的文本');
+        showNotification('Bitte geben Sie den zu übersetzenden Text ein');
         return;
     }
     
@@ -495,11 +495,11 @@ async function standardTranslation(text, sourceLang, targetLang) {
             addToHistory(text, translation, sourceLang, targetLang);
             evaluateTranslationQuality(text, translation);
         } else {
-            showErrorMessage('翻译失败，请重试');
+            showErrorMessage('Übersetzung fehlgeschlagen, bitte erneut versuchen');
         }
     } catch (error) {
-        console.error('翻译错误:', error);
-        showErrorMessage('翻译服务出错，请重试');
+        console.error('Übersetzungsfehler:', error);
+        showErrorMessage('Übersetzungsdienst hat einen Fehler, bitte erneut versuchen');
     } finally {
         isTranslating = false;
         hideTranslatingIndicator();
@@ -530,11 +530,11 @@ async function smartTranslation(text, sourceLang, targetLang) {
                 showComparisonView(text, processedText, translation);
             }
         } else {
-            showErrorMessage('翻译失败，请重试');
+            showErrorMessage('Übersetzung fehlgeschlagen, bitte erneut versuchen');
         }
     } catch (error) {
-        console.error('智能翻译错误:', error);
-        showErrorMessage('翻译服务出错，请重试');
+        console.error('Intelligenter Übersetzungsfehler:', error);
+        showErrorMessage('Übersetzungsdienst hat einen Fehler, bitte erneut versuchen');
     } finally {
         isTranslating = false;
         hideTranslatingIndicator();
@@ -551,11 +551,11 @@ async function documentTranslation(text, sourceLang, targetLang) {
             addToHistory(text, translation, sourceLang, targetLang);
             evaluateTranslationQuality(text, translation);
         } else {
-            showErrorMessage('翻译失败，请重试');
+            showErrorMessage('Übersetzung fehlgeschlagen, bitte erneut versuchen');
         }
     } catch (error) {
-        console.error('文档翻译错误:', error);
-        showErrorMessage('翻译服务出错，请重试');
+        console.error('Dokumentübersetzungsfehler:', error);
+        showErrorMessage('Übersetzungsdienst hat einen Fehler, bitte erneut versuchen');
     } finally {
         isTranslating = false;
         hideTranslatingIndicator();
@@ -569,7 +569,7 @@ function displayTranslation(translation) {
         // 显示翻译信息
         showTranslationInfo(translation);
     } else {
-        console.warn('输出文本元素未找到');
+        console.warn('Ausgabetextelement nicht gefunden');
     }
 }
 
@@ -625,7 +625,7 @@ function extractKeywords(text) {
 function isStopWord(word) {
     // 常见停用词列表
     const stopWords = [
-        'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
+        'der', 'die', 'das', 'ein', 'eine', 'und', 'oder', 'aber', 'in', 'auf', 'zu', 'für', 'von', 'mit',
         '的', '了', '和', '是', '在', '有', '我', '你', '他', '她', '它', '这', '那', '一个', '一些'
     ];
     
@@ -657,16 +657,16 @@ function getSynonyms(word) {
     
     // 简单的同义词映射（实际应用中应该使用更完整的词典）
     const synonymMap = {
-        'happy': ['joyful', 'cheerful', 'delighted', 'pleased', 'content'],
-        'sad': ['unhappy', 'sorrowful', 'gloomy', 'miserable', 'depressed'],
-        'good': ['excellent', 'great', 'wonderful', 'fantastic', 'superb'],
-        'bad': ['poor', 'terrible', 'awful', 'horrible', 'dreadful'],
-        'big': ['large', 'huge', 'enormous', 'massive', 'immense'],
-        'small': ['tiny', 'little', 'miniature', 'compact', 'minute'],
-        'fast': ['quick', 'rapid', 'swift', 'speedy', 'hasty'],
-        'slow': ['sluggish', 'leisurely', 'gradual', 'unhurried', 'delayed'],
-        'beautiful': ['attractive', 'pretty', 'lovely', 'gorgeous', 'stunning'],
-        'ugly': ['unattractive', 'hideous', 'unsightly', 'unpleasant', 'repulsive'],
+        'glücklich': ['fröhlich', 'froh', 'erfreut', 'zufrieden', 'vergnügt'],
+        'traurig': ['unglücklich', 'betrübt', 'trübsinnig', 'elend', 'niedergeschlagen'],
+        'gut': ['ausgezeichnet', 'großartig', 'wunderbar', 'fantastisch', 'hervorragend'],
+        'schlecht': ['dürftig', 'schrecklich', 'furchtbar', 'grauenhaft', 'entsetzlich'],
+        'groß': ['riesig', 'gewaltig', 'enorm', 'massiv', 'immens'],
+        'klein': ['winzig', 'zierlich', 'miniatur', 'kompakt', 'gering'],
+        'schnell': ['flott', 'rasch', 'zügig', 'geschwind', 'eilig'],
+        'langsam': ['träge', 'gemächlich', 'allmählich', 'gemütlich', 'verzögert'],
+        'schön': ['attraktiv', 'hübsch', 'reizend', 'wunderschön', 'atemberaubend'],
+        'hässlich': ['unattraktiv', 'scheußlich', 'unansehnlich', 'unangenehm', 'abstoßend'],
         '快乐': ['高兴', '愉快', '开心', '欢喜', '愉悦'],
         '悲伤': ['伤心', '难过', '哀伤', '悲痛', '忧伤'],
         '好': ['优秀', '良好', '棒', '不错', '很好'],
@@ -686,7 +686,7 @@ function showSynonymSelector(synonyms) {
     const synonymOptions = document.getElementById('synonym-options');
     
     if (!synonymSelector || !synonymOptions) {
-        console.warn('近义词选择器元素未找到');
+        console.warn('Element für den Synonym-Selektor nicht gefunden');
         return;
     }
     
@@ -701,7 +701,7 @@ function showSynonymSelector(synonyms) {
             groupTitle.textContent = `"${synonymGroup.original}" 的近义词:`;
             synonymOptions.appendChild(groupTitle);
         } else {
-            console.warn('groupTitle元素或其className属性不存在');
+            console.warn('groupTitle-Element oder dessen className-Attribut fehlt');
             return;
         }
         
@@ -709,11 +709,11 @@ function showSynonymSelector(synonyms) {
         if (optionsContainer && optionsContainer.className !== undefined) {
             optionsContainer.className = 'synonym-options';
         } else {
-            console.warn('optionsContainer元素或其className属性不存在');
+            console.warn('optionsContainer-Element oder dessen className-Attribut fehlt');
             return;
         }
         
-        // 添加"使用原词"选项
+        // 添加"Originalwort verwenden"选项
         const originalOption = document.createElement('div');
         if (originalOption && originalOption.className !== undefined) {
             originalOption.className = 'synonym-option';
@@ -723,7 +723,7 @@ function showSynonymSelector(synonyms) {
             });
             optionsContainer.appendChild(originalOption);
         } else {
-            console.warn('originalOption元素或其className属性不存在');
+            console.warn('originalOption-Element oder dessen className-Attribut fehlt');
         }
         
         // 添加近义词选项
@@ -737,7 +737,7 @@ function showSynonymSelector(synonyms) {
                 });
                 optionsContainer.appendChild(optionElement);
             } else {
-                console.warn('optionElement元素或其className属性不存在');
+                console.warn('optionElement-Element oder dessen className-Attribut fehlt');
             }
         });
         
@@ -748,7 +748,7 @@ function showSynonymSelector(synonyms) {
     if (synonymSelector && synonymSelector.style) {
         synonymSelector.style.display = 'block';
     } else {
-        console.warn('近义词选择器元素或其style属性不存在');
+        console.warn('Synonym-Selektor-Element oder dessen style-Attribut fehlt');
     }
 }
 
@@ -757,7 +757,7 @@ function hideSynonymSelector() {
     if (synonymSelector) {
         synonymSelector.style.display = 'none';
     } else {
-        console.warn('近义词选择器元素未找到');
+        console.warn('Element für den Synonym-Selektor nicht gefunden');
     }
 }
 
@@ -803,7 +803,7 @@ async function showComparisonView(originalText, modifiedText, translation) {
     const comparisonContent = document.getElementById('comparison-content');
     
     if (!comparisonView || !comparisonContent) {
-        console.warn('对比视图元素未找到');
+        console.warn('Vergleichsansicht-Element nicht gefunden');
         return;
     }
     
@@ -823,7 +823,7 @@ async function showComparisonView(originalText, modifiedText, translation) {
         `;
         comparisonContent.appendChild(originalTranslation);
     } else {
-        console.warn('originalTranslation元素或其className属性不存在');
+        console.warn('originalTranslation-Element oder dessen className-Attribut fehlt');
         return;
     }
     
@@ -845,11 +845,11 @@ async function showComparisonView(originalText, modifiedText, translation) {
                     `;
                     comparisonContent.appendChild(modifiedTranslation);
                 } else {
-                    console.warn('modifiedTranslation元素或其className属性不存在');
+                    console.warn('modifiedTranslation-Element oder dessen className-Attribut fehlt');
                 }
             }
         } catch (error) {
-            console.error('获取近义词翻译失败:', error);
+            console.error('Abrufen der Synonymübersetzung fehlgeschlagen:', error);
         }
     }
     
@@ -861,9 +861,9 @@ async function showComparisonView(originalText, modifiedText, translation) {
             
             if (targetText) {
                 targetText.value = translation;
-                showNotification('已应用选择的翻译');
+                showNotification('Ausgewählte Übersetzung angewendet');
             } else {
-                console.warn('目标文本元素未找到');
+                console.warn('Zieltextelement nicht gefunden');
             }
         });
     });
@@ -872,7 +872,7 @@ async function showComparisonView(originalText, modifiedText, translation) {
     if (comparisonView && comparisonView.style) {
         comparisonView.style.display = 'block';
     } else {
-        console.warn('对比视图元素或其style属性不存在');
+        console.warn('Vergleichsansicht-Element oder dessen style-Attribut fehlt');
     }
 }
 
@@ -881,7 +881,7 @@ function hideComparisonView() {
     if (comparisonView) {
         comparisonView.style.display = 'none';
     } else {
-        console.warn('对比视图元素未找到');
+        console.warn('Vergleichsansicht-Element nicht gefunden');
     }
 }
 
@@ -890,7 +890,7 @@ function showTranslationInfo(translation) {
     const translationInfoPanel = document.getElementById('translation-info-panel');
     
     if (!translationInfoPanel) {
-        console.warn('翻译信息面板元素未找到');
+        console.warn('Übersetzungs-Info-Panel-Element nicht gefunden');
         return;
     }
     
@@ -898,7 +898,7 @@ function showTranslationInfo(translation) {
     if (translationInfoPanel && translationInfoPanel.style) {
         translationInfoPanel.style.display = 'block';
     } else {
-        console.warn('翻译信息面板元素或其style属性不存在');
+        console.warn('Übersetzungs-Info-Panel-Element oder dessen style-Attribut fehlt');
     }
     
     // 更新词典信息
@@ -916,7 +916,7 @@ function hideTranslationInfo() {
     if (translationInfoPanel) {
         translationInfoPanel.style.display = 'none';
     } else {
-        console.warn('翻译信息面板元素未找到');
+        console.warn('Übersetzungs-Info-Panel-Element nicht gefunden');
     }
 }
 
@@ -928,7 +928,7 @@ function updateDictionaryInfo(translation) {
     const dictionaryDefinitions = document.getElementById('dictionary-definitions');
     
     if (!dictionaryPronunciation || !dictionaryDefinitions) {
-        console.warn('词典信息元素未找到');
+        console.warn('Wörterbuch-Info-Element nicht gefunden');
         return;
     }
     
@@ -982,7 +982,7 @@ function getDefinitions(word) {
         '美丽': '在美学上令人愉悦的。'
     };
     
-    return definitionMap[word.toLowerCase()] ? [definitionMap[word.toLowerCase()]] : ['暂无定义'];
+    return definitionMap[word.toLowerCase()] ? [definitionMap[word.toLowerCase()]] : ['Keine Definition verfügbar'];
 }
 
 function updateGrammarInfo(translation) {
@@ -992,7 +992,7 @@ function updateGrammarInfo(translation) {
     const grammarInfo = document.getElementById('grammar-info');
     
     if (!grammarInfo) {
-        console.warn('语法信息元素未找到');
+        console.warn('Grammatik-Info-Element nicht gefunden');
         return;
     }
     
@@ -1004,7 +1004,7 @@ function updateGrammarInfo(translation) {
     
     if (sentences.length > 0) {
         const h4 = document.createElement('h4');
-        h4.textContent = '句子结构';
+        h4.textContent = 'Satzstruktur';
         grammarInfo.appendChild(h4);
         
         const p = document.createElement('p');
@@ -1025,7 +1025,7 @@ function updateGrammarInfo(translation) {
 
 function isNoun(word) {
     // 简单的名词检测（实际应用中应该使用更复杂的NLP技术）
-    const nounSuffixes = ['tion', 'sion', 'ment', 'ness', 'ity', 'er', 'or', 'ist', 'ism', 
+    const nounSuffixes = ['ung', 'heit', 'keit', 'schaft', 'tum', 'er', 'in', 'ist', 'ismus', 
                           '的', '子', '性', '度', '员', '家', '者', '主义'];
     
     return nounSuffixes.some(suffix => word.toLowerCase().endsWith(suffix));
@@ -1033,7 +1033,7 @@ function isNoun(word) {
 
 function isVerb(word) {
     // 简单的动词检测（实际应用中应该使用更复杂的NLP技术）
-    const verbSuffixes = ['ing', 'ed', 'en', 'es', 's', 
+    const verbSuffixes = ['en', 'st', 'te', 'end', 't', 
                          '了', '着', '过', '化'];
     
     return verbSuffixes.some(suffix => word.toLowerCase().endsWith(suffix));
@@ -1041,7 +1041,7 @@ function isVerb(word) {
 
 function isAdjective(word) {
     // 简单的形容词检测（实际应用中应该使用更复杂的NLP技术）
-    const adjectiveSuffixes = ['ful', 'less', 'ous', 'ive', 'able', 'ible', 'al', 'ial', 
+    const adjectiveSuffixes = ['lich', 'ig', 'isch', 'bar', 'sam', 'haft', 'los', 'voll', 
                               '的', '性', '样'];
     
     return adjectiveSuffixes.some(suffix => word.toLowerCase().endsWith(suffix));
@@ -1054,7 +1054,7 @@ function updateContextInfo(translation) {
     const contextInfo = document.getElementById('context-info');
     
     if (!contextInfo) {
-        console.warn('上下文信息元素未找到');
+        console.warn('Kontext-Info-Element nicht gefunden');
         return;
     }
     
@@ -1063,11 +1063,11 @@ function updateContextInfo(translation) {
     
     // 分析语境（模拟）
     const h4 = document.createElement('h4');
-    h4.textContent = '语境分析';
+    h4.textContent = 'Kontextanalyse';
     contextInfo.appendChild(h4);
     
     const p = document.createElement('p');
-    p.textContent = '此翻译基于标准语境，适用于一般交流场景。';
+    p.textContent = 'Diese Übersetzung basiert auf einem Standardkontext und eignet sich für allgemeine Kommunikationssituationen.';
     contextInfo.appendChild(p);
     
     // 分析语域（模拟）
@@ -1081,9 +1081,9 @@ function analyzeFormality(text) {
     // 分析文本的正式程度（模拟）
     // 这里使用简化的逻辑，实际应用中可以使用更复杂的NLP技术
     
-    const formalWords = ['therefore', 'however', 'consequently', 'furthermore', 'nevertheless',
+    const formalWords = ['deshalb', 'jedoch', 'folglich', 'außerdem', 'dennoch',
                         '因此', '然而', '所以', '此外', '不过'];
-    const informalWords = ['hey', 'yeah', 'okay', 'cool', 'awesome',
+    const informalWords = ['hey', 'jo', 'okay', 'cool', 'geil',
                           '嘿', '好的', '嗯', '不错', '很棒'];
     
     const words = text.toLowerCase().split(/\s+/);
@@ -1091,11 +1091,11 @@ function analyzeFormality(text) {
     const informalCount = words.filter(word => informalWords.includes(word)).length;
     
     if (formalCount > informalCount) {
-        return '正式';
+        return 'Formell';
     } else if (informalCount > formalCount) {
-        return '非正式';
+        return 'Informell';
     } else {
-        return '中性';
+        return 'Neutral';
     }
 }
 
@@ -1144,7 +1144,7 @@ function updateQualityIndicator(quality) {
     const qualityScore = document.getElementById('quality-score');
     
     if (!qualityStars || !qualityScore) {
-        console.warn('质量指示器元素未找到');
+        console.warn('Qualitätsanzeige-Element nicht gefunden');
         return;
     }
     
@@ -1159,7 +1159,7 @@ function updateQualityIndicator(quality) {
             star.textContent = i <= stars ? '★' : '☆';
             qualityStars.appendChild(star);
         } else {
-            console.warn('star元素或其className属性不存在');
+            console.warn('Star-Element oder dessen className-Attribut fehlt');
         }
     }
     
@@ -1216,21 +1216,21 @@ function addToFavorites(sourceText, translation, sourceLang, targetLang) {
     
     saveFavoriteTranslations();
     updateFavoritesDisplay();
-    showNotification('已添加到收藏夹');
+    showNotification('Zu den Favoriten hinzugefügt');
 }
 
 function removeFromFavorites(id) {
     favoriteTranslations = favoriteTranslations.filter(item => item.id !== id);
     saveFavoriteTranslations();
     updateFavoritesDisplay();
-    showNotification('已从收藏夹移除');
+    showNotification('Aus den Favoriten entfernt');
 }
 
 function updateHistoryDisplay() {
     const historyList = document.getElementById('history-list');
     
     if (!historyList) {
-        console.warn('历史记录列表元素未找到');
+        console.warn('Verlaufsliste-Element nicht gefunden');
         return;
     }
     
@@ -1241,10 +1241,10 @@ function updateHistoryDisplay() {
         const emptyMessage = document.createElement('div');
         if (emptyMessage && emptyMessage.className !== undefined) {
             emptyMessage.className = 'empty-message';
-            emptyMessage.textContent = '暂无翻译历史';
+            emptyMessage.textContent = 'Keine Übersetzungsverläufe vorhanden';
             historyList.appendChild(emptyMessage);
         } else {
-            console.warn('emptyMessage元素或其className属性不存在');
+            console.warn('emptyMessage-Element oder dessen className-Attribut fehlt');
         }
         return;
     }
@@ -1260,7 +1260,7 @@ function updateFavoritesDisplay() {
     const favoritesList = document.getElementById('favorites-list');
     
     if (!favoritesList) {
-        console.warn('收藏夹列表元素未找到');
+        console.warn('Favoritenlisten-Element nicht gefunden');
         return;
     }
     
@@ -1271,10 +1271,10 @@ function updateFavoritesDisplay() {
         const emptyMessage = document.createElement('div');
         if (emptyMessage && emptyMessage.className !== undefined) {
             emptyMessage.className = 'empty-message';
-            emptyMessage.textContent = '暂无收藏的翻译';
+            emptyMessage.textContent = 'Keine gespeicherten Übersetzungen';
             favoritesList.appendChild(emptyMessage);
         } else {
-            console.warn('emptyMessage元素或其className属性不存在');
+            console.warn('emptyMessage-Element oder dessen className-Attribut fehlt');
         }
         return;
     }
@@ -1291,7 +1291,7 @@ function createHistoryItem(item) {
     if (historyItem && historyItem.className !== undefined) {
         historyItem.className = 'history-item';
     } else {
-        console.warn('historyItem元素或其className属性不存在');
+        console.warn('historyItem-Element oder dessen className-Attribut fehlt');
         return null;
     }
     
@@ -1301,7 +1301,7 @@ function createHistoryItem(item) {
     historyItem.innerHTML = `
         <div class="history-item-header">
             <div class="history-item-date">${dateStr}</div>
-            <button class="icon-button favorite-button" title="添加到收藏夹">
+            <button class="icon-button favorite-button" title="Zu den Favoriten hinzufügen">
                 <span>☆</span>
             </button>
         </div>
@@ -1325,7 +1325,7 @@ function createHistoryItem(item) {
                 targetLanguage.value = item.targetLang;
                 updateCharCount();
             } else {
-                console.warn('翻译区域元素未找到');
+                console.warn('Übersetzungsbereich-Element nicht gefunden');
             }
             
             if (historySidebar) {
@@ -1349,7 +1349,7 @@ function createFavoriteItem(item) {
     if (favoriteItem && favoriteItem.className !== undefined) {
         favoriteItem.className = 'favorite-item';
     } else {
-        console.warn('favoriteItem元素或其className属性不存在');
+        console.warn('favoriteItem-Element oder dessen className-Attribut fehlt');
         return null;
     }
     
@@ -1359,7 +1359,7 @@ function createFavoriteItem(item) {
     favoriteItem.innerHTML = `
         <div class="favorite-item-header">
             <div class="favorite-item-date">${dateStr}</div>
-            <button class="icon-button remove-favorite-button" title="从收藏夹移除">
+            <button class="icon-button remove-favorite-button" title="Aus den Favoriten entfernen">
                 <span>×</span>
             </button>
         </div>
@@ -1383,7 +1383,7 @@ function createFavoriteItem(item) {
                 targetLanguage.value = item.targetLang;
                 updateCharCount();
             } else {
-                console.warn('翻译区域元素未找到');
+                console.warn('Übersetzungsbereich-Element nicht gefunden');
             }
             
             if (favoritesSidebar) {
@@ -1410,7 +1410,7 @@ function filterHistory(query) {
         const translationElement = item.querySelector('.history-item-translation');
         
         if (!textElement || !translationElement) {
-            console.warn('历史记录项的子元素未找到');
+            console.warn('Unterelement des Verlaufseintrags nicht gefunden');
             return;
         }
         
@@ -1421,13 +1421,13 @@ function filterHistory(query) {
             if (item && item.style) {
                 item.style.display = 'block';
             } else {
-                console.warn('历史记录项或其style属性不存在');
+                console.warn('Verlaufseintrag oder dessen style-Attribut fehlt');
             }
         } else {
             if (item && item.style) {
                 item.style.display = 'none';
             } else {
-                console.warn('历史记录项或其style属性不存在');
+                console.warn('Verlaufseintrag oder dessen style-Attribut fehlt');
             }
         }
     });
@@ -1441,7 +1441,7 @@ function filterFavorites(query) {
         const translationElement = item.querySelector('.favorite-item-translation');
         
         if (!textElement || !translationElement) {
-            console.warn('收藏项的子元素未找到');
+            console.warn('Unterelement des Favoriteneintrags nicht gefunden');
             return;
         }
         
@@ -1452,13 +1452,13 @@ function filterFavorites(query) {
             if (item && item.style) {
                 item.style.display = 'block';
             } else {
-                console.warn('收藏项或其style属性不存在');
+                console.warn('Favoriteneintrag oder dessen style-Attribut fehlt');
             }
         } else {
             if (item && item.style) {
                 item.style.display = 'none';
             } else {
-                console.warn('收藏项或其style属性不存在');
+                console.warn('Favoriteneintrag oder dessen style-Attribut fehlt');
             }
         }
     });
@@ -1476,7 +1476,7 @@ function loadSettings() {
             // 应用设置
             currentTranslationMode = parsedSettings.translationMode || 'standard';
             currentSourceLanguage = parsedSettings.sourceLanguage || 'auto';
-            currentTargetLanguage = parsedSettings.targetLanguage || 'en';
+            currentTargetLanguage = parsedSettings.targetLanguage || 'de';
             
             // 更新UI
             const sourceLanguageElement = document.getElementById('source-language');
@@ -1494,7 +1494,7 @@ function loadSettings() {
                 if (document.body && document.body.className !== undefined) {
                     document.body.className = parsedSettings.theme;
                 } else {
-                    console.warn('文档body元素未找到或className属性不存在');
+                    console.warn('Dokument-Body-Element nicht gefunden oder className-Attribut fehlt');
                 }
             }
             
@@ -1502,7 +1502,7 @@ function loadSettings() {
                 if (document.body && document.body.style) {
                     document.body.style.fontSize = parsedSettings.fontSize;
                 } else {
-                    console.warn('文档body元素或其style属性不存在');
+                    console.warn('Dokument-Body-Element oder dessen style-Attribut fehlt');
                 }
             }
             
@@ -1560,7 +1560,7 @@ function loadSettings() {
                 }
             }
         } catch (error) {
-            console.error('加载设置失败:', error);
+            console.error('Laden der Einstellungen fehlgeschlagen:', error);
         }
     }
 }
@@ -1672,7 +1672,7 @@ function loadTranslationHistory() {
             translationHistory = JSON.parse(history);
             updateHistoryDisplay();
         } catch (error) {
-            console.error('加载翻译历史失败:', error);
+            console.error('Fehler beim Laden des Übersetzungsverlaufs:', error);
             translationHistory = [];
         }
     }
@@ -1692,7 +1692,7 @@ function loadFavoriteTranslations() {
             favoriteTranslations = JSON.parse(favorites);
             updateFavoritesDisplay();
         } catch (error) {
-            console.error('加载收藏翻译失败:', error);
+            console.error('Fehler beim Laden der gespeicherten Übersetzungen:', error);
             favoriteTranslations = [];
         }
     }
@@ -1709,7 +1709,7 @@ function updateCharCount() {
     const charCount = document.querySelector('.char-counter');
     
     if (!sourceText || !charCount) {
-        console.warn('字符计数所需的元素未找到');
+        console.warn('Element für Zeichenanzahl nicht gefunden');
         return;
     }
     
@@ -1721,7 +1721,7 @@ function showTranslatingIndicator() {
     if (translatingIndicator && translatingIndicator.style) {
         translatingIndicator.style.display = 'flex';
     } else {
-        console.warn('翻译指示器元素或其style属性不存在');
+        console.warn('Übersetzungsanzeige-Element oder dessen style-Attribut fehlt');
     }
 }
 
@@ -1730,7 +1730,7 @@ function hideTranslatingIndicator() {
     if (translatingIndicator && translatingIndicator.style) {
         translatingIndicator.style.display = 'none';
     } else {
-        console.warn('翻译指示器元素或其style属性不存在');
+        console.warn('Übersetzungsanzeige-Element oder dessen style-Attribut fehlt');
     }
 }
 
@@ -1740,7 +1740,7 @@ function showErrorMessage(message) {
         errorMessage.textContent = message;
         errorMessage.style.display = 'block';
     } else {
-        console.warn('错误消息元素或其style属性不存在，消息：', message);
+        console.warn('Fehlermeldungs-Element oder dessen style-Attribut fehlt, Nachricht:', message);
     }
 }
 
@@ -1749,7 +1749,7 @@ function hideErrorMessage() {
     if (errorMessage && errorMessage.style) {
         errorMessage.style.display = 'none';
     } else {
-        console.warn('错误消息元素或其style属性不存在');
+        console.warn('Fehlermeldungs-Element oder dessen style-Attribut fehlt');
     }
 }
 
@@ -1759,7 +1759,7 @@ function showNotification(message) {
     if (notification && notification.className !== undefined) {
         notification.className = 'notification';
     } else {
-        console.warn('通知元素创建失败或className属性不存在');
+        console.warn('Erstellung des Benachrichtigungs-Elements fehlgeschlagen oder className-Attribut fehlt');
         return;
     }
     notification.textContent = message;
@@ -1772,7 +1772,7 @@ function showNotification(message) {
         if (notification && notification.classList) {
             notification.classList.add('show');
         } else {
-            console.warn('notification元素或其classList属性不存在');
+            console.warn('notification-Element oder dessen classList-Attribut fehlt');
         }
     }, 10);
     
@@ -1788,7 +1788,7 @@ function showNotification(message) {
                 }
             }, 300);
         } else {
-            console.warn('notification元素或其classList属性不存在');
+            console.warn('notification-Element oder dessen classList-Attribut fehlt');
         }
     }, 3000);
 }
@@ -1800,7 +1800,7 @@ function swapLanguages() {
     const targetText = document.getElementById('output-text');
     
     if (!sourceLanguageSelect || !targetLanguageSelect || !sourceText || !targetText) {
-        console.warn('语言交换所需的元素未找到');
+        console.warn('Element für Sprachaustausch nicht gefunden');
         return;
     }
     
@@ -1875,27 +1875,27 @@ function initializeLanguageSelectors() {
     const targetLanguageSelect = document.getElementById('target-language');
     
     if (!sourceLanguageSelect || !targetLanguageSelect) {
-        console.warn('语言选择器元素未找到');
+        console.warn('Sprachauswahl-Element nicht gefunden');
         return;
     }
     
     // 语言列表
     const languages = [
-        { code: 'auto', name: '自动检测' },
-        { code: 'zh', name: '中文' },
-        { code: 'en', name: '英语' },
-        { code: 'ja', name: '日语' },
-        { code: 'ko', name: '韩语' },
-        { code: 'fr', name: '法语' },
-        { code: 'de', name: '德语' },
-        { code: 'es', name: '西班牙语' },
-        { code: 'ru', name: '俄语' },
-        { code: 'pt', name: '葡萄牙语' },
-        { code: 'it', name: '意大利语' },
-        { code: 'ar', name: '阿拉伯语' },
-        { code: 'hi', name: '印地语' },
-        { code: 'th', name: '泰语' },
-        { code: 'vi', name: '越南语' }
+        { code: 'auto', name: 'Automatisch erkennen' },
+        { code: 'zh', name: 'Chinesisch' },
+        { code: 'en', name: 'Englisch' },
+        { code: 'ja', name: 'Japanisch' },
+        { code: 'ko', name: 'Koreanisch' },
+        { code: 'fr', name: 'Französisch' },
+        { code: 'de', name: 'Deutsch' },
+        { code: 'es', name: 'Spanisch' },
+        { code: 'ru', name: 'Russisch' },
+        { code: 'pt', name: 'Portugiesisch' },
+        { code: 'it', name: 'Italienisch' },
+        { code: 'ar', name: 'Arabisch' },
+        { code: 'hi', name: 'Hindi' },
+        { code: 'th', name: 'Thailändisch' },
+        { code: 'vi', name: 'Vietnamesisch' }
     ];
     
     // 填充语言选择器
@@ -2009,10 +2009,10 @@ function openModal(modal) {
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         } else {
-            console.warn('模态框元素的classList属性不存在');
+            console.warn('classList-Attribut des Modal-Elements fehlt');
         }
     } else {
-        console.warn('模态框元素为空');
+        console.warn('Modal-Element ist leer');
     }
 }
 
@@ -2022,16 +2022,16 @@ function closeModal(modal) {
             modal.classList.remove('active');
             document.body.style.overflow = '';
         } else {
-            console.warn('模态框元素的classList属性不存在');
+            console.warn('classList-Attribut des Modal-Elements fehlt');
         }
     } else {
-        console.warn('模态框元素为空');
+        console.warn('Modal-Element ist leer');
     }
 }
 
 function toggleSidebar(sidebar) {
     if (!sidebar) {
-        console.warn('侧边栏元素为空');
+        console.warn('Seitenleisten-Element ist leer');
         return;
     }
     
@@ -2053,19 +2053,19 @@ function toggleSidebar(sidebar) {
             }
         }
     } else {
-        console.warn('侧边栏元素的classList属性不存在');
+        console.warn('classList-Attribut des Seitenleisten-Elements fehlt');
     }
 }
 
 function closeSidebar(sidebar) {
     if (!sidebar) {
-        console.warn('侧边栏元素为空');
+        console.warn('Seitenleisten-Element ist leer');
         return;
     }
     if (sidebar.classList) {
         sidebar.classList.remove('active');
     } else {
-        console.warn('侧边栏元素的classList属性不存在');
+        console.warn('classList-Attribut des Seitenleisten-Elements fehlt');
     }
 }
 
@@ -2080,7 +2080,7 @@ function toggleTheme() {
         // 保存设置
         saveSettings();
     } else {
-        console.warn('文档body元素未找到');
+        console.warn('Document-Body-Element nicht gefunden');
     }
 }
 
@@ -2095,17 +2095,17 @@ function initializeTheme() {
             document.body.classList.add('dark-theme');
         }
     } else {
-        console.warn('文档body元素未找到');
+        console.warn('Document-Body-Element nicht gefunden');
     }
 }
 
 function copyToClipboard(text) {
     if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
-            showNotification('已复制到剪贴板');
+            showNotification('In die Zwischenablage kopiert');
         }).catch(err => {
-            console.error('复制失败:', err);
-            showNotification('复制失败，请重试');
+            console.error('Kopieren fehlgeschlagen:', err);
+            showNotification('Kopieren fehlgeschlagen, bitte erneut versuchen');
         });
     } else {
         // 降级方案
@@ -2116,10 +2116,10 @@ function copyToClipboard(text) {
         
         try {
             document.execCommand('copy');
-            showNotification('已复制到剪贴板');
+            showNotification('In die Zwischenablage kopiert');
         } catch (err) {
-            console.error('复制失败:', err);
-            showNotification('复制失败，请重试');
+            console.error('Kopieren fehlgeschlagen:', err);
+            showNotification('Kopieren fehlgeschlagen, bitte erneut versuchen');
         }
         
         document.body.removeChild(textArea);
@@ -2144,7 +2144,7 @@ function speakText(text, language) {
         // 开始朗读
         window.speechSynthesis.speak(utterance);
     } else {
-        showNotification('您的浏览器不支持语音合成功能');
+        showNotification('Ihr Browser unterstützt die Sprachsynthese nicht');
     }
 }
 
@@ -2194,13 +2194,13 @@ function initializeSpeechRecognition() {
                     performTranslation();
                 }
             } else {
-                console.warn('输入文本元素未找到');
+                console.warn('Eingabetext-Element nicht gefunden');
             }
         };
         
         recognition.onerror = function(event) {
-            console.error('语音识别错误:', event.error);
-            showNotification('语音识别失败，请重试');
+            console.error('Spracherkennungsfehler:', event.error);
+            showNotification('Spracherkennung fehlgeschlagen, bitte erneut versuchen');
         };
         
         // 将识别对象保存到全局变量
@@ -2215,15 +2215,15 @@ function startListening() {
         if (sourceLanguageElement) {
             window.speechRecognition.lang = getLanguageCodeForSpeech(sourceLanguageElement.value);
         } else {
-            console.warn('源语言选择器元素未找到，使用默认语言');
+            console.warn('Quellsprachauswahl-Element nicht gefunden, Standardsprache wird verwendet');
             window.speechRecognition.lang = 'zh-CN';
         }
         
         // 开始识别
         window.speechRecognition.start();
-        showNotification('正在听取...');
+        showNotification('Höre gerade zu…');
     } else {
-        showNotification('您的浏览器不支持语音识别功能');
+        showNotification('Ihr Browser unterstützt die Spracherkennung nicht');
     }
 }
 
@@ -2240,12 +2240,12 @@ function checkApiStatus() {
             // 假设API正常
             if (statusIndicator && statusIndicator.className !== undefined) {
                 statusIndicator.className = 'status-indicator status-online';
-                statusText.textContent = '在线';
+                statusText.textContent = 'Online';
             } else {
-                console.warn('状态指示器元素或其className属性不存在');
+                console.warn('Statusanzeige-Element oder dessen className-Attribut fehlt');
             }
         } else {
-            console.warn('状态指示器元素未找到');
+            console.warn('Statusanzeige-Element nicht gefunden');
         }
     }, 1000);
 }
@@ -2257,7 +2257,7 @@ function handleFileUpload(file) {
                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     
     if (!validTypes.includes(file.type)) {
-        showNotification('不支持的文件类型，请上传文本文件、PDF或Word文档');
+        showNotification('Dateityp nicht unterstützt, bitte Textdatei, PDF oder Word-Dokument hochladen');
         return;
     }
     
@@ -2266,7 +2266,7 @@ function handleFileUpload(file) {
     const fileItems = document.getElementById('file-items');
     
     if (!fileList || !fileItems) {
-        console.warn('文件列表元素未找到');
+        console.warn('Dateiliste-Element nicht gefunden');
         return;
     }
     
@@ -2278,7 +2278,7 @@ function handleFileUpload(file) {
     if (fileItem && fileItem.className !== undefined) {
         fileItem.className = 'file-item';
     } else {
-        console.warn('fileItem元素或其className属性不存在');
+        console.warn('fileItem-Element oder dessen className-Attribut fehlt');
         return;
     }
     
@@ -2294,7 +2294,7 @@ function handleFileUpload(file) {
             </div>
         </div>
         <div class="file-actions">
-            <button class="icon-button remove-file-button" title="移除文件">
+            <button class="icon-button remove-file-button" title="Datei entfernen">
                 <span>×</span>
             </button>
         </div>
@@ -2304,7 +2304,7 @@ function handleFileUpload(file) {
     if (fileList && fileList.style) {
         fileList.style.display = 'block';
     } else {
-        console.warn('文件列表元素或其style属性不存在');
+        console.warn('Dateiliste-Element oder dessen style-Attribut fehlt');
     }
     
     // 添加移除文件按钮的事件监听器
@@ -2315,7 +2315,7 @@ function handleFileUpload(file) {
             if (fileList && fileList.style) {
                 fileList.style.display = 'none';
             } else {
-                console.warn('文件列表元素或其style属性不存在');
+                console.warn('Dateiliste-Element oder dessen style-Attribut fehlt');
             }
         }
     });
@@ -2372,15 +2372,15 @@ function readFileContent(file) {
                     performTranslation();
                 }
             } else {
-                console.warn('输入文本元素未找到');
+                console.warn('Eingabetext-Element nicht gefunden');
             }
         } else {
-            showNotification('已上传文件，请点击"翻译文档"按钮进行翻译');
+            showNotification('Datei hochgeladen, bitte klicken Sie auf die Schaltfläche "Dokument übersetzen" für die Übersetzung');
         }
     };
     
     reader.onerror = function() {
-        showNotification('读取文件失败，请重试');
+        showNotification('Datei einlesen fehlgeschlagen, bitte erneut versuchen');
     };
     
     // 根据文件类型选择读取方式
@@ -2399,14 +2399,14 @@ function translateDocument() {
     const documentModal = document.getElementById('document-modal');
     
     if (!inputText) {
-        console.warn('输入文本元素未找到');
+        console.warn('Eingabetext-Element nicht gefunden');
         return;
     }
     
     const sourceText = inputText.value.trim();
     
     if (sourceText === '') {
-        showNotification('请先上传文档或输入文本');
+        showNotification('Bitte laden Sie zuerst ein Dokument hoch oder geben Sie Text ein');
         return;
     }
     
@@ -2420,7 +2420,7 @@ function translateDocument() {
     if (documentModal) {
         closeModal(documentModal);
     } else {
-        console.warn('文档模态框元素未找到');
+        console.warn('Dokument-Modal-Element nicht gefunden');
     }
 }
 
@@ -2429,7 +2429,7 @@ function handleDocumentTranslation() {
     const documentModal = document.getElementById('document-modal');
     
     if (!documentModal) {
-        console.warn('文档翻译模态框未找到');
+        console.warn('Dokumentübersetzungs-Modal nicht gefunden');
         return;
     }
     
@@ -2438,7 +2438,7 @@ function handleDocumentTranslation() {
     const inputText = document.getElementById('input-text');
     
     if (!fileItems || !inputText) {
-        console.warn('文件列表或输入文本元素未找到');
+        console.warn('Dateiliste oder Eingabetext-Element nicht gefunden');
         return;
     }
     
@@ -2449,7 +2449,7 @@ function handleDocumentTranslation() {
         const sourceText = inputText.value.trim();
         
         if (sourceText === '') {
-            showNotification('请先上传文档或输入文本');
+            showNotification('Bitte laden Sie zuerst ein Dokument hoch oder geben Sie Text ein');
             return;
         }
         
@@ -2466,7 +2466,7 @@ function handleDocumentTranslation() {
         const sourceText = inputText.value.trim();
         
         if (sourceText === '') {
-            showNotification('请先上传文档或输入文本');
+            showNotification('Bitte laden Sie zuerst ein Dokument hoch oder geben Sie Text ein');
             return;
         }
         
@@ -2486,7 +2486,7 @@ function handleDocumentTranslation() {
 
 // 检查local-translate.js是否已加载
 if (typeof LocalTranslate === 'undefined') {
-    console.error('local-translate.js 未加载，本地翻译功能将不可用');
+    console.error('local-translate.js wurde nicht geladen, lokale Übersetzungsfunktion ist nicht verfügbar');
 }
 
 // 扩展翻译功能，添加近义词支持
@@ -2505,6 +2505,6 @@ function enhancedTranslate(text, sourceLang, targetLang, synonymInfo) {
     }
     
     // 如果本地翻译不可用，返回原始文本
-    console.warn('本地翻译功能不可用，返回原始文本');
+    console.warn('Lokale Übersetzungsfunktion nicht verfügbar, Originaltext wird zurückgegeben');
     return processedText;
 }
