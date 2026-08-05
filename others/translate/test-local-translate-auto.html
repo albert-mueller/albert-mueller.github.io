@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>本地翻译功能测试 - 自动化测试</title>
+    <title>Lokaler Übersetzungsfunktionstest - Automatisierte Tests</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -138,58 +138,58 @@
 </head>
 <body>
     <div class="test-container">
-        <h1>🧪 本地翻译功能自动化测试</h1>
+        <h1>🧪 Automatisierter Test der lokalen Übersetzungsfunktion</h1>
         
         <div class="test-section">
-            <div class="test-title">测试控制</div>
-            <button id="run-tests" class="test-button">🚀 运行所有测试</button>
-            <button id="run-basic" class="test-button">🔍 运行基础测试</button>
-            <button id="run-performance" class="test-button">⚡ 运行性能测试</button>
-            <button id="clear-console" class="test-button">🗑️ 清空控制台</button>
+            <div class="test-title">Teststeuerung</div>
+            <button id="run-tests" class="test-button">🚀 Alle Tests ausführen</button>
+            <button id="run-basic" class="test-button">🔍 Basis-Tests ausführen</button>
+            <button id="run-performance" class="test-button">⚡ Leistungstests ausführen</button>
+            <button id="clear-console" class="test-button">🗑️ Konsole leeren</button>
             <span id="loading-indicator"></span>
         </div>
 
         <div class="test-section">
-            <div class="test-title">测试摘要</div>
+            <div class="test-title">Testzusammenfassung</div>
             <div id="test-summary" class="summary" style="display: none;">
-                <h3>测试结果统计</h3>
+                <h3>Statistik der Testergebnisse</h3>
                 <div class="stats">
                     <div class="stat-item">
                         <div id="total-tests" class="stat-number">0</div>
-                        <div class="stat-label">总测试数</div>
+                        <div class="stat-label">Gesamtzahl der Tests</div>
                     </div>
                     <div class="stat-item">
                         <div id="passed-tests" class="stat-number">0</div>
-                        <div class="stat-label">通过</div>
+                        <div class="stat-label">Bestanden</div>
                     </div>
                     <div class="stat-item">
                         <div id="failed-tests" class="stat-number">0</div>
-                        <div class="stat-label">失败</div>
+                        <div class="stat-label">Fehlgeschlagen</div>
                     </div>
                     <div class="stat-item">
                         <div id="test-duration" class="stat-number">0ms</div>
-                        <div class="stat-label">耗时</div>
+                        <div class="stat-label">Dauer</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="test-section">
-            <div class="test-title">实时测试结果</div>
+            <div class="test-title">Echtzeit-Testergebnisse</div>
             <div id="test-results"></div>
         </div>
 
         <div class="test-section">
-            <div class="test-title">控制台输出</div>
-            <div id="console-output" class="console-output">等待测试开始...</div>
+            <div class="test-title">Konsolenausgabe</div>
+            <div id="console-output" class="console-output">Warte auf Testbeginn...</div>
         </div>
     </div>
 
-    <!-- 加载本地翻译脚本 -->
+    <!-- Lokales Übersetzungsskript laden -->
     <script src="local-translate.js"></script>
     
     <script>
-        class LocalTranslateTester {
+class LocalTranslateTester {
             constructor() {
                 this.testResults = [];
                 this.consoleOutput = document.getElementById('console-output');
@@ -203,7 +203,7 @@
             }
 
             setupConsoleCapture() {
-                // 捕获控制台输出
+                // Erfasse Konsolenausgabe
                 console.log = (...args) => {
                     this.originalConsoleLog.apply(console, args);
                     this.appendConsoleOutput(args.join(' '), 'log');
@@ -234,7 +234,7 @@
             }
 
             clearConsole() {
-                this.consoleOutput.textContent = '控制台已清空...\n';
+                this.consoleOutput.textContent = 'Konsole wurde geleert...\n';
             }
 
             addTestResult(title, success, message, details = '') {
@@ -247,7 +247,7 @@
                 `;
                 this.testResultsDiv.appendChild(resultDiv);
                 this.testResults.push({ title, success, message, details });
-            }
+}
 
             async runAllTests() {
                 this.testResults = [];
@@ -268,124 +268,124 @@
             }
 
             async runBasicTests() {
-                console.log('=== 开始基础测试 ===');
+                console.log('=== Beginn der Basistests ===');
                 
-                // 测试1: LocalTranslate对象存在性
+                // Test 1: Existenz des LocalTranslate-Objekts
                 try {
                     if (typeof LocalTranslate !== 'undefined') {
-                        this.addTestResult('LocalTranslate对象存在性', true, 'LocalTranslate对象已加载');
+                        this.addTestResult('Existenz des LocalTranslate-Objekts', true, 'LocalTranslate-Objekt geladen');
                     } else {
-                        this.addTestResult('LocalTranslate对象存在性', false, 'LocalTranslate对象未定义');
+                        this.addTestResult('Existenz des LocalTranslate-Objekts', false, 'LocalTranslate-Objekt nicht definiert');
                     }
                 } catch (error) {
-                    this.addTestResult('LocalTranslate对象存在性', false, error.message);
+                    this.addTestResult('Existenz des LocalTranslate-Objekts', false, error.message);
                 }
 
-                // 测试2: translate方法存在性
+                // Test 2: Existenz der translate-Methode
                 try {
                     if (typeof LocalTranslate.translate === 'function') {
-                        this.addTestResult('translate方法存在性', true, 'translate方法可用');
+                        this.addTestResult('Existenz der translate-Methode', true, 'translate-Methode verfügbar');
                     } else {
-                        this.addTestResult('translate方法存在性', false, 'translate方法不可用');
+                        this.addTestResult('Existenz der translate-Methode', false, 'translate-Methode nicht verfügbar');
                     }
                 } catch (error) {
-                    this.addTestResult('translate方法存在性', false, error.message);
+                    this.addTestResult('Existenz der translate-Methode', false, error.message);
                 }
 
-                // 测试3: 简单英文到中文翻译
+                // Test 3: Einfache Englisch-zu-Chinesisch-Übersetzung
                 try {
-                    const result = LocalTranslate.translate('hello', 'en', 'zh');
+                    const result = LocalTranslate.translate('hallo', 'de', 'zh');
                     const success = result === '你好';
-                    this.addTestResult('英文到中文翻译', success, 
-                        success ? `翻译结果: ${result}` : `期望: 你好, 实际: ${result}`);
+                    this.addTestResult('Englisch-zu-Chinesisch Übersetzung', success, 
+                        success ? `Übersetzungsergebnis: ${result}` : `Erwartet: 你好, Tatsächlich: ${result}`);
                 } catch (error) {
-                    this.addTestResult('英文到中文翻译', false, error.message);
+                    this.addTestResult('Englisch-zu-Chinesisch Übersetzung', false, error.message);
                 }
 
-                // 测试4: 简单中文到英文翻译
+                // Test 4: Einfache Chinesisch-zu-Englisch-Übersetzung
                 try {
-                    const result = LocalTranslate.translate('你好', 'zh', 'en');
-                    const success = result === 'hello';
-                    this.addTestResult('中文到英文翻译', success, 
-                        success ? `翻译结果: ${result}` : `期望: hello, 实际: ${result}`);
+                    const result = LocalTranslate.translate('你好', 'zh', 'de');
+const success = result === 'hallo';
+                    this.addTestResult('Chinesisch nach Deutsch Übersetzung', success, 
+                        success ? `Übersetzungsergebnis: ${result}` : `Erwartet: hallo, Tatsächlich: ${result}`);
                 } catch (error) {
-                    this.addTestResult('中文到英文翻译', false, error.message);
+                    this.addTestResult('Chinesisch nach Deutsch Übersetzung', false, error.message);
                 }
 
-                // 测试5: 复杂短语翻译
+                // Test 5: Komplexe Phrase Übersetzung
                 try {
-                    const result = LocalTranslate.translate('good morning', 'en', 'zh');
+                    const result = LocalTranslate.translate('guten morgen', 'de', 'zh');
                     const success = result.includes('早上好');
-                    this.addTestResult('复杂短语翻译', success, 
-                        success ? `翻译结果: ${result}` : `期望包含: 早上好, 实际: ${result}`);
+                    this.addTestResult('Komplexe Phrase Übersetzung', success, 
+                        success ? `Übersetzungsergebnis: ${result}` : `Erwartet enthalten: 早上好, Tatsächlich: ${result}`);
                 } catch (error) {
-                    this.addTestResult('复杂短语翻译', false, error.message);
+                    this.addTestResult('Komplexe Phrase Übersetzung', false, error.message);
                 }
             }
 
             async runPerformanceTests() {
-                console.log('=== 开始性能测试 ===');
+                console.log('=== Leistungstest starten ===');
                 
-                // 测试1: 单次翻译性能
+                // Test 1: Einzelübersetzungsleistung
                 try {
                     const start = performance.now();
-                    const result = LocalTranslate.translate('hello world', 'en', 'zh');
+                    const result = LocalTranslate.translate('hallo welt', 'de', 'zh');
                     const end = performance.now();
                     const duration = (end - start).toFixed(2);
                     
-                    this.addTestResult('单次翻译性能', true, 
-                        `翻译结果: ${result}, 耗时: ${duration}ms`, `期望 < 10ms`);
+                    this.addTestResult('Einzelübersetzungsleistung', true, 
+                        `Übersetzungsergebnis: ${result}, Dauer: ${duration}ms`, `Erwartet < 10ms`);
                 } catch (error) {
-                    this.addTestResult('单次翻译性能', false, error.message);
+                    this.addTestResult('Einzelübersetzungsleistung', false, error.message);
                 }
 
-                // 测试2: 批量翻译性能
+                // Test 2: Batch-Übersetzungsleistung
                 try {
                     const start = performance.now();
                     for (let i = 0; i < 100; i++) {
-                        LocalTranslate.translate('hello', 'en', 'zh');
+                        LocalTranslate.translate('hallo', 'de', 'zh');
                     }
                     const end = performance.now();
                     const duration = (end - start).toFixed(2);
                     
-                    this.addTestResult('批量翻译性能', duration < 100, 
-                        `100次翻译耗时: ${duration}ms`, `期望 < 100ms`);
+                    this.addTestResult('Batch-Übersetzungsleistung', duration < 100, 
+                        `100 Übersetzungen Dauer: ${duration}ms`, `Erwartet < 100ms`);
                 } catch (error) {
-                    this.addTestResult('批量翻译性能', false, error.message);
+                    this.addTestResult('Batch-Übersetzungsleistung', false, error.message);
                 }
             }
 
             async runEdgeCaseTests() {
-                console.log('=== 开始边界情况测试 ===');
+                console.log('=== Beginne Randfalltest ===');
                 
-                // 测试1: 空字符串处理
+                // Test 1: Leere Zeichenkette Verarbeitung
                 try {
-                    const result = LocalTranslate.translate('', 'en', 'zh');
+                    const result = LocalTranslate.translate('', 'de', 'zh');
                     const success = result === '';
-                    this.addTestResult('空字符串处理', success, 
-                        success ? '正确处理空字符串' : `结果: "${result}"`);
+                    this.addTestResult('Leere Zeichenkette Verarbeitung', success,
+success ? 'Richtige Verarbeitung leerer Zeichenkette' : `Ergebnis: "${result}"`);
                 } catch (error) {
-                    this.addTestResult('空字符串处理', false, error.message);
+                    this.addTestResult('Leerer String Verarbeitung', false, error.message);
                 }
 
-                // 测试2: 相同语言翻译
+                // Test 2: Übersetzung gleicher Sprache
                 try {
-                    const result = LocalTranslate.translate('hello', 'en', 'en');
-                    const success = result === 'hello';
-                    this.addTestResult('相同语言翻译', success, 
-                        success ? '正确处理相同语言' : `期望: hello, 实际: ${result}`);
+                    const result = LocalTranslate.translate('hallo', 'de', 'de');
+                    const success = result === 'hallo';
+                    this.addTestResult('Übersetzung gleicher Sprache', success, 
+                        success ? 'Richtige Verarbeitung gleicher Sprache' : `Erwartet: hallo, Tatsächlich: ${result}`);
                 } catch (error) {
-                    this.addTestResult('相同语言翻译', false, error.message);
+                    this.addTestResult('Übersetzung gleicher Sprache', false, error.message);
                 }
 
-                // 测试3: 不支持的语言对
+                // Test 3: Nicht unterstütztes Sprachpaar
                 try {
-                    const result = LocalTranslate.translate('hello', 'en', 'jp');
-                    this.addTestResult('不支持的语言对', false, 
-                        `应该抛出异常，但返回: ${result}`);
+                    const result = LocalTranslate.translate('hallo', 'de', 'jp');
+                    this.addTestResult('Nicht unterstütztes Sprachpaar', false, 
+                        `Sollte eine Ausnahme werfen, aber zurückgegeben: ${result}`);
                 } catch (error) {
-                    this.addTestResult('不支持的语言对', true, 
-                        `正确抛出异常: ${error.message}`);
+                    this.addTestResult('Nicht unterstütztes Sprachpaar', true, 
+                        `Korrekt Ausnahme geworfen: ${error.message}`);
                 }
             }
 
@@ -418,10 +418,10 @@
             }
         }
 
-        // 初始化测试器
+        // Initialisiere Tester
         document.addEventListener('DOMContentLoaded', function() {
             new LocalTranslateTester();
-        });
+});
     </script>
 </body>
 </html>
