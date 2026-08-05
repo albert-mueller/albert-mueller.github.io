@@ -5,7 +5,7 @@ window.addEventListener('message', event => {
     const message = event.data;
     if (typeof message === 'object' && message.giscus === 'comment-created') {
         // Comment successfully posted
-        showSuccessMessage('评论成功！感谢您的宝贵意见。');
+        showSuccessMessage('Kommentar erfolgreich! Vielen Dank für Ihr wertvolles Feedback.');
     }
 });
 
