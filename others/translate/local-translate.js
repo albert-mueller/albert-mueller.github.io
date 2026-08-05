@@ -1,1016 +1,3063 @@
 /**
- * 本地翻译功能模块
- * 实现基础的本地翻译功能，用于API不可用时的备用方案
+ * Lokales Übersetzungsmodul
+ * Implementiert grundlegende lokale Übersetzungsfunktionen als Ausweichlösung, wenn die API nicht verfügbar ist
  */
 
 const LocalTranslate = {
-    // 常用短语映射表（英文 -> 中文）
-    enToZhDict: {
-        'hello': '你好',
-        'world': '世界',
-        'good morning': '早上好',
-        'good afternoon': '下午好',
-        'good evening': '晚上好',
-        'goodbye': '再见',
-        'thank you': '谢谢',
-        'sorry': '对不起',
-        'yes': '是',
-        'no': '否',
-        'please': '请',
-        'welcome': '欢迎',
-        'how are you': '你好吗',
-        'i am fine': '我很好',
-        'what is your name': '你叫什么名字',
-        'my name is': '我的名字是',
-        'nice to meet you': '很高兴认识你',
-        'where are you from': '你来自哪里',
-        'i am from': '我来自',
-        'i love you': '我爱你',
-        'happy': '高兴',
-        'sad': '悲伤',
-        'angry': '生气',
-        'tired': '疲倦',
-        'hungry': '饿',
-        'thirsty': '渴',
-        'hot': '热',
-        'cold': '冷',
-        'big': '大',
-        'small': '小',
-        'old': '老',
-        'new': '新',
-        'good': '好',
-        'bad': '坏',
-        'fast': '快',
-        'slow': '慢',
-        'right': '对',
-        'wrong': '错',
-        'today': '今天',
-        'tomorrow': '明天',
-        'yesterday': '昨天',
-        'time': '时间',
-        'day': '日',
-        'week': '周',
-        'month': '月',
-        'year': '年',
-        'water': '水',
-        'food': '食物',
-        'money': '钱',
-        'book': '书',
-        'friend': '朋友',
-        'family': '家庭',
-        'father': '父亲',
-        'mother': '母亲',
-        'brother': '兄弟',
-        'sister': '姐妹',
-        'son': '儿子',
-        'daughter': '女儿',
-        'man': '男人',
-        'woman': '女人',
-        'child': '孩子',
-        'boy': '男孩',
-        'girl': '女孩',
+    // Häufige Ausdrücke (Deutsch -> Chinesisch)
+    deToZhDict: {
+        'hallo': '你好',
+        'welt': '世界',
+        'guten morgen': '早上好',
+        'guten tag': '下午好',
+        'guten abend': '晚上好',
+        'auf wiedersehen': '再见',
+        'danke': '谢谢',
+        'entschuldigung': '对不起',
+        'ja': '是',
+        'nein': '否',
+        'bitte': '请',
+        'willkommen': '欢迎',
+        'wie geht es dir': '你好吗',
+        'mir geht es gut': '我很好',
+        'wie heißt du': '你叫什么名字',
+        'ich heiße': '我的名字是',
+        'schön, sie kennenzulernen': '很高兴认识你',
+        'woher kommst du': '你来自哪里',
+        'ich komme aus': '我来自',
+        'ich liebe dich': '我爱你',
+        'glücklich': '快乐',
+        'traurig': '悲伤',
+        'wütend': '生气',
+        'müde': '疲倦',
+        'hungrig': '饿',
+        'durstig': '渴',
+        'heiß': '热',
+        'kalt': '冷',
+        'groß': '大',
+        'klein': '小',
+        'alt': '年老',
+        'neu': '新',
+        'gut': '好',
+        'schlecht': '坏',
+        'schnell': '快速',
+        'langsam': '缓慢',
+        'richtig': '右',
+        'falsch': '错',
+        'heute': '今天',
+        'morgen': '明天',
+        'gestern': '昨天',
+        'zeit': '时间',
+        'tag': '日',
+        'woche': '周',
+        'monat': '月',
+        'jahr': '年',
+        'wasser': '水',
+        'essen': '食物',
+        'geld': '钱',
+        'buch': '书',
+        'freund': '朋友',
+        'familie': '家庭',
+        'vater': '父亲',
+        'mutter': '母亲',
+        'bruder': '兄弟',
+        'schwester': '姐妹',
+        'sohn': '儿子',
+        'tochter': '女儿',
+        'mann': '男人',
+        'frau': '女人',
+        'kind': '孩子',
+        'junge': '男孩',
+        'mädchen': '女孩',
         'person': '人',
-        'people': '人们',
-        'house': '房子',
-        'car': '汽车',
-        'phone': '电话',
+        'leute': '人们',
+        'haus': '房子',
+        'auto': '汽车',
+        'telefon': '电话',
         'computer': '电脑',
         'internet': '互联网',
-        'language': '语言',
-        'english': '英语',
-        'chinese': '中文',
-        'translate': '翻译',
-        'hello world': '你好世界',
-        'good night': '晚安',
-        
-        // 新增词汇 - 数字
-        'zero': '零', 'one': '一', 'two': '二', 'three': '三', 'four': '四', 'five': '五',
-        'six': '六', 'seven': '七', 'eight': '八', 'nine': '九', 'ten': '十',
-        'hundred': '百', 'thousand': '千', 'million': '百万', 'billion': '十亿',
-        
-        // 新增词汇 - 颜色
-        'red': '红色', 'blue': '蓝色', 'green': '绿色', 'yellow': '黄色', 'black': '黑色',
-        'white': '白色', 'orange': '橙色', 'purple': '紫色', 'pink': '粉色', 'brown': '棕色',
-        
-        // 新增词汇 - 动物
-        'dog': '狗', 'cat': '猫', 'bird': '鸟', 'fish': '鱼', 'horse': '马', 'cow': '牛',
-        'sheep': '羊', 'pig': '猪', 'chicken': '鸡', 'duck': '鸭', 'rabbit': '兔子',
-        
-        // 新增词汇 - 水果
-        'apple': '苹果', 'banana': '香蕉', 'orange': '橙子', 'grape': '葡萄', 'strawberry': '草莓',
-        'watermelon': '西瓜', 'pineapple': '菠萝', 'mango': '芒果', 'pear': '梨', 'peach': '桃子',
-        
-        // 新增词汇 - 蔬菜
-        'tomato': '番茄', 'potato': '土豆', 'carrot': '胡萝卜', 'onion': '洋葱', 'cabbage': '卷心菜',
-        'broccoli': '西兰花', 'spinach': '菠菜', 'corn': '玉米', 'cucumber': '黄瓜', 'pepper': '辣椒',
-        
-        // 新增词汇 - 天气
-        'sun': '太阳', 'moon': '月亮', 'star': '星星', 'cloud': '云', 'rain': '雨',
-        'snow': '雪', 'wind': '风', 'storm': '风暴', 'weather': '天气', 'temperature': '温度',
-        
-        // 新增词汇 - 职业
-        'teacher': '老师', 'doctor': '医生', 'engineer': '工程师', 'student': '学生', 'worker': '工人',
-        'farmer': '农民', 'driver': '司机', 'cook': '厨师', 'artist': '艺术家', 'scientist': '科学家',
-        
-        // 新增词汇 - 国家
-        'china': '中国', 'america': '美国', 'england': '英国', 'france': '法国', 'germany': '德国',
-        'japan': '日本', 'korea': '韩国', 'russia': '俄罗斯', 'india': '印度', 'australia': '澳大利亚',
-        
-        // 新增词汇 - 城市
-        'beijing': '北京', 'shanghai': '上海', 'guangzhou': '广州', 'shenzhen': '深圳', 'hong kong': '香港',
-        'new york': '纽约', 'london': '伦敦', 'paris': '巴黎', 'tokyo': '东京', 'seoul': '首尔',
-        
-        // 新增词汇 - 交通工具
-        'bus': '公交车', 'train': '火车', 'airplane': '飞机', 'ship': '船', 'bicycle': '自行车',
-        'motorcycle': '摩托车', 'taxi': '出租车', 'subway': '地铁', 'boat': '小船', 'truck': '卡车',
-        
-        // 新增词汇 - 学校相关
-        'school': '学校', 'classroom': '教室', 'teacher': '老师', 'student': '学生', 'book': '书',
-        'pen': '笔', 'pencil': '铅笔', 'paper': '纸', 'homework': '作业', 'exam': '考试',
-        
-        // 新增词汇 - 身体部位
-        'head': '头', 'eye': '眼睛', 'ear': '耳朵', 'nose': '鼻子', 'mouth': '嘴',
-        'hand': '手', 'foot': '脚', 'leg': '腿', 'arm': '手臂', 'heart': '心脏',
-        
-        // 新增词汇 - 服装
-        'shirt': '衬衫', 'pants': '裤子', 'dress': '裙子', 'shoes': '鞋子', 'hat': '帽子',
-        'coat': '外套', 'jacket': '夹克', 'socks': '袜子', 'gloves': '手套', 'scarf': '围巾',
-        
-        // 新增词汇 - 时间相关
-        'morning': '早晨', 'afternoon': '下午', 'evening': '晚上', 'night': '夜晚', 'dawn': '黎明',
-        'dusk': '黄昏', 'minute': '分钟', 'hour': '小时', 'second': '秒', 'clock': '时钟',
-        
-        // 新增词汇 - 方向
-        'north': '北', 'south': '南', 'east': '东', 'west': '西', 'left': '左',
-        'right': '右', 'up': '上', 'down': '下', 'front': '前', 'back': '后',
-        
-        // 新增词汇 - 常见动词
-        'eat': '吃', 'drink': '喝', 'sleep': '睡觉', 'work': '工作', 'study': '学习',
-        'play': '玩', 'read': '读', 'write': '写', 'speak': '说', 'listen': '听',
-        'see': '看', 'go': '去', 'come': '来', 'buy': '买', 'sell': '卖',
-        
-        // 新增词汇 - 常见形容词
-        'beautiful': '美丽', 'ugly': '丑陋', 'rich': '富有', 'poor': '贫穷', 'strong': '强壮',
-        'weak': '虚弱', 'tall': '高', 'short': '矮', 'long': '长', 'short': '短',
-        'heavy': '重', 'light': '轻', 'clean': '干净', 'dirty': '脏', 'easy': '容易',
-        'difficult': '困难', 'important': '重要', 'interesting': '有趣', 'boring': '无聊',
-        
-        // 新增短语 - 日常用语
-        'how much': '多少钱', 'what time': '几点', 'where is': '在哪里', 'how old': '多大',
-        'can you help me': '你能帮我吗', 'i need help': '我需要帮助', 'excuse me': '打扰一下',
-        'i dont understand': '我不明白', 'can you repeat': '你能重复吗', 'speak slowly': '说慢一点',
-        'i agree': '我同意', 'i disagree': '我不同意', 'maybe': '也许', 'probably': '可能',
-        'of course': '当然', 'no problem': '没问题', 'you are welcome': '不客气',
-        'have a good day': '祝你今天愉快', 'see you later': '回头见', 'take care': '保重',
-        
-        // 扩展词汇 - 更多常见动词
-        'run': '跑', 'walk': '走', 'jump': '跳', 'fly': '飞', 'swim': '游泳',
-        'drive': '驾驶', 'ride': '骑', 'climb': '爬', 'dance': '跳舞', 'sing': '唱歌',
-        'laugh': '笑', 'cry': '哭', 'think': '思考', 'know': '知道', 'understand': '理解',
-        'remember': '记住', 'forget': '忘记', 'believe': '相信', 'hope': '希望', 'want': '想要',
-        'need': '需要', 'like': '喜欢', 'love': '爱', 'hate': '讨厌', 'prefer': '更喜欢',
-        'choose': '选择', 'decide': '决定', 'plan': '计划', 'try': '尝试', 'fail': '失败',
-        'succeed': '成功', 'win': '赢', 'lose': '输', 'fight': '战斗', 'argue': '争论',
-        'agree': '同意', 'disagree': '不同意', 'accept': '接受', 'refuse': '拒绝', 'invite': '邀请',
-        'visit': '参观', 'travel': '旅行', 'move': '移动', 'stay': '停留', 'leave': '离开',
-        'arrive': '到达', 'return': '返回', 'enter': '进入', 'exit': '退出', 'open': '打开',
-        'close': '关闭', 'start': '开始', 'stop': '停止', 'continue': '继续', 'finish': '完成',
-        'end': '结束', 'begin': '开始', 'create': '创建', 'build': '建造', 'make': '制作',
-        'produce': '生产', 'grow': '种植', 'cook': '烹饪', 'bake': '烘焙', 'clean': '清洁',
-        'wash': '洗', 'repair': '修理', 'break': '打破', 'destroy': '破坏', 'cut': '切割',
-        'hit': '打', 'push': '推', 'pull': '拉', 'carry': '携带', 'lift': '举起',
-        'throw': '扔', 'catch': '接住', 'kick': '踢', 'pick': '挑选', 'give': '给予',
-        'take': '拿取', 'receive': '接收', 'send': '发送', 'bring': '带来', 'follow': '跟随',
-        'lead': '领导', 'join': '加入', 'separate': '分离', 'connect': '连接', 'compare': '比较',
-        'measure': '测量', 'count': '计数', 'calculate': '计算', 'add': '添加', 'subtract': '减去',
-        'multiply': '乘', 'divide': '除', 'increase': '增加', 'decrease': '减少', 'change': '改变',
-        'become': '变成', 'turn': '转向', 'appear': '出现', 'disappear': '消失', 'show': '展示',
-        'hide': '隐藏', 'find': '寻找', 'search': '搜索', 'discover': '发现', 'explore': '探索',
-        'invent': '发明', 'design': '设计', 'draw': '画画', 'paint': '绘画', 'color': '上色',
-        'photograph': '拍照', 'record': '记录', 'play': '玩', 'game': '游戏', 'sport': '运动',
-        
-        // 扩展词汇 - 更多常见形容词
-        'happy': '快乐', 'sad': '悲伤', 'angry': '生气', 'calm': '平静', 'excited': '兴奋',
-        'bored': '无聊', 'surprised': '惊讶', 'confused': '困惑', 'scared': '害怕', 'brave': '勇敢',
-        'nervous': '紧张', 'relaxed': '放松', 'stressed': '压力', 'proud': '自豪', 'ashamed': '羞愧',
-        'jealous': '嫉妒', 'generous': '慷慨', 'selfish': '自私', 'kind': '善良', 'cruel': '残忍',
-        'polite': '礼貌', 'rude': '粗鲁', 'honest': '诚实', 'dishonest': '不诚实', 'friendly': '友好',
-        'unfriendly': '不友好', 'social': '社交', 'antisocial': '反社交', 'outgoing': '外向', 'shy': '害羞',
-        'confident': '自信', 'insecure': '不安全', 'intelligent': '聪明', 'stupid': '愚蠢', 'wise': '明智',
-        'foolish': '愚蠢', 'creative': '有创意', 'boring': '乏味', 'imaginative': '富有想象力', 'practical': '实用',
-        'impractical': '不实用', 'logical': '逻辑', 'emotional': '情感', 'rational': '理性', 'irrational': '不理性',
-        'patient': '耐心', 'impatient': '不耐烦', 'hardworking': '勤奋', 'lazy': '懒惰', 'active': '活跃',
-        'passive': '被动', 'energetic': '精力充沛', 'tired': '疲倦', 'healthy': '健康', 'sick': '生病',
-        'strong': '强壮', 'weak': '虚弱', 'fit': '健康', 'unfit': '不健康', 'flexible': '灵活',
-        'stiff': '僵硬', 'fast': '快速', 'slow': '缓慢', 'quick': '迅速', 'swift': '敏捷',
-        'young': '年轻', 'old': '年老', 'new': '新', 'ancient': '古老', 'modern': '现代',
-        'fresh': '新鲜', 'stale': '不新鲜', 'raw': '生的', 'cooked': '煮熟的', 'hot': '热',
-        'cold': '冷', 'warm': '温暖', 'cool': '凉爽', 'freezing': '冰冻', 'boiling': '沸腾',
-        'wet': '湿', 'dry': '干', 'moist': '湿润', 'damp': '潮湿', 'humid': '湿润',
-        'bright': '明亮', 'dark': '黑暗', 'light': '轻', 'heavy': '重', 'thick': '厚',
-        'thin': '薄', 'wide': '宽', 'narrow': '窄', 'deep': '深', 'shallow': '浅',
-        'high': '高', 'low': '低', 'tall': '高', 'short': '矮', 'far': '远',
-        'near': '近', 'close': '近', 'distant': '远', 'expensive': '昂贵', 'cheap': '便宜',
-        'valuable': '有价值', 'worthless': '无价值', 'precious': '珍贵', 'common': '普通', 'rare': '稀有',
-        'unique': '独特', 'normal': '正常', 'strange': '奇怪', 'weird': '怪异', 'ordinary': '普通',
-        'special': '特别', 'extraordinary': '非凡', 'simple': '简单', 'complex': '复杂', 'easy': '容易',
-        'difficult': '困难', 'hard': '困难', 'soft': '软', 'hard': '硬', 'smooth': '光滑',
-        'rough': '粗糙', 'sharp': '锋利', 'blunt': '钝', 'clear': '清晰', 'unclear': '不清楚',
-        'obvious': '明显', 'hidden': '隐藏', 'visible': '可见', 'invisible': '不可见', 'transparent': '透明',
-        'opaque': '不透明', 'loud': '大声', 'quiet': '安静', 'silent': '沉默', 'noisy': '嘈杂',
-        'sweet': '甜', 'sour': '酸', 'bitter': '苦', 'salty': '咸', 'spicy': '辣',
-        'delicious': '美味', 'tasty': '好吃', 'awful': '糟糕', 'disgusting': '恶心', 'fresh': '新鲜',
-        
-        // 扩展词汇 - 食物和饮料
-        'bread': '面包', 'rice': '米饭', 'noodles': '面条', 'pasta': '意大利面', 'pizza': '披萨',
-        'hamburger': '汉堡', 'sandwich': '三明治', 'cheese': '奶酪', 'butter': '黄油', 'milk': '牛奶',
-        'yogurt': '酸奶', 'cream': '奶油', 'egg': '鸡蛋', 'meat': '肉', 'beef': '牛肉',
-        'pork': '猪肉', 'chicken': '鸡肉', 'fish': '鱼', 'seafood': '海鲜', 'shrimp': '虾',
-        'crab': '螃蟹', 'soup': '汤', 'salad': '沙拉', 'vegetable': '蔬菜', 'fruit': '水果',
-        'cake': '蛋糕', 'cookie': '饼干', 'chocolate': '巧克力', 'ice cream': '冰淇淋', 'candy': '糖果',
-        'sugar': '糖', 'salt': '盐', 'pepper': '胡椒', 'oil': '油', 'vinegar': '醋',
-        'sauce': '酱', 'spice': '香料', 'herb': '香草', 'flour': '面粉', 'coffee': '咖啡',
-        'tea': '茶', 'juice': '果汁', 'water': '水', 'soda': '苏打水', 'beer': '啤酒',
-        'wine': '葡萄酒', 'alcohol': '酒精', 'breakfast': '早餐', 'lunch': '午餐', 'dinner': '晚餐',
-        'snack': '零食', 'meal': '餐', 'dish': '菜', 'cuisine': '美食', 'recipe': '食谱',
-        
-        // 扩展词汇 - 家居用品
-        'table': '桌子', 'chair': '椅子', 'sofa': '沙发', 'bed': '床', 'desk': '书桌',
-        'shelf': '架子', 'cupboard': '橱柜', 'wardrobe': '衣柜', 'mirror': '镜子', 'lamp': '灯',
-        'bulb': '灯泡', 'clock': '时钟', 'watch': '手表', 'battery': '电池', 'key': '钥匙',
-        'lock': '锁', 'door': '门', 'window': '窗户', 'wall': '墙', 'floor': '地板',
-        'ceiling': '天花板', 'roof': '屋顶', 'garden': '花园', 'yard': '院子', 'kitchen': '厨房',
-        'bathroom': '浴室', 'bedroom': '卧室', 'living room': '客厅', 'dining room': '餐厅', 'garage': '车库',
-        'basement': '地下室', 'attic': '阁楼', 'balcony': '阳台', 'stairs': '楼梯', 'elevator': '电梯',
-        'refrigerator': '冰箱', 'freezer': '冰柜', 'oven': '烤箱', 'microwave': '微波炉', 'stove': '炉子',
-        'dishwasher': '洗碗机', 'washing machine': '洗衣机', 'dryer': '烘干机', 'vacuum': '吸尘器', 'broom': '扫帚',
-        'mop': '拖把', 'towel': '毛巾', 'soap': '肥皂', 'shampoo': '洗发水', 'toothbrush': '牙刷',
-        'toothpaste': '牙膏', 'comb': '梳子', 'brush': '刷子', 'razor': '剃须刀', 'scissors': '剪刀',
-        'knife': '刀', 'fork': '叉', 'spoon': '勺', 'plate': '盘子', 'bowl': '碗',
-        'cup': '杯子', 'glass': '玻璃杯', 'mug': '马克杯', 'bottle': '瓶子', 'jar': '罐子',
-        'pot': '锅', 'pan': '平底锅', 'basket': '篮子', 'bag': '包', 'backpack': '背包',
-        'suitcase': '手提箱', 'purse': '钱包', 'wallet': '钱包', 'umbrella': '雨伞', 'trash can': '垃圾桶',
-        
-        // 扩展词汇 - 自然和环境
-        'mountain': '山', 'hill': '小山', 'valley': '山谷', 'river': '河流', 'lake': '湖泊',
-        'ocean': '海洋', 'sea': '海', 'beach': '海滩', 'desert': '沙漠', 'forest': '森林',
-        'jungle': '丛林', 'wood': '树林', 'park': '公园', 'garden': '花园', 'field': '田野',
-        'farm': '农场', 'island': '岛屿', 'volcano': '火山', 'earthquake': '地震', 'flood': '洪水',
-        'drought': '干旱', 'storm': '风暴', 'hurricane': '飓风', 'tornado': '龙卷风', 'tsunami': '海啸',
-        'fire': '火', 'water': '水', 'air': '空气', 'wind': '风', 'rain': '雨',
-        'snow': '雪', 'ice': '冰', 'hail': '冰雹', 'fog': '雾', 'cloud': '云',
-        'sky': '天空', 'sun': '太阳', 'moon': '月亮', 'star': '星星', 'planet': '行星',
-        'earth': '地球', 'world': '世界', 'universe': '宇宙', 'galaxy': '星系', 'space': '太空',
-        'gravity': '重力', 'atmosphere': '大气层', 'oxygen': '氧气', 'carbon dioxide': '二氧化碳', 'pollution': '污染',
-        'environment': '环境', 'nature': '自然', 'ecosystem': '生态系统', 'climate': '气候', 'weather': '天气',
-        'temperature': '温度', 'season': '季节', 'spring': '春天', 'summer': '夏天', 'autumn': '秋天',
-        'winter': '冬天', 'plant': '植物', 'tree': '树', 'flower': '花', 'grass': '草',
-        'leaf': '叶子', 'root': '根', 'branch': '树枝', 'seed': '种子', 'fruit': '水果',
-        'vegetable': '蔬菜', 'crop': '庄稼', 'soil': '土壤', 'sand': '沙子', 'rock': '岩石',
-        'stone': '石头', 'metal': '金属', 'gold': '金', 'silver': '银', 'copper': '铜',
-        'iron': '铁', 'steel': '钢', 'plastic': '塑料', 'wood': '木头', 'paper': '纸',
-        'glass': '玻璃', 'rubber': '橡胶', 'leather': '皮革', 'fabric': '织物', 'cotton': '棉花',
-        'wool': '羊毛', 'silk': '丝绸', 'nylon': '尼龙', 'material': '材料', 'substance': '物质',
-        
-        // 扩展词汇 - 学习和教育
-        'school': '学校', 'university': '大学', 'college': '学院', 'class': '班级', 'lesson': '课程',
-        'subject': '科目', 'math': '数学', 'science': '科学', 'biology': '生物学', 'chemistry': '化学',
-        'physics': '物理学', 'geography': '地理学', 'history': '历史', 'literature': '文学', 'art': '艺术',
-        'music': '音乐', 'language': '语言', 'philosophy': '哲学', 'psychology': '心理学', 'sociology': '社会学',
-        'economics': '经济学', 'politics': '政治学', 'law': '法律', 'medicine': '医学', 'engineering': '工程学',
-        'architecture': '建筑学', 'computer science': '计算机科学', 'information technology': '信息技术', 'business': '商业',
-        'management': '管理', 'marketing': '市场营销', 'accounting': '会计', 'finance': '金融', 'banking': '银行业',
-        'teacher': '教师', 'professor': '教授', 'student': '学生', 'pupil': '小学生', 'graduate': '毕业生',
-        'undergraduate': '本科生', 'postgraduate': '研究生', 'doctorate': '博士学位', 'degree': '学位', 'diploma': '文凭',
-        'certificate': '证书', 'qualification': '资格', 'skill': '技能', 'knowledge': '知识', 'wisdom': '智慧',
-        'intelligence': '智力', 'memory': '记忆', 'concentration': '专注', 'attention': '注意力', 'learning': '学习',
-        'studying': '学习', 'research': '研究', 'experiment': '实验', 'observation': '观察', 'analysis': '分析',
-        'theory': '理论', 'practice': '实践', 'experience': '经验', 'expertise': '专业知识', 'mastery': '精通',
-        'textbook': '教科书', 'notebook': '笔记本', 'dictionary': '字典', 'encyclopedia': '百科全书', 'library': '图书馆',
-        'laboratory': '实验室', 'workshop': '工作室', 'seminar': '研讨会', 'conference': '会议', 'lecture': '讲座',
-        'presentation': '演示', 'assignment': '作业', 'project': '项目', 'thesis': '论文', 'dissertation': '学位论文',
-        'exam': '考试', 'test': '测试', 'quiz': '测验', 'assessment': '评估', 'evaluation': '评价',
-        'grade': '成绩', 'mark': '分数', 'score': '得分', 'result': '结果', 'achievement': '成就',
-        'success': '成功', 'failure': '失败', 'progress': '进步', 'development': '发展', 'improvement': '提高',
-        'education': '教育', 'teaching': '教学', 'training': '培训', 'instruction': '指导', 'guidance': '指导',
-        'advice': '建议', 'feedback': '反馈', 'criticism': '批评', 'praise': '表扬', 'reward': '奖励',
-        'punishment': '惩罚', 'discipline': '纪律', 'rules': '规则', 'regulations': '规定', 'policy': '政策',
-        
-        // 扩展词汇 - 工作和职业
-        'job': '工作', 'work': '工作', 'career': '职业', 'profession': '职业', 'occupation': '职业',
-        'employment': '就业', 'unemployment': '失业', 'retirement': '退休', 'promotion': '晋升', 'demotion': '降职',
-        'salary': '薪水', 'wage': '工资', 'income': '收入', 'earning': '收入', 'bonus': '奖金',
-        'benefit': '福利', 'pension': '养老金', 'insurance': '保险', 'contract': '合同', 'agreement': '协议',
-        'responsibility': '责任', 'duty': '职责', 'task': '任务', 'assignment': '任务', 'project': '项目',
-        'deadline': '截止日期', 'schedule': '时间表', 'meeting': '会议', 'appointment': '约会', 'interview': '面试',
-        'application': '申请', 'resume': '简历', 'cv': '简历', 'qualification': '资格', 'experience': '经验',
-        'skill': '技能', 'ability': '能力', 'talent': '才能', 'expertise': '专业知识', 'knowledge': '知识',
-        'training': '培训', 'education': '教育', 'degree': '学位', 'certificate': '证书', 'license': '执照',
-        'office': '办公室', 'factory': '工厂', 'workshop': '车间', 'warehouse': '仓库', 'store': '商店',
-        'shop': '商店', 'market': '市场', 'company': '公司', 'corporation': '公司', 'organization': '组织',
-        'institution': '机构', 'government': '政府', 'department': '部门', 'division': '部门', 'team': '团队',
-        'group': '小组', 'committee': '委员会', 'board': '董事会', 'management': '管理层', 'leadership': '领导力',
-        'supervisor': '主管', 'manager': '经理', 'director': '主任', 'executive': '高管', 'president': '总裁',
-        'ceo': '首席执行官', 'cfo': '首席财务官', 'cto': '首席技术官', 'partner': '合伙人', 'associate': '合伙人',
-        'assistant': '助理', 'secretary': '秘书', 'receptionist': '接待员', 'clerk': '职员', 'cashier': '收银员',
-        'accountant': '会计', 'auditor': '审计员', 'consultant': '顾问', 'advisor': '顾问', 'analyst': '分析师',
-        'specialist': '专家', 'expert': '专家', 'technician': '技术员', 'engineer': '工程师', 'architect': '建筑师',
-        'designer': '设计师', 'developer': '开发人员', 'programmer': '程序员', 'researcher': '研究员', 'scientist': '科学家',
-        'writer': '作家', 'author': '作者', 'journalist': '记者', 'editor': '编辑', 'publisher': '出版商',
-        'artist': '艺术家', 'painter': '画家', 'sculptor': '雕塑家', 'musician': '音乐家', 'composer': '作曲家',
-        'singer': '歌手', 'actor': '演员', 'actress': '女演员', 'director': '导演', 'producer': '制片人',
-        'photographer': '摄影师', 'chef': '厨师', 'baker': '面包师', 'butcher': '屠夫', 'farmer': '农民',
-        'gardener': '园丁', 'carpenter': '木匠', 'plumber': '水管工', 'electrician': '电工', 'mechanic': '机械师',
-        'driver': '司机', 'pilot': '飞行员', 'sailor': '水手', 'soldier': '士兵', 'police': '警察',
-        'officer': '官员', 'firefighter': '消防员', 'doctor': '医生', 'nurse': '护士', 'dentist': '牙医',
-        'veterinarian': '兽医', 'pharmacist': '药剂师', 'therapist': '治疗师', 'psychologist': '心理学家', 'counselor': '顾问',
-        'lawyer': '律师', 'judge': '法官', 'teacher': '教师', 'professor': '教授', 'principal': '校长',
-        
-        // 扩展词汇 - 娱乐和休闲
-        'game': '游戏', 'sport': '运动', 'hobby': '爱好', 'interest': '兴趣', 'activity': '活动',
-        'fun': '乐趣', 'entertainment': '娱乐', 'amusement': '娱乐', 'recreation': '娱乐', 'leisure': '休闲',
-        'relaxation': '放松', 'rest': '休息', 'vacation': '假期', 'holiday': '假日', 'trip': '旅行',
-        'journey': '旅程', 'adventure': '冒险', 'excursion': '短途旅行', 'tour': '旅游', 'sightseeing': '观光',
-        'camping': '露营', 'hiking': '徒步旅行', 'climbing': '攀爬', 'swimming': '游泳', 'diving': '潜水',
-        'surfing': '冲浪', 'skiing': '滑雪', 'skating': '滑冰', 'fishing': '钓鱼', 'hunting': '打猎',
-        'golf': '高尔夫', 'tennis': '网球', 'football': '足球', 'basketball': '篮球', 'volleyball': '排球',
-        'baseball': '棒球', 'cricket': '板球', 'rugby': '橄榄球', 'hockey': '曲棍球', 'badminton': '羽毛球',
-        'table tennis': '乒乓球', 'bowling': '保龄球', 'chess': '国际象棋', 'checkers': '跳棋', 'cards': '纸牌',
-        'poker': '扑克', 'dice': '骰子', 'puzzle': '拼图', 'crossword': '填字游戏', 'sudoku': '数独',
-        'movie': '电影', 'film': '电影', 'cinema': '电影院', 'theater': '剧院', 'concert': '音乐会',
-        'show': '表演', 'performance': '表演', 'play': '戏剧', 'opera': '歌剧', 'ballet': '芭蕾舞',
-        'dance': '舞蹈', 'music': '音乐', 'song': '歌曲', 'singing': '唱歌', 'band': '乐队',
-        'orchestra': '管弦乐队', 'instrument': '乐器', 'guitar': '吉他', 'piano': '钢琴', 'violin': '小提琴',
-        'drums': '鼓', 'trumpet': '小号', 'flute': '长笛', 'saxophone': '萨克斯管', 'microphone': '麦克风',
-        'radio': '收音机', 'television': '电视', 'tv': '电视', 'computer': '电脑', 'laptop': '笔记本电脑',
-        'tablet': '平板电脑', 'smartphone': '智能手机', 'phone': '电话', 'camera': '相机', 'video': '视频',
-        'photo': '照片', 'picture': '图片', 'painting': '绘画', 'drawing': '绘画', 'sculpture': '雕塑',
-        'art': '艺术', 'museum': '博物馆', 'gallery': '画廊', 'exhibition': '展览', 'festival': '节日',
-        'celebration': '庆祝', 'party': '聚会', 'gathering': '聚会', 'event': '事件', 'ceremony': '仪式',
-        'wedding': '婚礼', 'birthday': '生日', 'anniversary': '周年纪念', 'christmas': '圣诞节', 'easter': '复活节',
-        'halloween': '万圣节', 'new year': '新年', 'fireworks': '烟花', 'parade': '游行', 'carnival': '狂欢节',
-        'picnic': '野餐', 'barbecue': '烧烤', 'dinner': '晚餐', 'lunch': '午餐', 'breakfast': '早餐',
-        'brunch': '早午餐', 'supper': '晚餐', 'feast': '盛宴', 'banquet': '宴会', 'reception': '招待会',
-        'club': '俱乐部', 'bar': '酒吧', 'pub': '酒吧', 'restaurant': '餐厅', 'cafe': '咖啡馆',
-        'disco': '迪斯科', 'nightclub': '夜总会', 'casino': '赌场', 'amusement park': '游乐园', 'theme park': '主题公园',
-        'zoo': '动物园', 'aquarium': '水族馆', 'park': '公园', 'garden': '花园', 'playground': '游乐场',
-        'beach': '海滩', 'pool': '游泳池', 'spa': '水疗中心', 'gym': '健身房', 'fitness center': '健身中心',
-        'stadium': '体育场', 'arena': '竞技场', 'course': '课程', 'lesson': '课程', 'class': '班级',
-        'workshop': '工作室', 'seminar': '研讨会', 'conference': '会议', 'lecture': '讲座', 'presentation': '演示',
-        'meeting': '会议', 'appointment': '约会', 'date': '约会', 'socializing': '社交', 'chatting': '聊天',
-        'talking': '谈话', 'discussion': '讨论', 'conversation': '对话', 'debate': '辩论', 'argument': '争论',
-        'reading': '阅读', 'writing': '写作', 'studying': '学习', 'learning': '学习', 'researching': '研究',
-        'thinking': '思考', 'reflecting': '反思', 'meditating': '冥想', 'praying': '祈祷', 'worshipping': '崇拜',
-        'volunteering': '志愿服务', 'donating': '捐赠', 'helping': '帮助', 'supporting': '支持', 'caring': '关心',
-        'sharing': '分享', 'giving': '给予', 'receiving': '接收', 'exchanging': '交换', 'trading': '交易',
-        'buying': '购买', 'selling': '销售', 'shopping': '购物', 'browsing': '浏览', 'searching': '搜索',
-        'exploring': '探索', 'discovering': '发现', 'experimenting': '实验', 'trying': '尝试', 'testing': '测试',
-        'practicing': '练习', 'training': '训练', 'exercising': '锻炼', 'working out': '锻炼', 'relaxing': '放松',
-        'resting': '休息', 'sleeping': '睡觉', 'napping': '小睡', 'dreaming': '做梦', 'imagining': '想象',
-        'creating': '创造', 'inventing': '发明', 'designing': '设计', 'building': '建造', 'making': '制作',
-        'cooking': '烹饪', 'baking': '烘焙', 'grilling': '烧烤', 'frying': '煎', 'boiling': '煮',
-        'steaming': '蒸', 'roasting': '烤', 'chopping': '切', 'cutting': '切割', 'slicing': '切片',
-        'mixing': '混合', 'stirring': '搅拌', 'beating': '打', 'whisking': '搅打', 'kneading': '揉',
-        'rolling': '滚动', 'folding': '折叠', 'molding': '塑造', 'shaping': '塑造', 'carving': '雕刻',
-        'painting': '绘画', 'drawing': '绘画', 'sketching': '素描', 'coloring': '上色', 'decorating': '装饰',
-        'arranging': '安排', 'organizing': '组织', 'planning': '计划', 'preparing': '准备', 'setting up': '设置',
-        'cleaning': '清洁', 'washing': '清洗', 'wiping': '擦拭', 'dusting': '除尘', 'sweeping': '扫地',
-        'mopping': '拖地', 'vacuuming': '吸尘', 'polishing': '抛光', 'scrubbing': '擦洗', 'rinsing': '冲洗',
-        'drying': '干燥', 'hanging': '悬挂', 'folding': '折叠', 'ironing': '熨烫', 'sewing': '缝纫',
-        'knitting': '编织', 'crocheting': '钩编', 'embroidering': '刺绣', 'mending': '修补', 'repairing': '修理',
-        'fixing': '修理', 'adjusting': '调整', 'modifying': '修改', 'changing': '改变', 'replacing': '替换',
-        'installing': '安装', 'assembling': '组装', 'disassembling': '拆卸', 'connecting': '连接', 'disconnecting': '断开',
-        'attaching': '连接', 'detaching': '分离', 'fastening': '固定', 'unfastening': '解开', 'tying': '系',
-        'untying': '解开', 'binding': '捆绑', 'wrapping': '包装', 'unwrapping': '打开包装', 'packing': '打包',
-        'unpacking': '拆包', 'loading': '装载', 'unloading': '卸载', 'carrying': '携带', 'transporting': '运输',
-        'delivering': '递送', 'sending': '发送', 'receiving': '接收', 'collecting': '收集', 'gathering': '收集',
-        'storing': '存储', 'keeping': '保存', 'saving': '保存', 'preserving': '保存', 'protecting': '保护',
-        'guarding': '守卫', 'defending': '防御', 'attacking': '攻击', 'fighting': '战斗', 'competing': '竞争',
-        'winning': '获胜', 'losing': '失败', 'succeeding': '成功', 'failing': '失败', 'achieving': '实现',
-        'accomplishing': '完成', 'finishing': '完成', 'completing': '完成', 'ending': '结束', 'starting': '开始',
-        'beginning': '开始', 'continuing': '继续', 'stopping': '停止', 'pausing': '暂停', 'waiting': '等待',
-        'hoping': '希望', 'wishing': '希望', 'dreaming': '梦想', 'desiring': '渴望', 'wanting': '想要',
-        'needing': '需要', 'requiring': '需要', 'demanding': '要求', 'requesting': '请求', 'asking': '询问',
-        'questioning': '质疑', 'inquiring': '询问', 'investigating': '调查', 'examining': '检查', 'inspecting': '检查',
-        'observing': '观察', 'watching': '观看', 'looking': '看', 'seeing': '看见', 'viewing': '观看',
-        'witnessing': '见证', 'noticing': '注意到', 'spotting': '发现', 'recognizing': '认出', 'identifying': '识别',
-        'discovering': '发现', 'finding': '找到', 'searching': '搜索', 'seeking': '寻找', 'exploring': '探索',
-        'traveling': '旅行', 'journeying': '旅行', 'touring': '旅游', 'visiting': '参观', 'sightseeing': '观光',
-        'wandering': '漫游', 'roaming': '漫游', 'drifting': '漂移', 'sailing': '航行', 'cruising': '巡航',
-        'flying': '飞行', 'soaring': '翱翔', 'gliding': '滑翔', 'floating': '漂浮', 'swimming': '游泳',
-        'diving': '潜水', 'plunging': '跳入', 'jumping': '跳跃', 'leaping': '跳跃', 'hopping': '跳跃',
-        'skipping': '跳跃', 'running': '跑步', 'jogging': '慢跑', 'sprinting': '冲刺', 'dashing': '猛冲',
-        'rushing': '匆忙', 'hurrying': '匆忙', 'speeding': '加速', 'racing': '比赛', 'chasing': '追逐',
-        'following': '跟随', 'pursuing': '追求', 'hunting': '狩猎', 'tracking': '追踪', 'tracing': '追踪',
-        'leading': '领导', 'guiding': '引导', 'directing': '指导', 'showing': '展示', 'demonstrating': '演示',
-        'teaching': '教学', 'educating': '教育', 'training': '训练', 'coaching': '教练', 'instructing': '指导',
-        'advising': '建议', 'counseling': '咨询', 'consulting': '咨询', 'recommending': '推荐', 'suggesting': '建议',
-        'proposing': '提议', 'offering': '提供', 'presenting': '呈现', 'delivering': '递送', 'providing': '提供',
-        'supplying': '供应', 'furnishing': '提供', 'equipping': '装备', 'preparing': '准备', 'arranging': '安排',
-        'organizing': '组织', 'planning': '计划', 'scheduling': '安排', 'coordinating': '协调', 'managing': '管理',
-        'supervising': '监督', 'overseeing': '监督', 'monitoring': '监控', 'controlling': '控制', 'regulating': '调节',
-        'governing': '管理', 'ruling': '统治', 'commanding': '命令', 'ordering': '命令', 'directing': '指导',
-        'instructing': '指导', 'telling': '告诉', 'informing': '通知', 'notifying': '通知', 'announcing': '宣布',
-        'declaring': '宣布', 'proclaiming': '宣布', 'broadcasting': '广播', 'publishing': '出版', 'printing': '打印',
-        'writing': '写作', 'recording': '记录', 'documenting': '记录', 'reporting': '报告', 'describing': '描述',
-        'explaining': '解释', 'clarifying': '澄清', 'defining': '定义', 'specifying': '指定', 'detailing': '详细说明',
-        'outlining': '概述', 'summarizing': '总结', 'reviewing': '审查', 'analyzing': '分析', 'examining': '检查',
-        'investigating': '调查', 'researching': '研究', 'studying': '学习', 'learning': '学习', 'memorizing': '记忆',
-        'remembering': '记住', 'recalling': '回忆', 'recollecting': '回忆', 'reminding': '提醒', 'forgetting': '忘记',
-        'ignoring': '忽视', 'neglecting': '忽视', 'overlooking': '忽视', 'missing': '错过', 'losing': '失去',
-        'finding': '找到', 'locating': '定位', 'discovering': '发现', 'uncovering': '发现', 'revealing': '揭示',
-        'exposing': '暴露', 'showing': '展示', 'displaying': '展示', 'exhibiting': '展览', 'presenting': '呈现',
-        'offering': '提供', 'giving': '给予', 'donating': '捐赠', 'contributing': '贡献', 'providing': '提供',
-        'supplying': '供应', 'delivering': '递送', 'distributing': '分发', 'sharing': '分享', 'dividing': '分割',
-        'splitting': '分裂', 'separating': '分离', 'disconnecting': '断开', 'detaching': '分离', 'removing': '移除',
-        'eliminating': '消除', 'erasing': '擦除', 'deleting': '删除', 'destroying': '摧毁', 'damaging': '损坏',
-        'breaking': '打破', 'cracking': '破裂', 'shattering': '粉碎', 'tearing': '撕裂', 'ripping': '撕扯',
-        'cutting': '切割', 'slicing': '切片', 'chopping': '砍', 'hacking': '砍', 'slashing': '砍',
-        'piercing': '刺穿', 'puncturing': '刺穿', 'stabbing': '刺', 'shooting': '射击', 'firing': '开火',
-        'throwing': '扔', 'tossing': '抛', 'casting': '投', 'flinging': '抛', 'hurling': '猛投',
-        'launching': '发射', 'ejecting': '弹出', 'expelling': '驱逐', 'forcing': '强迫', 'pushing': '推',
-        'pressing': '按', 'squeezing': '挤压', 'crushing': '压碎', 'grinding': '磨碎', 'pounding': '重击',
-        'beating': '打', 'hitting': '击打', 'striking': '打击', 'slapping': '拍打', 'punching': '拳击',
-        'kicking': '踢', 'stomping': '踩踏', 'trampling': '践踏', 'stamping': '踩', 'stepping': '踏',
-        'walking': '走路', 'marching': '行进', 'parading': '游行', 'patrolling': '巡逻', 'wandering': '漫游',
-        'roaming': '漫游', 'drifting': '漂移', 'floating': '漂浮', 'sinking': '下沉', 'drowning': '溺水',
-        'swimming': '游泳', 'diving': '潜水', 'plunging': '跳入', 'jumping': '跳跃', 'leaping': '跳跃',
-        'hopping': '跳跃', 'skipping': '跳跃', 'dancing': '跳舞', 'twirling': '旋转', 'spinning': '旋转',
-        'turning': '转动', 'rotating': '旋转', 'revolving': '旋转', 'circling': '环绕', 'orbiting': '环绕',
-        'surrounding': '包围', 'encircling': '环绕', 'enveloping': '包围', 'covering': '覆盖', 'wrapping': '包裹',
-        'packaging': '包装', 'boxing': '装箱', 'containing': '包含', 'holding': '持有', 'carrying': '携带',
-        'transporting': '运输', 'moving': '移动', 'shifting': '移动', 'transferring': '转移', 'relocating': '搬迁',
-        'placing': '放置', 'positioning': '定位', 'locating': '定位', 'situating': '安置', 'installing': '安装',
-        'setting': '设置', 'adjusting': '调整', 'modifying': '修改', 'changing': '改变', 'altering': '改变',
-        'transforming': '转变', 'converting': '转换', 'adapting': '适应', 'adjusting': '调整', 'accommodating': '适应',
-        'fitting': '适合', 'matching': '匹配', 'corresponding': '对应', 'relating': '关联', 'connecting': '连接',
-        'linking': '连接', 'joining': '加入', 'uniting': '联合', 'combining': '结合', 'merging': '合并',
-        'blending': '混合', 'mixing': '混合', 'stirring': '搅拌', 'beating': '打', 'whisking': '搅打',
-        'folding': '折叠', 'bending': '弯曲', 'flexing': '弯曲', 'curving': '弯曲', 'twisting': '扭曲',
-        'winding': '缠绕', 'coiling': '盘绕', 'spiraling': '螺旋', 'curling': '卷曲', 'rolling': '滚动',
-        'turning': '转动', 'spinning': '旋转', 'rotating': '旋转', 'revolving': '旋转', 'circling': '环绕',
-        'orbiting': '环绕', 'encircling': '环绕', 'surrounding': '包围', 'enveloping': '包围', 'covering': '覆盖',
-        'wrapping': '包裹', 'packaging': '包装', 'boxing': '装箱', 'containing': '包含', 'holding': '持有',
-        'carrying': '携带', 'transporting': '运输', 'moving': '移动', 'shifting': '移动', 'transferring': '转移',
-        'relocating': '搬迁', 'placing': '放置', 'positioning': '定位', 'locating': '定位', 'situating': '安置',
-        'installing': '安装', 'setting': '设置', 'adjusting': '调整', 'modifying': '修改', 'changing': '改变',
-        'altering': '改变', 'transforming': '转变', 'converting': '转换', 'adapting': '适应', 'adjusting': '调整',
-        'accommodating': '适应', 'fitting': '适合', 'matching': '匹配', 'corresponding': '对应', 'relating': '关联',
-        'connecting': '连接', 'linking': '连接', 'joining': '加入', 'uniting': '联合', 'combining': '结合',
-        'merging': '合并', 'blending': '混合', 'mixing': '混合', 'stirring': '搅拌', 'beating': '打',
-        'whisking': '搅打', 'folding': '折叠', 'bending': '弯曲', 'flexing': '弯曲', 'curving': '弯曲',
-        'twisting': '扭曲', 'winding': '缠绕', 'coiling': '盘绕', 'spiraling': '螺旋', 'curling': '卷曲'
+        'sprache': '语言',
+        'englisch': '英语',
+        'chinesisch': '中文',
+        'übersetzen': '翻译',
+        'hallo welt': '你好世界',
+        'gute nacht': '晚安',
+        'null': '零',
+        'eins': '一',
+        'zwei': '二',
+        'drei': '三',
+        'vier': '四',
+        'fünf': '五',
+        'sechs': '六',
+        'sieben': '七',
+        'acht': '八',
+        'neun': '九',
+        'zehn': '十',
+        'hundert': '百',
+        'tausend': '千',
+        'million': '百万',
+        'milliarde': '十亿',
+        'rot': '红色',
+        'blau': '蓝色',
+        'grün': '绿色',
+        'gelb': '黄色',
+        'schwarz': '黑色',
+        'weiß': '白色',
+        'orange': '橙子',
+        'lila': '紫色',
+        'rosa': '粉色',
+        'braun': '棕色',
+        'hund': '狗',
+        'katze': '猫',
+        'vogel': '鸟',
+        'fisch': '鱼',
+        'pferd': '马',
+        'kuh': '牛',
+        'schaf': '羊',
+        'schwein': '猪',
+        'huhn': '鸡肉',
+        'ente': '鸭',
+        'kaninchen': '兔子',
+        'apfel': '苹果',
+        'banane': '香蕉',
+        'traube': '葡萄',
+        'erdbeere': '草莓',
+        'wassermelone': '西瓜',
+        'ananas': '菠萝',
+        'mango': '芒果',
+        'birne': '梨',
+        'pfirsich': '桃子',
+        'tomate': '番茄',
+        'kartoffel': '土豆',
+        'karotte': '胡萝卜',
+        'zwiebel': '洋葱',
+        'kohl': '卷心菜',
+        'brokkoli': '西兰花',
+        'spinat': '菠菜',
+        'mais': '玉米',
+        'gurke': '黄瓜',
+        'pfeffer': '胡椒',
+        'sonne': '太阳',
+        'mond': '月亮',
+        'stern': '星星',
+        'wolke': '云',
+        'regen': '雨',
+        'schnee': '雪',
+        'wind': '风',
+        'sturm': '风暴',
+        'wetter': '天气',
+        'temperatur': '温度',
+        'lehrer': '教师',
+        'arzt': '医生',
+        'ingenieur': '工程师',
+        'student': '学生',
+        'arbeiter': '工人',
+        'bauer': '农民',
+        'fahrer': '司机',
+        'kochen': '烹饪',
+        'künstler': '艺术家',
+        'wissenschaftler': '科学家',
+        'china': '中国',
+        'amerika': '美国',
+        'england': '英国',
+        'frankreich': '法国',
+        'deutschland': '德国',
+        'japan': '日本',
+        'korea': '韩国',
+        'russland': '俄罗斯',
+        'indien': '印度',
+        'australien': '澳大利亚',
+        'peking': '北京',
+        'shanghai': '上海',
+        'guangzhou': '广州',
+        'shenzhen': '深圳',
+        'hongkong': '香港',
+        'new york': '纽约',
+        'london': '伦敦',
+        'paris': '巴黎',
+        'tokyo': '东京',
+        'seoul': '首尔',
+        'bus': '公交车',
+        'zug': '火车',
+        'flugzeug': '飞机',
+        'schiff': '船',
+        'fahrrad': '自行车',
+        'motorrad': '摩托车',
+        'taxi': '出租车',
+        'u-bahn': '地铁',
+        'boot': '小船',
+        'lastwagen': '卡车',
+        'schule': '学校',
+        'klassenraum': '教室',
+        'stift': '笔',
+        'bleistift': '铅笔',
+        'papier': '纸',
+        'hausaufgaben': '作业',
+        'prüfung': '考试',
+        'kopf': '头',
+        'auge': '眼睛',
+        'ohr': '耳朵',
+        'nase': '鼻子',
+        'mund': '嘴',
+        'hand': '手',
+        'fuß': '脚',
+        'bein': '腿',
+        'arm': '手臂',
+        'herz': '心脏',
+        'hemd': '衬衫',
+        'hose': '裤子',
+        'kleid': '裙子',
+        'schuhe': '鞋子',
+        'hut': '帽子',
+        'mantel': '外套',
+        'jacke': '夹克',
+        'socken': '袜子',
+        'handschuhe': '手套',
+        'schal': '围巾',
+        'morgen': '早晨',
+        'nachmittag': '下午',
+        'abend': '晚上',
+        'nacht': '夜晚',
+        'morgengrauen': '黎明',
+        'dämmerung': '黄昏',
+        'minute': '分钟',
+        'stunde': '小时',
+        'sekunde': '秒',
+        'uhr': '时钟',
+        'norden': '北',
+        'süden': '南',
+        'ost': '东',
+        'westen': '西',
+        'links': '左',
+        'oben': '上',
+        'runter': '下',
+        'front': '前',
+        'zurück': '后',
+        'essen': '吃',
+        'trinken': '喝',
+        'schlafen': '睡觉',
+        'arbeiten': '工作',
+        'studieren': '学习',
+        'spielen': '戏剧',
+        'lesen': '读',
+        'schreiben': '写',
+        'sprechen': '说',
+        'hören': '听',
+        'sehen': '看',
+        'gehen': '去',
+        'kommen': '来',
+        'kaufen': '买',
+        'verkaufen': '卖',
+        'schön': '美丽',
+        'hässlich': '丑陋',
+        'reich': '富有',
+        'arm': '贫穷',
+        'stark': '强壮',
+        'schwach': '虚弱',
+        'groß': '高',
+        'kurz': '矮',
+        'lang': '长',
+        'schwer': '重',
+        'licht': '轻',
+        'reinigen': '清洁',
+        'schmutzig': '脏',
+        'einfach': '容易',
+        'schwierig': '困难',
+        'wichtig': '重要',
+        'interessant': '有趣',
+        'langweilig': '乏味',
+        'wie viel': '多少钱',
+        'wie spät': '几点',
+        'wo ist': '在哪里',
+        'wie alt': '多大',
+        'kannst du mir helfen': '你能帮我吗',
+        'ich brauche hilfe': '我需要帮助',
+        'entschuldigung': '打扰一下',
+        'ich verstehe nicht': '我不明白',
+        'kannst du wiederholen': '你能重复吗',
+        'langsam sprechen': '说慢一点',
+        'ich stimme zu': '我同意',
+        'ich stimme nicht zu': '我不同意',
+        'vielleicht': '也许',
+        'wahrscheinlich': '可能',
+        'natürlich': '当然',
+        'kein problem': '没问题',
+        'bitte': '不客气',
+        'einen schönen tag': '祝你今天愉快',
+        'bis später': '回头见',
+        'aufpassen': '保重',
+        'laufen': '跑',
+        'gehen': '走',
+        'springen': '跳',
+        'fliegen': '飞',
+        'schwimmen': '游泳',
+        'fahren': '驾驶',
+        'fahren': '骑',
+        'klettern': '爬',
+        'tanz': '舞蹈',
+        'singen': '唱歌',
+        'lachen': '笑',
+        'weinen': '哭',
+        'denken': '思考',
+        'wissen': '知道',
+        'verstehen': '理解',
+        'erinnern': '记住',
+        'vergessen': '忘记',
+        'glauben': '相信',
+        'hoffen': '希望',
+        'wollen': '想要',
+        'brauchen': '需要',
+        'mögen': '喜欢',
+        'liebe': '爱',
+        'hassen': '讨厌',
+        'bevorzugen': '更喜欢',
+        'wählen': '选择',
+        'entscheiden': '决定',
+        'plan': '计划',
+        'versuchen': '尝试',
+        'scheitern': '失败',
+        'gelingen': '成功',
+        'gewinnen': '赢',
+        'verlieren': '输',
+        'kämpfen': '战斗',
+        'streiten': '争论',
+        'zustimmen': '同意',
+        'nicht zustimmen': '不同意',
+        'akzeptieren': '接受',
+        'ablehnen': '拒绝',
+        'einladen': '邀请',
+        'besuchen': '参观',
+        'reisen': '旅行',
+        'bewegen': '移动',
+        'bleiben': '停留',
+        'verlassen': '离开',
+        'ankommen': '到达',
+        'zurückkehren': '返回',
+        'eintreten': '进入',
+        'ausgang': '退出',
+        'öffnen': '打开',
+        'schließen': '近',
+        'starten': '开始',
+        'stoppen': '停止',
+        'fortsetzen': '继续',
+        'beenden': '完成',
+        'ende': '结束',
+        'beginnen': '开始',
+        'erstellen': '创建',
+        'bauen': '建造',
+        'machen': '制作',
+        'produzieren': '生产',
+        'wachsen': '种植',
+        'backen': '烘焙',
+        'waschen': '洗',
+        'reparieren': '修理',
+        'brechen': '打破',
+        'zerstören': '破坏',
+        'schneiden': '切割',
+        'schlagen': '打',
+        'schieben': '推',
+        'ziehen': '拉',
+        'tragen': '携带',
+        'aufzug': '举起',
+        'werfen': '扔',
+        'fangen': '接住',
+        'treten': '踢',
+        'auswählen': '挑选',
+        'geben': '给予',
+        'nehmen': '拿取',
+        'erhalten': '接收',
+        'senden': '发送',
+        'bringen': '带来',
+        'folgen': '跟随',
+        'führen': '领导',
+        'beitreten': '加入',
+        'trennen': '分离',
+        'verbinden': '连接',
+        'vergleichen': '比较',
+        'maß': '测量',
+        'zählen': '计数',
+        'rechnen': '计算',
+        'hinzufügen': '添加',
+        'subtrahieren': '减去',
+        'multiplizieren': '乘',
+        'teilen': '除',
+        'erhöhen': '增加',
+        'abnehmen': '减少',
+        'wechseln': '改变',
+        'werden': '变成',
+        'drehen': '转向',
+        'erscheinen': '出现',
+        'verschwinden': '消失',
+        'zeigen': '表演',
+        'verstecken': '隐藏',
+        'finden': '寻找',
+        'suchen': '搜索',
+        'entdecken': '发现',
+        'erkunden': '探索',
+        'erfinden': '发明',
+        'entwurf': '设计',
+        'zeichnen': '画画',
+        'farbe': '绘画',
+        'farbe': '上色',
+        'fotografie': '拍照',
+        'aufzeichnen': '记录',
+        'spiel': '游戏',
+        'sport': '运动',
+        'ruhig': '平静',
+        'aufgeregt': '兴奋',
+        'gelangweilt': '无聊',
+        'überrascht': '惊讶',
+        'verwirrt': '困惑',
+        'ängstlich': '害怕',
+        'mutig': '勇敢',
+        'nervös': '紧张',
+        'entspannt': '放松',
+        'gestresst': '压力',
+        'stolz': '自豪',
+        'beschämt': '羞愧',
+        'eifersüchtig': '嫉妒',
+        'großzügig': '慷慨',
+        'egoistisch': '自私',
+        'freundlich': '善良',
+        'grausam': '残忍',
+        'höflich': '礼貌',
+        'unhöflich': '粗鲁',
+        'ehrlich': '诚实',
+        'unehrlich': '不诚实',
+        'freundlich': '友好',
+        'unfreundlich': '不友好',
+        'sozial': '社交',
+        'asozial': '反社交',
+        'aufgeschlossen': '外向',
+        'schüchtern': '害羞',
+        'zuversichtlich': '自信',
+        'unsicher': '不安全',
+        'intelligent': '聪明',
+        'dumm': '愚蠢',
+        'weise': '明智',
+        'töricht': '愚蠢',
+        'kreativ': '有创意',
+        'fantasievoll': '富有想象力',
+        'praktisch': '实用',
+        'unpraktisch': '不实用',
+        'logisch': '逻辑',
+        'emotional': '情感',
+        'rational': '理性',
+        'irrational': '不理性',
+        'patient': '耐心',
+        'ungeduldig': '不耐烦',
+        'fleißig': '勤奋',
+        'faul': '懒惰',
+        'aktiv': '活跃',
+        'passiv': '被动',
+        'energiegeladen': '精力充沛',
+        'gesund': '健康',
+        'krank': '生病',
+        'passen': '健康',
+        'ungeeignet': '不健康',
+        'flexibel': '灵活',
+        'steif': '僵硬',
+        'schnell': '迅速',
+        'schnell': '敏捷',
+        'jung': '年轻',
+        'antik': '古老',
+        'modern': '现代',
+        'frisch': '新鲜',
+        'altbacken': '不新鲜',
+        'roh': '生的',
+        'gekocht': '煮熟的',
+        'warm': '温暖',
+        'kühl': '凉爽',
+        'gefrieren': '冰冻',
+        'kochen': '煮',
+        'nass': '湿',
+        'trocken': '干',
+        'feucht': '湿润',
+        'feucht': '潮湿',
+        'feucht': '湿润',
+        'hell': '明亮',
+        'dunkel': '黑暗',
+        'dick': '厚',
+        'dünn': '薄',
+        'breit': '宽',
+        'eng': '窄',
+        'tief': '深',
+        'flach': '浅',
+        'hoch': '高',
+        'niedrig': '低',
+        'weit': '远',
+        'nahe': '近',
+        'fern': '远',
+        'teuer': '昂贵',
+        'günstig': '便宜',
+        'wertvoll': '有价值',
+        'wertlos': '无价值',
+        'kostbar': '珍贵',
+        'gemeinsam': '普通',
+        'selten': '稀有',
+        'einzigartig': '独特',
+        'normal': '正常',
+        'seltsam': '奇怪',
+        'seltsam': '怪异',
+        'gewöhnlich': '普通',
+        'besonders': '特别',
+        'außergewöhnlich': '非凡',
+        'einfach': '简单',
+        'komplex': '复杂',
+        'hart': '硬',
+        'weich': '软',
+        'glatt': '光滑',
+        'rau': '粗糙',
+        'scharf': '锋利',
+        'stumpf': '钝',
+        'klar': '清晰',
+        'unklar': '不清楚',
+        'offensichtlich': '明显',
+        'versteckt': '隐藏',
+        'sichtbar': '可见',
+        'unsichtbar': '不可见',
+        'transparent': '透明',
+        'undurchsichtig': '不透明',
+        'laut': '大声',
+        'ruhig': '安静',
+        'still': '沉默',
+        'laut': '嘈杂',
+        'süß': '甜',
+        'sauer': '酸',
+        'bitter': '苦',
+        'salzig': '咸',
+        'scharf': '辣',
+        'lecker': '美味',
+        'lecker': '好吃',
+        'schrecklich': '糟糕',
+        'ekelhaft': '恶心',
+        'brot': '面包',
+        'reis': '米饭',
+        'nudeln': '面条',
+        'nudeln': '意大利面',
+        'pizza': '披萨',
+        'hamburger': '汉堡',
+        'sandwich': '三明治',
+        'käse': '奶酪',
+        'butter': '黄油',
+        'milch': '牛奶',
+        'joghurt': '酸奶',
+        'creme': '奶油',
+        'ei': '鸡蛋',
+        'fleisch': '肉',
+        'rindfleisch': '牛肉',
+        'schweinefleisch': '猪肉',
+        'meeresfrüchte': '海鲜',
+        'garnele': '虾',
+        'krabbe': '螃蟹',
+        'suppe': '汤',
+        'salat': '沙拉',
+        'gemüse': '蔬菜',
+        'frucht': '水果',
+        'kuchen': '蛋糕',
+        'keks': '饼干',
+        'schokolade': '巧克力',
+        'eiscreme': '冰淇淋',
+        'süßigkeit': '糖果',
+        'zucker': '糖',
+        'salz': '盐',
+        'öl': '油',
+        'essig': '醋',
+        'soße': '酱',
+        'gewürz': '香料',
+        'kraut': '香草',
+        'mehl': '面粉',
+        'kaffee': '咖啡',
+        'tee': '茶',
+        'saft': '果汁',
+        'limonade': '苏打水',
+        'bier': '啤酒',
+        'wein': '葡萄酒',
+        'alkohol': '酒精',
+        'frühstück': '早餐',
+        'mittagessen': '午餐',
+        'abendessen': '晚餐',
+        'snack': '零食',
+        'mahlzeit': '餐',
+        'gericht': '菜',
+        'küche': '美食',
+        'rezept': '食谱',
+        'tisch': '桌子',
+        'stuhl': '椅子',
+        'sofa': '沙发',
+        'bett': '床',
+        'schreibtisch': '书桌',
+        'regal': '架子',
+        'schrank': '橱柜',
+        'kleiderschrank': '衣柜',
+        'spiegel': '镜子',
+        'lampe': '灯',
+        'glühbirne': '灯泡',
+        'uhr': '手表',
+        'batterie': '电池',
+        'schlüssel': '钥匙',
+        'schloss': '锁',
+        'tür': '门',
+        'fenster': '窗户',
+        'wand': '墙',
+        'boden': '地板',
+        'decke': '天花板',
+        'dach': '屋顶',
+        'garten': '花园',
+        'hof': '院子',
+        'küche': '厨房',
+        'badezimmer': '浴室',
+        'schlafzimmer': '卧室',
+        'wohnzimmer': '客厅',
+        'speisesaal': '餐厅',
+        'garage': '车库',
+        'keller': '地下室',
+        'dachboden': '阁楼',
+        'balkon': '阳台',
+        'treppe': '楼梯',
+        'aufzug': '电梯',
+        'kühlschrank': '冰箱',
+        'gefrierschrank': '冰柜',
+        'ofen': '烤箱',
+        'mikrowelle': '微波炉',
+        'herd': '炉子',
+        'geschirrspüler': '洗碗机',
+        'waschmaschine': '洗衣机',
+        'trockner': '烘干机',
+        'vakuum': '吸尘器',
+        'besen': '扫帚',
+        'wischmopp': '拖把',
+        'handtuch': '毛巾',
+        'seife': '肥皂',
+        'shampoo': '洗发水',
+        'zahnbürste': '牙刷',
+        'zahnpasta': '牙膏',
+        'kamm': '梳子',
+        'bürste': '刷子',
+        'rasierer': '剃须刀',
+        'schere': '剪刀',
+        'messer': '刀',
+        'gabel': '叉',
+        'löffel': '勺',
+        'teller': '盘子',
+        'schüssel': '碗',
+        'tasse': '杯子',
+        'glas': '玻璃',
+        'becher': '马克杯',
+        'flasche': '瓶子',
+        'glas': '罐子',
+        'topf': '锅',
+        'pfanne': '平底锅',
+        'korb': '篮子',
+        'tasche': '包',
+        'rucksack': '背包',
+        'koffer': '手提箱',
+        'geldbörse': '钱包',
+        'geldbörse': '钱包',
+        'regenschirm': '雨伞',
+        'mülleimer': '垃圾桶',
+        'berg': '山',
+        'hügel': '小山',
+        'tal': '山谷',
+        'fluss': '河流',
+        'see': '湖泊',
+        'ozean': '海洋',
+        'meer': '海',
+        'strand': '海滩',
+        'wüste': '沙漠',
+        'wald': '森林',
+        'dschungel': '丛林',
+        'holz': '木头',
+        'park': '公园',
+        'feld': '田野',
+        'bauernhof': '农场',
+        'insel': '岛屿',
+        'vulkan': '火山',
+        'erdbeben': '地震',
+        'überschwemmung': '洪水',
+        'dürre': '干旱',
+        'hurrikan': '飓风',
+        'tornado': '龙卷风',
+        'tsunami': '海啸',
+        'feuer': '火',
+        'luft': '空气',
+        'eis': '冰',
+        'hagel': '冰雹',
+        'nebel': '雾',
+        'himmel': '天空',
+        'planet': '行星',
+        'erde': '地球',
+        'universum': '宇宙',
+        'galaxie': '星系',
+        'raum': '太空',
+        'schwerkraft': '重力',
+        'atmosphäre': '大气层',
+        'sauerstoff': '氧气',
+        'kohlenstoffdioxid': '二氧化碳',
+        'verschmutzung': '污染',
+        'umwelt': '环境',
+        'natur': '自然',
+        'ökosystem': '生态系统',
+        'klima': '气候',
+        'saison': '季节',
+        'frühling': '春天',
+        'sommer': '夏天',
+        'herbst': '秋天',
+        'winter': '冬天',
+        'pflanze': '植物',
+        'baum': '树',
+        'blume': '花',
+        'gras': '草',
+        'blatt': '叶子',
+        'wurzel': '根',
+        'zweig': '树枝',
+        'samen': '种子',
+        'ernte': '庄稼',
+        'boden': '土壤',
+        'sand': '沙子',
+        'stein': '岩石',
+        'stein': '石头',
+        'metall': '金属',
+        'gold': '金',
+        'silber': '银',
+        'kupfer': '铜',
+        'eisen': '铁',
+        'stahl': '钢',
+        'plastik': '塑料',
+        'gummi': '橡胶',
+        'leder': '皮革',
+        'stoff': '织物',
+        'baumwolle': '棉花',
+        'wolle': '羊毛',
+        'seide': '丝绸',
+        'nylon': '尼龙',
+        'material': '材料',
+        'stoff': '物质',
+        'universität': '大学',
+        'hochschule': '学院',
+        'klasse': '班级',
+        'lektion': '课程',
+        'fach': '科目',
+        'mathe': '数学',
+        'wissenschaft': '科学',
+        'biologie': '生物学',
+        'chemie': '化学',
+        'physik': '物理学',
+        'geografie': '地理学',
+        'geschichte': '历史',
+        'literatur': '文学',
+        'kunst': '艺术',
+        'musik': '音乐',
+        'philosophie': '哲学',
+        'psychologie': '心理学',
+        'soziologie': '社会学',
+        'wirtschaft': '经济学',
+        'politik': '政治学',
+        'recht': '法律',
+        'medizin': '医学',
+        'ingenieurwesen': '工程学',
+        'architektur': '建筑学',
+        'informatik': '计算机科学',
+        'informationstechnologie': '信息技术',
+        'geschäft': '商业',
+        'management': '管理层',
+        'vermarkten': '市场营销',
+        'buchhaltung': '会计',
+        'finanzen': '金融',
+        'bankwesen': '银行业',
+        'professor': '教授',
+        'schüler': '小学生',
+        'graduieren': '毕业生',
+        'student': '本科生',
+        'postgraduiert': '研究生',
+        'doktorgrad': '博士学位',
+        'grad': '学位',
+        'diplom': '文凭',
+        'zertifikat': '证书',
+        'qualifikation': '资格',
+        'fähigkeit': '技能',
+        'wissen': '知识',
+        'weisheit': '智慧',
+        'intelligenz': '智力',
+        'gedächtnis': '记忆',
+        'konzentration': '专注',
+        'aufmerksamkeit': '注意力',
+        'lernen': '学习',
+        'studieren': '学习',
+        'forschung': '研究',
+        'experiment': '实验',
+        'beobachtung': '观察',
+        'analyse': '分析',
+        'theorie': '理论',
+        'übung': '实践',
+        'erfahrung': '经验',
+        'fachwissen': '专业知识',
+        'meisterschaft': '精通',
+        'lehrbuch': '教科书',
+        'notizbuch': '笔记本',
+        'wörterbuch': '字典',
+        'encyklopädie': '百科全书',
+        'bibliothek': '图书馆',
+        'labor': '实验室',
+        'werkstatt': '工作室',
+        'seminar': '研讨会',
+        'konferenz': '会议',
+        'vorlesung': '讲座',
+        'präsentation': '演示',
+        'aufgabe': '任务',
+        'projekt': '项目',
+        'these': '论文',
+        'dissertation': '学位论文',
+        'test': '测试',
+        'quiz': '测验',
+        'bewertung': '评估',
+        'bewertung': '评价',
+        'note': '成绩',
+        'marke': '分数',
+        'punktzahl': '得分',
+        'ergebnis': '结果',
+        'leistung': '成就',
+        'erfolg': '成功',
+        'misserfolg': '失败',
+        'fortschritt': '进步',
+        'entwicklung': '发展',
+        'verbesserung': '提高',
+        'bildung': '教育',
+        'unterrichten': '教学',
+        'training': '训练',
+        'anleitung': '指导',
+        'anleitung': '指导',
+        'rat': '建议',
+        'rückmeldung': '反馈',
+        'kritik': '批评',
+        'loben': '表扬',
+        'belohnung': '奖励',
+        'strafe': '惩罚',
+        'disziplin': '纪律',
+        'regeln': '规则',
+        'vorschriften': '规定',
+        'richtlinie': '政策',
+        'job': '工作',
+        'karriere': '职业',
+        'beruf': '职业',
+        'beruf': '职业',
+        'beschäftigung': '就业',
+        'arbeitslosigkeit': '失业',
+        'rente': '退休',
+        'beförderung': '晋升',
+        'degradierung': '降职',
+        'gehalt': '薪水',
+        'lohn': '工资',
+        'einkommen': '收入',
+        'verdienen': '收入',
+        'bonus': '奖金',
+        'nutzen': '福利',
+        'rente': '养老金',
+        'versicherung': '保险',
+        'vertrag': '合同',
+        'vereinbarung': '协议',
+        'verantwortung': '责任',
+        'pflicht': '职责',
+        'aufgabe': '任务',
+        'frist': '截止日期',
+        'zeitplan': '时间表',
+        'treffen': '会议',
+        'termin': '约会',
+        'interview': '面试',
+        'anwendung': '申请',
+        'lebenslauf': '简历',
+        'lebenslauf': '简历',
+        'fähigkeit': '能力',
+        'talent': '才能',
+        'lizenz': '执照',
+        'büro': '办公室',
+        'fabrik': '工厂',
+        'lagerhaus': '仓库',
+        'laden': '商店',
+        'laden': '商店',
+        'markt': '市场',
+        'firma': '公司',
+        'gesellschaft': '公司',
+        'organisation': '组织',
+        'institution': '机构',
+        'regierung': '政府',
+        'abteilung': '部门',
+        'division': '部门',
+        'team': '团队',
+        'gruppe': '小组',
+        'ausschuss': '委员会',
+        'brett': '董事会',
+        'führung': '领导力',
+        'aufseher': '主管',
+        'manager': '经理',
+        'direktor': '导演',
+        'geschäftsführer': '高管',
+        'präsident': '总裁',
+        'geschäftsführer': '首席执行官',
+        'finanzvorstand': '首席财务官',
+        'cto': '首席技术官',
+        'partner': '合伙人',
+        'verbinden': '合伙人',
+        'assistent': '助理',
+        'sekretär': '秘书',
+        'rezeptionist': '接待员',
+        'angestellter': '职员',
+        'kassierer': '收银员',
+        'buchhalter': '会计',
+        'prüfer': '审计员',
+        'berater': '顾问',
+        'berater': '顾问',
+        'analyst': '分析师',
+        'spezialist': '专家',
+        'experte': '专家',
+        'techniker': '技术员',
+        'architekt': '建筑师',
+        'designer': '设计师',
+        'entwickler': '开发人员',
+        'programmierer': '程序员',
+        'forscher': '研究员',
+        'schriftsteller': '作家',
+        'autor': '作者',
+        'journalist': '记者',
+        'redakteur': '编辑',
+        'verleger': '出版商',
+        'maler': '画家',
+        'bildhauer': '雕塑家',
+        'musiker': '音乐家',
+        'komponist': '作曲家',
+        'sänger': '歌手',
+        'schauspieler': '演员',
+        'schauspielerin': '女演员',
+        'produzent': '制片人',
+        'fotograf': '摄影师',
+        'koch': '厨师',
+        'bäcker': '面包师',
+        'metzger': '屠夫',
+        'gärtner': '园丁',
+        'tischler': '木匠',
+        'klempner': '水管工',
+        'elektriker': '电工',
+        'mechaniker': '机械师',
+        'pilot': '飞行员',
+        'seemann': '水手',
+        'soldat': '士兵',
+        'polizei': '警察',
+        'offizier': '官员',
+        'feuerwehrmann': '消防员',
+        'krankenschwester': '护士',
+        'zahnarzt': '牙医',
+        'tierarzt': '兽医',
+        'apotheker': '药剂师',
+        'therapeut': '治疗师',
+        'psychologe': '心理学家',
+        'berater': '顾问',
+        'anwalt': '律师',
+        'richten': '法官',
+        'direktor': '校长',
+        'hobby': '爱好',
+        'interesse': '兴趣',
+        'aktivität': '活动',
+        'spaß': '乐趣',
+        'unterhaltung': '娱乐',
+        'unterhaltung': '娱乐',
+        'freizeit': '娱乐',
+        'freizeit': '休闲',
+        'entspannung': '放松',
+        'ruhe': '休息',
+        'urlaub': '假期',
+        'urlaub': '假日',
+        'reise': '旅行',
+        'reise': '旅程',
+        'abenteuer': '冒险',
+        'ausflug': '短途旅行',
+        'tour': '旅游',
+        'besichtigung': '观光',
+        'zelten': '露营',
+        'wandern': '徒步旅行',
+        'klettern': '攀爬',
+        'schwimmen': '游泳',
+        'tauchen': '潜水',
+        'surfen': '冲浪',
+        'skifahren': '滑雪',
+        'skaten': '滑冰',
+        'fischen': '钓鱼',
+        'jagen': '狩猎',
+        'golf': '高尔夫',
+        'tennis': '网球',
+        'fußball': '足球',
+        'basketball': '篮球',
+        'volleyball': '排球',
+        'baseball': '棒球',
+        'kricket': '板球',
+        'rugby': '橄榄球',
+        'hockey': '曲棍球',
+        'badminton': '羽毛球',
+        'tischtennis': '乒乓球',
+        'bowlen': '保龄球',
+        'schach': '国际象棋',
+        'damen': '跳棋',
+        'karten': '纸牌',
+        'poker': '扑克',
+        'würfel': '骰子',
+        'rätsel': '拼图',
+        'kreuzworträtsel': '填字游戏',
+        'sudoku': '数独',
+        'film': '电影',
+        'film': '电影',
+        'kino': '电影院',
+        'theater': '剧院',
+        'konzert': '音乐会',
+        'leistung': '表演',
+        'oper': '歌剧',
+        'ballett': '芭蕾舞',
+        'lied': '歌曲',
+        'singen': '唱歌',
+        'band': '乐队',
+        'orchester': '管弦乐队',
+        'instrument': '乐器',
+        'gitarre': '吉他',
+        'klavier': '钢琴',
+        'geige': '小提琴',
+        'schlagzeug': '鼓',
+        'trompete': '小号',
+        'flöte': '长笛',
+        'saxophon': '萨克斯管',
+        'mikrofon': '麦克风',
+        'radio': '收音机',
+        'fernsehen': '电视',
+        'fernseher': '电视',
+        'laptop': '笔记本电脑',
+        'tablet': '平板电脑',
+        'smartphone': '智能手机',
+        'kamera': '相机',
+        'video': '视频',
+        'foto': '照片',
+        'bild': '图片',
+        'malen': '绘画',
+        'zeichnung': '绘画',
+        'skulptur': '雕塑',
+        'museum': '博物馆',
+        'galerie': '画廊',
+        'ausstellung': '展览',
+        'festival': '节日',
+        'feier': '庆祝',
+        'party': '聚会',
+        'versammlung': '收集',
+        'veranstaltung': '事件',
+        'zeremonie': '仪式',
+        'hochzeit': '婚礼',
+        'geburtstag': '生日',
+        'jubiläum': '周年纪念',
+        'weihnachten': '圣诞节',
+        'ostern': '复活节',
+        'halloween': '万圣节',
+        'neujahr': '新年',
+        'feuerwerk': '烟花',
+        'parade': '游行',
+        'karneval': '狂欢节',
+        'picknick': '野餐',
+        'grill': '烧烤',
+        'brunch': '早午餐',
+        'abendessen': '晚餐',
+        'fest': '盛宴',
+        'bankett': '宴会',
+        'empfang': '招待会',
+        'verein': '俱乐部',
+        'bar': '酒吧',
+        'kneipe': '酒吧',
+        'restaurant': '餐厅',
+        'café': '咖啡馆',
+        'disco': '迪斯科',
+        'nachtclub': '夜总会',
+        'kasino': '赌场',
+        'freizeitpark': '游乐园',
+        'freizeitpark': '主题公园',
+        'zoo': '动物园',
+        'aquarium': '水族馆',
+        'spielplatz': '游乐场',
+        'pool': '游泳池',
+        'kurort': '水疗中心',
+        'fitnessstudio': '健身房',
+        'fitnessstudio': '健身中心',
+        'stadion': '体育场',
+        'arena': '竞技场',
+        'kurs': '课程',
+        'datum': '约会',
+        'sozialisieren': '社交',
+        'plaudern': '聊天',
+        'sprechen': '谈话',
+        'diskussion': '讨论',
+        'gespräch': '对话',
+        'debatte': '辩论',
+        'argument': '争论',
+        'lesen': '阅读',
+        'schreiben': '写作',
+        'forschen': '研究',
+        'denken': '思考',
+        'reflektieren': '反思',
+        'meditieren': '冥想',
+        'beten': '祈祷',
+        'anbeten': '崇拜',
+        'freiwilligenarbeit': '志愿服务',
+        'spenden': '捐赠',
+        'helfen': '帮助',
+        'unterstützen': '支持',
+        'fürsorglich': '关心',
+        'teilen': '分享',
+        'geben': '给予',
+        'erhalten': '接收',
+        'austauschen': '交换',
+        'handeln': '交易',
+        'kaufen': '购买',
+        'verkaufen': '销售',
+        'einkaufen': '购物',
+        'surfen': '浏览',
+        'suchen': '搜索',
+        'erkunden': '探索',
+        'entdecken': '发现',
+        'experimentieren': '实验',
+        'versuchen': '尝试',
+        'testen': '测试',
+        'üben': '练习',
+        'trainieren': '锻炼',
+        'trainieren': '锻炼',
+        'entspannen': '放松',
+        'ausruhen': '休息',
+        'schlafen': '睡觉',
+        'ein nickerchen machen': '小睡',
+        'träumen': '梦想',
+        'vorstellen': '想象',
+        'erstellen': '创造',
+        'erfinden': '发明',
+        'gestalten': '设计',
+        'gebäude': '建造',
+        'machen': '制作',
+        'kochen': '烹饪',
+        'backen': '烘焙',
+        'grillen': '烧烤',
+        'braten': '煎',
+        'dampfen': '蒸',
+        'braten': '烤',
+        'hacken': '砍',
+        'schneiden': '切割',
+        'schneiden': '切片',
+        'mischen': '混合',
+        'rühren': '搅拌',
+        'schlagen': '打',
+        'schlagen': '搅打',
+        'kneten': '揉',
+        'rollen': '滚动',
+        'falten': '折叠',
+        'formen': '塑造',
+        'formen': '塑造',
+        'schnitzen': '雕刻',
+        'skizzieren': '素描',
+        'färben': '上色',
+        'dekorieren': '装饰',
+        'organisieren': '安排',
+        'organisieren': '组织',
+        'planen': '计划',
+        'vorbereiten': '准备',
+        'einrichten': '设置',
+        'reinigen': '清洁',
+        'waschen': '清洗',
+        'abwischen': '擦拭',
+        'abstauben': '除尘',
+        'fegen': '扫地',
+        'wischen': '拖地',
+        'staubsaugen': '吸尘',
+        'polieren': '抛光',
+        'schrubben': '擦洗',
+        'spülen': '冲洗',
+        'trocknen': '干燥',
+        'hängen': '悬挂',
+        'bügeln': '熨烫',
+        'nähen': '缝纫',
+        'stricken': '编织',
+        'häkeln': '钩编',
+        'sticken': '刺绣',
+        'reparieren': '修补',
+        'reparieren': '修理',
+        'reparieren': '修理',
+        'anpassen': '调整',
+        'ändern': '修改',
+        'wechseln': '改变',
+        'ersetzen': '替换',
+        'installieren': '安装',
+        'zusammenbauen': '组装',
+        'zerlegen': '拆卸',
+        'verbinden': '连接',
+        'trennen': '断开',
+        'anhängen': '连接',
+        'abtrennen': '分离',
+        'befestigen': '固定',
+        'lösen': '解开',
+        'binden': '系',
+        'entschnüren': '解开',
+        'binden': '捆绑',
+        'einwickeln': '包裹',
+        'auswickeln': '打开包装',
+        'packen': '打包',
+        'auspacken': '拆包',
+        'laden': '装载',
+        'entladen': '卸载',
+        'tragen': '携带',
+        'transportieren': '运输',
+        'liefern': '递送',
+        'senden': '发送',
+        'sammeln': '收集',
+        'lagern': '存储',
+        'behalten': '保存',
+        'sparen': '保存',
+        'bewahren': '保存',
+        'schützen': '保护',
+        'bewachen': '守卫',
+        'verteidigen': '防御',
+        'angreifen': '攻击',
+        'kämpfen': '战斗',
+        'konkurrieren': '竞争',
+        'gewinnen': '获胜',
+        'verlieren': '失去',
+        'gelingen': '成功',
+        'versagen': '失败',
+        'erreichen': '实现',
+        'erreichen': '完成',
+        'beenden': '完成',
+        'abschließen': '完成',
+        'ende': '结束',
+        'beginnen': '开始',
+        'anfang': '开始',
+        'fortsetzen': '继续',
+        'anhalten': '停止',
+        'pausieren': '暂停',
+        'warten': '等待',
+        'hoffen': '希望',
+        'wünschen': '希望',
+        'wünschen': '渴望',
+        'verlangen': '想要',
+        'brauchen': '需要',
+        'erfordern': '需要',
+        'fordern': '要求',
+        'anfordern': '请求',
+        'fragen': '询问',
+        'befragen': '质疑',
+        'nachfragen': '询问',
+        'untersuchen': '调查',
+        'untersuchen': '检查',
+        'inspizieren': '检查',
+        'beobachten': '观察',
+        'anschauen': '观看',
+        'schauen': '看',
+        'sehen': '看见',
+        'ansehen': '观看',
+        'bezeugen': '见证',
+        'bemerken': '注意到',
+        'erkennen': '发现',
+        'erkennen': '认出',
+        'identifizieren': '识别',
+        'finden': '找到',
+        'suchen': '寻找',
+        'reisen': '旅行',
+        'reisen': '旅行',
+        'reisen': '旅游',
+        'besichtigen': '参观',
+        'umherwandern': '漫游',
+        'umherziehen': '漫游',
+        'treiben': '漂移',
+        'segeln': '航行',
+        'kreuzen': '巡航',
+        'fliegen': '飞行',
+        'aufsteigen': '翱翔',
+        'gleiten': '滑翔',
+        'schweben': '漂浮',
+        'tauchen': '跳入',
+        'springen': '跳跃',
+        'springen': '跳跃',
+        'hüpfen': '跳跃',
+        'springen': '跳跃',
+        'laufen': '跑步',
+        'joggen': '慢跑',
+        'sprinten': '冲刺',
+        'rasen': '猛冲',
+        'hetzen': '匆忙',
+        'eilen': '匆忙',
+        'rasen': '加速',
+        'rennen': '比赛',
+        'jagen': '追逐',
+        'folgen': '跟随',
+        'verfolgen': '追求',
+        'verfolgen': '追踪',
+        'nachzeichnen': '追踪',
+        'führen': '领导',
+        'führen': '引导',
+        'leiten': '指导',
+        'zeigen': '展示',
+        'demonstrieren': '演示',
+        'bilden': '教育',
+        'coaching': '教练',
+        'unterrichten': '指导',
+        'beraten': '建议',
+        'beratung': '咨询',
+        'beratung': '咨询',
+        'empfehlen': '推荐',
+        'vorschlagen': '建议',
+        'vorschlagen': '提议',
+        'anbieten': '提供',
+        'präsentieren': '呈现',
+        'bereitstellen': '提供',
+        'liefern': '供应',
+        'einrichten': '提供',
+        'ausstatten': '装备',
+        'planen': '安排',
+        'koordinieren': '协调',
+        'leiten': '管理',
+        'überwachen': '监督',
+        'überwachen': '监督',
+        'überwachen': '监控',
+        'steuern': '控制',
+        'regeln': '调节',
+        'regieren': '管理',
+        'urteil': '统治',
+        'befehlen': '命令',
+        'bestellen': '命令',
+        'erzählen': '告诉',
+        'informieren': '通知',
+        'benachrichtigen': '通知',
+        'ankündigen': '宣布',
+        'erklären': '宣布',
+        'verkünden': '宣布',
+        'senden': '广播',
+        'verlegen': '出版',
+        'drucken': '打印',
+        'aufnahme': '记录',
+        'dokumentieren': '记录',
+        'berichten': '报告',
+        'beschreiben': '描述',
+        'erklären': '解释',
+        'klären': '澄清',
+        'definieren': '定义',
+        'spezifizieren': '指定',
+        'detaillieren': '详细说明',
+        'skizzieren': '概述',
+        'zusammenfassen': '总结',
+        'überprüfen': '审查',
+        'analysieren': '分析',
+        'auswendig lernen': '记忆',
+        'erinnern': '记住',
+        'erinnern': '回忆',
+        'erinnern': '回忆',
+        'erinnern': '提醒',
+        'vergessen': '忘记',
+        'ignorieren': '忽视',
+        'vernachlässigen': '忽视',
+        'überblicken': '忽视',
+        'fehlen': '错过',
+        'lokalisieren': '定位',
+        'aufdecken': '发现',
+        'enthüllen': '揭示',
+        'enthüllen': '暴露',
+        'anzeigen': '展示',
+        'ausstellen': '展览',
+        'beitragen': '贡献',
+        'verteilen': '分发',
+        'teilen': '分割',
+        'spalten': '分裂',
+        'trennen': '分离',
+        'entfernen': '移除',
+        'beseitigen': '消除',
+        'löschen': '擦除',
+        'löschen': '删除',
+        'zerstören': '摧毁',
+        'beschädigen': '损坏',
+        'brechen': '打破',
+        'knacken': '破裂',
+        'zerbrechen': '粉碎',
+        'zerreißen': '撕裂',
+        'zerreißen': '撕扯',
+        'hacken': '砍',
+        'schneiden': '砍',
+        'piercing': '刺穿',
+        'durchstechen': '刺穿',
+        'stechen': '刺',
+        'schießen': '射击',
+        'abschuss': '开火',
+        'werfen': '扔',
+        'werfen': '抛',
+        'besetzung': '投',
+        'werfen': '抛',
+        'werfen': '猛投',
+        'starten': '发射',
+        'auswerfen': '弹出',
+        'ausstoßen': '驱逐',
+        'zwingen': '强迫',
+        'schieben': '推',
+        'pressen': '按',
+        'quetschen': '挤压',
+        'zerquetschen': '压碎',
+        'mahlen': '磨碎',
+        'schlagen': '重击',
+        'schlagen': '击打',
+        'schlagen': '打击',
+        'schlagen': '拍打',
+        'schlagen': '拳击',
+        'treten': '踢',
+        'stampfen': '踩踏',
+        'trampeln': '践踏',
+        'stempeln': '踩',
+        'schreiten': '踏',
+        'gehen': '走路',
+        'marschieren': '行进',
+        'paraden': '游行',
+        'patrouillieren': '巡逻',
+        'sinken': '下沉',
+        'ertrinken': '溺水',
+        'tanzen': '跳舞',
+        'wirbeln': '旋转',
+        'spinnen': '旋转',
+        'drehen': '转动',
+        'drehen': '旋转',
+        'drehen': '旋转',
+        'kreisen': '环绕',
+        'umkreisen': '环绕',
+        'umgebend': '包围',
+        'umkreisen': '环绕',
+        'umschließen': '包围',
+        'abdecken': '覆盖',
+        'verpacken': '包装',
+        'boxen': '装箱',
+        'enthalten': '包含',
+        'halten': '持有',
+        'bewegen': '移动',
+        'verschieben': '移动',
+        'übertragen': '转移',
+        'umziehen': '搬迁',
+        'platzieren': '放置',
+        'positionieren': '定位',
+        'positionieren': '安置',
+        'einstellung': '设置',
+        'ändern': '改变',
+        'verwandeln': '转变',
+        'umwandeln': '转换',
+        'anpassen': '适应',
+        'unterbringen': '适应',
+        'anpassen': '适合',
+        'abgleichen': '匹配',
+        'entsprechend': '对应',
+        'beziehen': '关联',
+        'verbinden': '连接',
+        'beitreten': '加入',
+        'vereinen': '联合',
+        'kombinieren': '结合',
+        'verschmelzen': '合并',
+        'mischen': '混合',
+        'biegen': '弯曲',
+        'dehnen': '弯曲',
+        'krümmen': '弯曲',
+        'verdrehen': '扭曲',
+        'kurvenreich': '缠绕',
+        'aufwickeln': '盘绕',
+        'spiralieren': '螺旋',
+        'curling': '卷曲',
     },
 
-    // 常用短语映射表（中文 -> 英文）
-    zhToEnDict: {
-        '你好': 'hello',
-        '世界': 'world',
-        '早上好': 'good morning',
-        '下午好': 'good afternoon',
-        '晚上好': 'good evening',
-        '再见': 'goodbye',
-        '谢谢': 'thank you',
-        '对不起': 'sorry',
-        '是': 'yes',
-        '否': 'no',
-        '请': 'please',
-        '欢迎': 'welcome',
-        '你好吗': 'how are you',
-        '我很好': 'i am fine',
-        '你叫什么名字': 'what is your name',
-        '我的名字是': 'my name is',
-        '很高兴认识你': 'nice to meet you',
-        '你来自哪里': 'where are you from',
-        '我来自': 'i am from',
-        '我爱你': 'i love you',
-        '高兴': 'happy',
-        '悲伤': 'sad',
-        '生气': 'angry',
-        '疲倦': 'tired',
-        '饿': 'hungry',
-        '渴': 'thirsty',
-        '热': 'hot',
-        '冷': 'cold',
-        '大': 'big',
-        '小': 'small',
-        '老': 'old',
-        '新': 'new',
-        '好': 'good',
-        '坏': 'bad',
-        '快': 'fast',
-        '慢': 'slow',
-        '对': 'right',
-        '错': 'wrong',
-        '今天': 'today',
-        '明天': 'tomorrow',
-        '昨天': 'yesterday',
-        '时间': 'time',
-        '日': 'day',
-        '周': 'week',
-        '月': 'month',
-        '年': 'year',
-        '水': 'water',
-        '食物': 'food',
-        '钱': 'money',
-        '书': 'book',
-        '朋友': 'friend',
-        '家庭': 'family',
-        '父亲': 'father',
-        '母亲': 'mother',
-        '兄弟': 'brother',
-        '姐妹': 'sister',
-        '儿子': 'son',
-        '女儿': 'daughter',
-        '男人': 'man',
-        '女人': 'woman',
-        '孩子': 'child',
-        '男孩': 'boy',
-        '女孩': 'girl',
+    // Häufige Ausdrücke (Chinesisch -> Deutsch)
+    zhToDeDict: {
+        '你好': 'hallo',
+        '世界': 'welt',
+        '早上好': 'guten morgen',
+        '下午好': 'guten tag',
+        '晚上好': 'guten abend',
+        '再见': 'auf wiedersehen',
+        '谢谢': 'danke',
+        '对不起': 'entschuldigung',
+        '是': 'ja',
+        '否': 'nein',
+        '请': 'bitte',
+        '欢迎': 'willkommen',
+        '你好吗': 'wie geht es dir',
+        '我很好': 'mir geht es gut',
+        '你叫什么名字': 'wie heißt du',
+        '我的名字是': 'ich heiße',
+        '很高兴认识你': 'schön, sie kennenzulernen',
+        '你来自哪里': 'woher kommst du',
+        '我来自': 'ich komme aus',
+        '我爱你': 'ich liebe dich',
+        '快乐': 'glücklich',
+        '悲伤': 'traurig',
+        '生气': 'wütend',
+        '疲倦': 'müde',
+        '饿': 'hungrig',
+        '渴': 'durstig',
+        '热': 'heiß',
+        '冷': 'kalt',
+        '大': 'groß',
+        '小': 'klein',
+        '年老': 'alt',
+        '新': 'neu',
+        '好': 'gut',
+        '坏': 'schlecht',
+        '快速': 'schnell',
+        '缓慢': 'langsam',
+        '右': 'richtig',
+        '错': 'falsch',
+        '今天': 'heute',
+        '明天': 'morgen',
+        '昨天': 'gestern',
+        '时间': 'zeit',
+        '日': 'tag',
+        '周': 'woche',
+        '月': 'monat',
+        '年': 'jahr',
+        '水': 'wasser',
+        '食物': 'essen',
+        '钱': 'geld',
+        '书': 'buch',
+        '朋友': 'freund',
+        '家庭': 'familie',
+        '父亲': 'vater',
+        '母亲': 'mutter',
+        '兄弟': 'bruder',
+        '姐妹': 'schwester',
+        '儿子': 'sohn',
+        '女儿': 'tochter',
+        '男人': 'mann',
+        '女人': 'frau',
+        '孩子': 'kind',
+        '男孩': 'junge',
+        '女孩': 'mädchen',
         '人': 'person',
-        '人们': 'people',
-        '房子': 'house',
-        '汽车': 'car',
-        '电话': 'phone',
+        '人们': 'leute',
+        '房子': 'haus',
+        '汽车': 'auto',
+        '电话': 'telefon',
         '电脑': 'computer',
         '互联网': 'internet',
-        '语言': 'language',
-        '英语': 'english',
-        '中文': 'chinese',
-        '翻译': 'translate',
-        '你好世界': 'hello world',
-        '晚安': 'good night',
-        
-        // 新增词汇 - 数字
-        '零': 'zero', '一': 'one', '二': 'two', '三': 'three', '四': 'four', '五': 'five',
-        '六': 'six', '七': 'seven', '八': 'eight', '九': 'nine', '十': 'ten',
-        '百': 'hundred', '千': 'thousand', '百万': 'million', '十亿': 'billion',
-        
-        // 新增词汇 - 颜色
-        '红色': 'red', '蓝色': 'blue', '绿色': 'green', '黄色': 'yellow', '黑色': 'black',
-        '白色': 'white', '橙色': 'orange', '紫色': 'purple', '粉色': 'pink', '棕色': 'brown',
-        
-        // 新增词汇 - 动物
-        '狗': 'dog', '猫': 'cat', '鸟': 'bird', '鱼': 'fish', '马': 'horse', '牛': 'cow',
-        '羊': 'sheep', '猪': 'pig', '鸡': 'chicken', '鸭': 'duck', '兔子': 'rabbit',
-        
-        // 新增词汇 - 水果
-        '苹果': 'apple', '香蕉': 'banana', '橙子': 'orange', '葡萄': 'grape', '草莓': 'strawberry',
-        '西瓜': 'watermelon', '菠萝': 'pineapple', '芒果': 'mango', '梨': 'pear', '桃子': 'peach',
-        
-        // 新增词汇 - 蔬菜
-        '番茄': 'tomato', '土豆': 'potato', '胡萝卜': 'carrot', '洋葱': 'onion', '卷心菜': 'cabbage',
-        '西兰花': 'broccoli', '菠菜': 'spinach', '玉米': 'corn', '黄瓜': 'cucumber', '辣椒': 'pepper',
-        
-        // 新增词汇 - 天气
-        '太阳': 'sun', '月亮': 'moon', '星星': 'star', '云': 'cloud', '雨': 'rain',
-        '雪': 'snow', '风': 'wind', '风暴': 'storm', '天气': 'weather', '温度': 'temperature',
-        
-        // 新增词汇 - 职业
-        '老师': 'teacher', '医生': 'doctor', '工程师': 'engineer', '学生': 'student', '工人': 'worker',
-        '农民': 'farmer', '司机': 'driver', '厨师': 'cook', '艺术家': 'artist', '科学家': 'scientist',
-        
-        // 新增词汇 - 国家
-        '中国': 'china', '美国': 'america', '英国': 'england', '法国': 'france', '德国': 'germany',
-        '日本': 'japan', '韩国': 'korea', '俄罗斯': 'russia', '印度': 'india', '澳大利亚': 'australia',
-        
-        // 新增词汇 - 城市
-        '北京': 'beijing', '上海': 'shanghai', '广州': 'guangzhou', '深圳': 'shenzhen', '香港': 'hong kong',
-        '纽约': 'new york', '伦敦': 'london', '巴黎': 'paris', '东京': 'tokyo', '首尔': 'seoul',
-        
-        // 新增词汇 - 交通工具
-        '公交车': 'bus', '火车': 'train', '飞机': 'airplane', '船': 'ship', '自行车': 'bicycle',
-        '摩托车': 'motorcycle', '出租车': 'taxi', '地铁': 'subway', '小船': 'boat', '卡车': 'truck',
-        
-        // 新增词汇 - 学校相关
-        '学校': 'school', '教室': 'classroom', '老师': 'teacher', '学生': 'student', '书': 'book',
-        '笔': 'pen', '铅笔': 'pencil', '纸': 'paper', '作业': 'homework', '考试': 'exam',
-        
-        // 新增词汇 - 身体部位
-        '头': 'head', '眼睛': 'eye', '耳朵': 'ear', '鼻子': 'nose', '嘴': 'mouth',
-        '手': 'hand', '脚': 'foot', '腿': 'leg', '手臂': 'arm', '心脏': 'heart',
-        
-        // 新增词汇 - 服装
-        '衬衫': 'shirt', '裤子': 'pants', '裙子': 'dress', '鞋子': 'shoes', '帽子': 'hat',
-        '外套': 'coat', '夹克': 'jacket', '袜子': 'socks', '手套': 'gloves', '围巾': 'scarf',
-        
-        // 新增词汇 - 时间相关
-        '早晨': 'morning', '下午': 'afternoon', '晚上': 'evening', '夜晚': 'night', '黎明': 'dawn',
-        '黄昏': 'dusk', '分钟': 'minute', '小时': 'hour', '秒': 'second', '时钟': 'clock',
-        
-        // 新增词汇 - 方向
-        '北': 'north', '南': 'south', '东': 'east', '西': 'west', '左': 'left',
-        '右': 'right', '上': 'up', '下': 'down', '前': 'front', '后': 'back',
-        
-        // 新增词汇 - 常见动词
-        '吃': 'eat', '喝': 'drink', '睡觉': 'sleep', '工作': 'work', '学习': 'study',
-        '玩': 'play', '读': 'read', '写': 'write', '说': 'speak', '听': 'listen',
-        '看': 'see', '去': 'go', '来': 'come', '买': 'buy', '卖': 'sell',
-        
-        // 新增词汇 - 常见形容词
-        '美丽': 'beautiful', '丑陋': 'ugly', '富有': 'rich', '贫穷': 'poor', '强壮': 'strong',
-        '虚弱': 'weak', '高': 'tall', '矮': 'short', '长': 'long', '短': 'short',
-        '重': 'heavy', '轻': 'light', '干净': 'clean', '脏': 'dirty', '容易': 'easy',
-        '困难': 'difficult', '重要': 'important', '有趣': 'interesting', '无聊': 'boring',
-        
-        // 扩展词汇 - 日常用语
-        '多少钱': 'how much', '几点': 'what time', '在哪里': 'where is', '多大': 'how old',
-        '你能帮我吗': 'can you help me', '我需要帮助': 'i need help', '打扰一下': 'excuse me',
-        '我不明白': 'i dont understand', '你能重复吗': 'can you repeat', '说慢一点': 'speak slowly',
-        '我同意': 'i agree', '我不同意': 'i disagree', '也许': 'maybe', '可能': 'probably',
-        '当然': 'of course', '没问题': 'no problem', '不客气': 'you are welcome',
-        '祝你今天愉快': 'have a good day', '回头见': 'see you later', '保重': 'take care',
-        
-        // 扩展词汇 - 更多常见动词
-        '跑': 'run', '走': 'walk', '跳': 'jump', '飞': 'fly', '游泳': 'swim',
-        '驾驶': 'drive', '骑': 'ride', '爬': 'climb', '跳舞': 'dance', '唱歌': 'sing',
-        '笑': 'laugh', '哭': 'cry', '思考': 'think', '知道': 'know', '理解': 'understand',
-        '记住': 'remember', '忘记': 'forget', '相信': 'believe', '希望': 'hope', '想要': 'want',
-        '需要': 'need', '喜欢': 'like', '爱': 'love', '讨厌': 'hate', '更喜欢': 'prefer',
-        '选择': 'choose', '决定': 'decide', '计划': 'plan', '尝试': 'try', '失败': 'fail',
-        '成功': 'succeed', '赢': 'win', '输': 'lose', '战斗': 'fight', '争论': 'argue',
-        '同意': 'agree', '不同意': 'disagree', '接受': 'accept', '拒绝': 'refuse', '邀请': 'invite',
-        '参观': 'visit', '旅行': 'travel', '移动': 'move', '停留': 'stay', '离开': 'leave',
-        '到达': 'arrive', '返回': 'return', '进入': 'enter', '退出': 'exit', '打开': 'open',
-        '关闭': 'close', '开始': 'start', '停止': 'stop', '继续': 'continue', '完成': 'finish',
-        '结束': 'end', '创建': 'create', '建造': 'build', '制作': 'make', '生产': 'produce',
-        '种植': 'grow', '烹饪': 'cook', '烘焙': 'bake', '清洁': 'clean', '洗': 'wash',
-        '修理': 'repair', '打破': 'break', '破坏': 'destroy', '切割': 'cut', '打': 'hit',
-        '推': 'push', '拉': 'pull', '携带': 'carry', '举起': 'lift', '扔': 'throw',
-        '接住': 'catch', '踢': 'kick', '挑选': 'pick', '给予': 'give', '拿取': 'take',
-        '接收': 'receive', '发送': 'send', '带来': 'bring', '跟随': 'follow', '领导': 'lead',
-        '加入': 'join', '分离': 'separate', '连接': 'connect', '比较': 'compare', '测量': 'measure',
-        '计数': 'count', '计算': 'calculate', '添加': 'add', '减去': 'subtract', '乘': 'multiply',
-        '除': 'divide', '增加': 'increase', '减少': 'decrease', '改变': 'change', '变成': 'become',
-        '转向': 'turn', '出现': 'appear', '消失': 'disappear', '展示': 'show', '隐藏': 'hide',
-        '寻找': 'find', '搜索': 'search', '发现': 'discover', '探索': 'explore', '发明': 'invent',
-        '设计': 'design', '画画': 'draw', '绘画': 'paint', '上色': 'color', '拍照': 'photograph',
-        '记录': 'record', '玩': 'play', '游戏': 'game', '运动': 'sport',
-        
-        // 扩展词汇 - 更多常见形容词
-        '快乐': 'happy', '悲伤': 'sad', '生气': 'angry', '平静': 'calm', '兴奋': 'excited',
-        '无聊': 'bored', '惊讶': 'surprised', '困惑': 'confused', '害怕': 'scared', '勇敢': 'brave',
-        '紧张': 'nervous', '放松': 'relaxed', '压力': 'stressed', '自豪': 'proud', '羞愧': 'ashamed',
-        '嫉妒': 'jealous', '慷慨': 'generous', '自私': 'selfish', '善良': 'kind', '残忍': 'cruel',
-        '礼貌': 'polite', '粗鲁': 'rude', '诚实': 'honest', '不诚实': 'dishonest', '友好': 'friendly',
-        '不友好': 'unfriendly', '社交': 'social', '反社交': 'antisocial', '外向': 'outgoing', '害羞': 'shy',
-        '自信': 'confident', '不安全': 'insecure', '聪明': 'intelligent', '愚蠢': 'stupid', '明智': 'wise',
-        '有创意': 'creative', '乏味': 'boring', '富有想象力': 'imaginative', '实用': 'practical', '不实用': 'impractical',
-        '逻辑': 'logical', '情感': 'emotional', '理性': 'rational', '不理性': 'irrational', '耐心': 'patient',
-        '不耐烦': 'impatient', '勤奋': 'hardworking', '懒惰': 'lazy', '活跃': 'active', '被动': 'passive',
-        '精力充沛': 'energetic', '疲倦': 'tired', '健康': 'healthy', '生病': 'sick', '强壮': 'strong',
-        '虚弱': 'weak', '灵活': 'flexible', '僵硬': 'stiff', '快速': 'fast', '缓慢': 'slow',
-        '迅速': 'quick', '敏捷': 'swift', '年轻': 'young', '年老': 'old', '新': 'new',
-        '古老': 'ancient', '现代': 'modern', '新鲜': 'fresh', '不新鲜': 'stale', '生的': 'raw',
-        '煮熟的': 'cooked', '热': 'hot', '冷': 'cold', '温暖': 'warm', '凉爽': 'cool',
-        '冰冻': 'freezing', '沸腾': 'boiling', '湿': 'wet', '干': 'dry', '湿润': 'moist',
-        '潮湿': 'damp', '明亮': 'bright', '黑暗': 'dark', '轻': 'light', '重': 'heavy',
-        '厚': 'thick', '薄': 'thin', '宽': 'wide', '窄': 'narrow', '深': 'deep',
-        '浅': 'shallow', '高': 'high', '低': 'low', '矮': 'short', '远': 'far',
-        '近': 'near', '昂贵': 'expensive', '便宜': 'cheap', '有价值': 'valuable', '无价值': 'worthless',
-        '珍贵': 'precious', '普通': 'common', '稀有': 'rare', '独特': 'unique', '正常': 'normal',
-        '奇怪': 'strange', '怪异': 'weird', '特别': 'special', '非凡': 'extraordinary', '简单': 'simple',
-        '复杂': 'complex', '容易': 'easy', '困难': 'difficult', '软': 'soft', '硬': 'hard',
-        '光滑': 'smooth', '粗糙': 'rough', '锋利': 'sharp', '钝': 'blunt', '清晰': 'clear',
-        '不清楚': 'unclear', '明显': 'obvious', '隐藏': 'hidden', '可见': 'visible', '不可见': 'invisible',
-        '透明': 'transparent', '不透明': 'opaque', '大声': 'loud', '安静': 'quiet', '沉默': 'silent',
-        '嘈杂': 'noisy', '甜': 'sweet', '酸': 'sour', '苦': 'bitter', '咸': 'salty',
-        '辣': 'spicy', '美味': 'delicious', '好吃': 'tasty', '糟糕': 'awful', '恶心': 'disgusting',
-        
-        // 扩展词汇 - 食物和饮料
-        '面包': 'bread', '米饭': 'rice', '面条': 'noodles', '意大利面': 'pasta', '披萨': 'pizza',
-        '汉堡': 'hamburger', '三明治': 'sandwich', '奶酪': 'cheese', '黄油': 'butter', '牛奶': 'milk',
-        '酸奶': 'yogurt', '奶油': 'cream', '鸡蛋': 'egg', '肉': 'meat', '牛肉': 'beef',
-        '猪肉': 'pork', '鸡肉': 'chicken', '鱼': 'fish', '海鲜': 'seafood', '虾': 'shrimp',
-        '螃蟹': 'crab', '汤': 'soup', '沙拉': 'salad', '蔬菜': 'vegetable', '水果': 'fruit',
-        '蛋糕': 'cake', '饼干': 'cookie', '巧克力': 'chocolate', '冰淇淋': 'ice cream', '糖果': 'candy',
-        '糖': 'sugar', '盐': 'salt', '胡椒': 'pepper', '油': 'oil', '醋': 'vinegar',
-        '酱': 'sauce', '香料': 'spice', '香草': 'herb', '面粉': 'flour', '咖啡': 'coffee',
-        '茶': 'tea', '果汁': 'juice', '水': 'water', '苏打水': 'soda', '啤酒': 'beer',
-        '葡萄酒': 'wine', '酒精': 'alcohol', '早餐': 'breakfast', '午餐': 'lunch', '晚餐': 'dinner',
-        '零食': 'snack', '餐': 'meal', '菜': 'dish', '美食': 'cuisine', '食谱': 'recipe',
-        
-        // 扩展词汇 - 家居用品
-        '桌子': 'table', '椅子': 'chair', '沙发': 'sofa', '床': 'bed', '书桌': 'desk',
-        '架子': 'shelf', '橱柜': 'cupboard', '衣柜': 'wardrobe', '镜子': 'mirror', '灯': 'lamp',
-        '灯泡': 'bulb', '时钟': 'clock', '手表': 'watch', '电池': 'battery', '钥匙': 'key',
-        '锁': 'lock', '门': 'door', '窗户': 'window', '墙': 'wall', '地板': 'floor',
-        '天花板': 'ceiling', '屋顶': 'roof', '花园': 'garden', '院子': 'yard', '厨房': 'kitchen',
-        '浴室': 'bathroom', '卧室': 'bedroom', '客厅': 'living room', '餐厅': 'dining room', '车库': 'garage',
-        '地下室': 'basement', '阁楼': 'attic', '阳台': 'balcony', '楼梯': 'stairs', '电梯': 'elevator',
-        '冰箱': 'refrigerator', '冰柜': 'freezer', '烤箱': 'oven', '微波炉': 'microwave', '炉子': 'stove',
-        '洗碗机': 'dishwasher', '洗衣机': 'washing machine', '烘干机': 'dryer', '吸尘器': 'vacuum', '扫帚': 'broom',
-        '拖把': 'mop', '毛巾': 'towel', '肥皂': 'soap', '洗发水': 'shampoo', '牙刷': 'toothbrush',
-        '牙膏': 'toothpaste', '梳子': 'comb', '刷子': 'brush', '剃须刀': 'razor', '剪刀': 'scissors',
-        '刀': 'knife', '叉': 'fork', '勺': 'spoon', '盘子': 'plate', '碗': 'bowl',
-        '杯子': 'cup', '玻璃杯': 'glass', '马克杯': 'mug', '瓶子': 'bottle', '罐子': 'jar',
-        '锅': 'pot', '平底锅': 'pan', '篮子': 'basket', '包': 'bag', '背包': 'backpack',
-        '手提箱': 'suitcase', '钱包': 'purse', '雨伞': 'umbrella', '垃圾桶': 'trash can',
-        
-        // 扩展词汇 - 自然和环境
-        '山': 'mountain', '小山': 'hill', '山谷': 'valley', '河流': 'river', '湖泊': 'lake',
-        '海洋': 'ocean', '海': 'sea', '海滩': 'beach', '沙漠': 'desert', '森林': 'forest',
-        '丛林': 'jungle', '树林': 'wood', '公园': 'park', '田野': 'field', '农场': 'farm',
-        '岛屿': 'island', '火山': 'volcano', '地震': 'earthquake', '洪水': 'flood', '干旱': 'drought',
-        '风暴': 'storm', '飓风': 'hurricane', '龙卷风': 'tornado', '海啸': 'tsunami', '火': 'fire',
-        '水': 'water', '空气': 'air', '风': 'wind', '雨': 'rain', '雪': 'snow',
-        '冰': 'ice', '冰雹': 'hail', '雾': 'fog', '云': 'cloud', '天空': 'sky',
-        '太阳': 'sun', '月亮': 'moon', '星星': 'star', '行星': 'planet', '地球': 'earth',
-        '世界': 'world', '宇宙': 'universe', '星系': 'galaxy', '太空': 'space', '重力': 'gravity',
-        '大气层': 'atmosphere', '氧气': 'oxygen', '二氧化碳': 'carbon dioxide', '污染': 'pollution', '环境': 'environment',
-        '自然': 'nature', '生态系统': 'ecosystem', '气候': 'climate', '天气': 'weather', '温度': 'temperature',
-        '季节': 'season', '春天': 'spring', '夏天': 'summer', '秋天': 'autumn', '冬天': 'winter',
-        '植物': 'plant', '树': 'tree', '花': 'flower', '草': 'grass', '叶子': 'leaf',
-        '根': 'root', '树枝': 'branch', '种子': 'seed', '庄稼': 'crop', '土壤': 'soil',
-        '沙子': 'sand', '岩石': 'rock', '石头': 'stone', '金属': 'metal', '金': 'gold',
-        '银': 'silver', '铜': 'copper', '铁': 'iron', '钢': 'steel', '塑料': 'plastic',
-        '木头': 'wood', '纸': 'paper', '玻璃': 'glass', '橡胶': 'rubber', '皮革': 'leather',
-        '织物': 'fabric', '棉花': 'cotton', '羊毛': 'wool', '丝绸': 'silk', '尼龙': 'nylon',
-        '材料': 'material', '物质': 'substance',
-        
-        // 扩展词汇 - 学习和教育
-        '学校': 'school', '大学': 'university', '学院': 'college', '班级': 'class', '课程': 'lesson',
-        '科目': 'subject', '数学': 'math', '科学': 'science', '生物学': 'biology', '化学': 'chemistry',
-        '物理学': 'physics', '地理学': 'geography', '历史': 'history', '文学': 'literature', '艺术': 'art',
-        '音乐': 'music', '语言': 'language', '哲学': 'philosophy', '心理学': 'psychology', '社会学': 'sociology',
-        '经济学': 'economics', '政治学': 'politics', '法律': 'law', '医学': 'medicine', '工程学': 'engineering',
-        '建筑学': 'architecture', '计算机科学': 'computer science', '信息技术': 'information technology', '商业': 'business',
-        '管理': 'management', '市场营销': 'marketing', '会计': 'accounting', '金融': 'finance', '银行业': 'banking',
-        '教师': 'teacher', '教授': 'professor', '学生': 'student', '小学生': 'pupil', '毕业生': 'graduate',
-        '本科生': 'undergraduate', '研究生': 'postgraduate', '博士学位': 'doctorate', '学位': 'degree', '文凭': 'diploma',
-        '证书': 'certificate', '资格': 'qualification', '技能': 'skill', '知识': 'knowledge', '智慧': 'wisdom',
-        '智力': 'intelligence', '记忆': 'memory', '专注': 'concentration', '注意力': 'attention', '学习': 'learning',
-        '研究': 'research', '实验': 'experiment', '观察': 'observation', '分析': 'analysis', '理论': 'theory',
-        '实践': 'practice', '经验': 'experience', '专业知识': 'expertise', '精通': 'mastery', '教科书': 'textbook',
-        '笔记本': 'notebook', '字典': 'dictionary', '百科全书': 'encyclopedia', '图书馆': 'library', '实验室': 'laboratory',
-        '工作室': 'workshop', '研讨会': 'seminar', '会议': 'conference', '讲座': 'lecture', '演示': 'presentation',
-        '作业': 'assignment', '项目': 'project', '论文': 'thesis', '学位论文': 'dissertation', '考试': 'exam',
-        '测试': 'test', '测验': 'quiz', '评估': 'assessment', '评价': 'evaluation', '成绩': 'grade',
-        '分数': 'mark', '得分': 'score', '结果': 'result', '成就': 'achievement', '成功': 'success',
-        '失败': 'failure', '进步': 'progress', '发展': 'development', '提高': 'improvement', '教育': 'education',
-        '教学': 'teaching', '培训': 'training', '指导': 'instruction', '建议': 'advice', '反馈': 'feedback',
-        '批评': 'criticism', '表扬': 'praise', '奖励': 'reward', '惩罚': 'punishment', '纪律': 'discipline',
-        '规则': 'rules', '规定': 'regulations', '政策': 'policy',
-        
-        // 扩展词汇 - 工作和职业
-        '工作': 'job', '职业': 'career', '就业': 'employment', '失业': 'unemployment', '退休': 'retirement',
-        '晋升': 'promotion', '降职': 'demotion', '薪水': 'salary', '工资': 'wage', '收入': 'income',
-        '奖金': 'bonus', '福利': 'benefit', '养老金': 'pension', '保险': 'insurance', '合同': 'contract',
-        '协议': 'agreement', '责任': 'responsibility', '职责': 'duty', '任务': 'task', '截止日期': 'deadline',
-        '时间表': 'schedule', '会议': 'meeting', '约会': 'appointment', '面试': 'interview', '申请': 'application',
-        '简历': 'resume', '经验': 'experience', '能力': 'ability', '才能': 'talent', '执照': 'license',
-        '办公室': 'office', '工厂': 'factory', '车间': 'workshop', '仓库': 'warehouse', '商店': 'store',
-        '市场': 'market', '公司': 'company', '组织': 'organization', '机构': 'institution', '政府': 'government',
-        '部门': 'department', '团队': 'team', '小组': 'group', '委员会': 'committee', '董事会': 'board',
-        '管理层': 'management', '领导力': 'leadership', '主管': 'supervisor', '经理': 'manager', '主任': 'director',
-        '高管': 'executive', '总裁': 'president', '首席执行官': 'ceo', '首席财务官': 'cfo', '首席技术官': 'cto',
-        '合伙人': 'partner', '助理': 'assistant', '秘书': 'secretary', '接待员': 'receptionist', '职员': 'clerk',
-        '收银员': 'cashier', '会计': 'accountant', '审计员': 'auditor', '顾问': 'consultant', '分析师': 'analyst',
-        '专家': 'expert', '技术员': 'technician', '工程师': 'engineer', '建筑师': 'architect', '设计师': 'designer',
-        '开发人员': 'developer', '程序员': 'programmer', '研究员': 'researcher', '科学家': 'scientist', '作家': 'writer',
-        '作者': 'author', '记者': 'journalist', '编辑': 'editor', '出版商': 'publisher', '艺术家': 'artist',
-        '画家': 'painter', '雕塑家': 'sculptor', '音乐家': 'musician', '作曲家': 'composer', '歌手': 'singer',
-        '演员': 'actor', '女演员': 'actress', '导演': 'director', '制片人': 'producer', '摄影师': 'photographer',
-        '厨师': 'chef', '面包师': 'baker', '屠夫': 'butcher', '农民': 'farmer', '园丁': 'gardener',
-        '木匠': 'carpenter', '水管工': 'plumber', '电工': 'electrician', '机械师': 'mechanic', '司机': 'driver',
-        '飞行员': 'pilot', '水手': 'sailor', '士兵': 'soldier', '警察': 'police', '官员': 'officer',
-        '消防员': 'firefighter', '医生': 'doctor', '护士': 'nurse', '牙医': 'dentist', '兽医': 'veterinarian',
-        '药剂师': 'pharmacist', '治疗师': 'therapist', '心理学家': 'psychologist', '律师': 'lawyer', '法官': 'judge',
-        '校长': 'principal',
-        
-        // 扩展词汇 - 娱乐和休闲
-        '游戏': 'game', '运动': 'sport', '爱好': 'hobby', '兴趣': 'interest', '活动': 'activity',
-        '乐趣': 'fun', '娱乐': 'entertainment', '休闲': 'leisure', '放松': 'relaxation', '休息': 'rest',
-        '假期': 'vacation', '假日': 'holiday', '旅行': 'trip', '旅程': 'journey', '冒险': 'adventure',
-        '短途旅行': 'excursion', '旅游': 'tour', '观光': 'sightseeing', '露营': 'camping', '徒步旅行': 'hiking',
-        '攀爬': 'climbing', '潜水': 'diving', '冲浪': 'surfing', '滑雪': 'skiing', '滑冰': 'skating',
-        '钓鱼': 'fishing', '打猎': 'hunting', '高尔夫': 'golf', '网球': 'tennis', '足球': 'football',
-        '篮球': 'basketball', '排球': 'volleyball', '棒球': 'baseball', '板球': 'cricket', '橄榄球': 'rugby',
-        '曲棍球': 'hockey', '羽毛球': 'badminton', '乒乓球': 'table tennis', '保龄球': 'bowling', '国际象棋': 'chess',
-        '跳棋': 'checkers', '纸牌': 'cards', '扑克': 'poker', '骰子': 'dice', '拼图': 'puzzle',
-        '填字游戏': 'crossword', '数独': 'sudoku', '电影': 'movie', '电影院': 'cinema', '剧院': 'theater',
-        '音乐会': 'concert', '表演': 'performance', '戏剧': 'play', '歌剧': 'opera', '芭蕾舞': 'ballet',
-        '舞蹈': 'dance', '歌曲': 'song', '唱歌': 'singing', '乐队': 'band', '管弦乐队': 'orchestra',
-        '乐器': 'instrument', '吉他': 'guitar', '钢琴': 'piano', '小提琴': 'violin', '鼓': 'drums',
-        '小号': 'trumpet', '长笛': 'flute', '萨克斯管': 'saxophone', '麦克风': 'microphone', '收音机': 'radio',
-        '电视': 'television', '电脑': 'computer', '笔记本电脑': 'laptop', '平板电脑': 'tablet', '智能手机': 'smartphone',
-        '电话': 'phone', '相机': 'camera', '视频': 'video', '照片': 'photo', '图片': 'picture',
-        '绘画': 'painting', '雕塑': 'sculpture', '博物馆': 'museum', '画廊': 'gallery', '展览': 'exhibition',
-        '节日': 'festival', '庆祝': 'celebration', '聚会': 'party', '事件': 'event', '仪式': 'ceremony',
-        '婚礼': 'wedding', '生日': 'birthday', '周年纪念': 'anniversary', '圣诞节': 'christmas', '复活节': 'easter',
-        '万圣节': 'halloween', '新年': 'new year', '烟花': 'fireworks', '游行': 'parade', '狂欢节': 'carnival',
-        '野餐': 'picnic', '烧烤': 'barbecue', '早午餐': 'brunch', '盛宴': 'feast', '宴会': 'banquet',
-        '招待会': 'reception', '俱乐部': 'club', '酒吧': 'bar', '咖啡馆': 'cafe', '迪斯科': 'disco',
-        '夜总会': 'nightclub', '赌场': 'casino', '游乐园': 'amusement park', '主题公园': 'theme park', '动物园': 'zoo',
-        '水族馆': 'aquarium', '游乐场': 'playground', '游泳池': 'pool', '水疗中心': 'spa', '健身房': 'gym',
-        '健身中心': 'fitness center', '体育场': 'stadium', '竞技场': 'arena', '社交': 'socializing', '聊天': 'chatting',
-        '谈话': 'talking', '讨论': 'discussion', '对话': 'conversation', '辩论': 'debate', '争论': 'argument',
-        '阅读': 'reading', '写作': 'writing', '研究': 'researching', '思考': 'thinking', '反思': 'reflecting',
-        '冥想': 'meditating', '祈祷': 'praying', '崇拜': 'worshipping', '志愿服务': 'volunteering', '捐赠': 'donating',
-        '帮助': 'helping', '支持': 'supporting', '关心': 'caring', '分享': 'sharing', '给予': 'giving',
-        '接收': 'receiving', '交换': 'exchanging', '交易': 'trading', '购买': 'buying', '销售': 'selling',
-        '购物': 'shopping', '浏览': 'browsing', '搜索': 'searching', '探索': 'exploring', '实验': 'experimenting',
-        '测试': 'testing', '练习': 'practicing', '锻炼': 'exercising', '放松': 'relaxing', '睡觉': 'sleeping',
-        '小睡': 'napping', '做梦': 'dreaming', '想象': 'imagining', '创造': 'creating', '发明': 'inventing',
-        '建造': 'building', '制作': 'making', '烧烤': 'grilling', '煎': 'frying', '煮': 'boiling',
-        '蒸': 'steaming', '烤': 'roasting', '切': 'chopping', '切片': 'slicing', '混合': 'mixing',
-        '搅拌': 'stirring', '打': 'beating', '搅打': 'whisking', '揉': 'kneading', '滚动': 'rolling',
-        '折叠': 'folding', '弯曲': 'bending', '扭曲': 'twisting', '缠绕': 'winding', '盘绕': 'coiling',
-        '螺旋': 'spiraling', '卷曲': 'curling', '转动': 'turning', '旋转': 'spinning', '环绕': 'circling',
-        '包围': 'surrounding', '包裹': 'wrapping', '包装': 'packaging', '装箱': 'boxing', '包含': 'containing',
-        '持有': 'holding', '携带': 'carrying', '运输': 'transporting', '移动': 'moving', '转移': 'transferring',
-        '搬迁': 'relocating', '放置': 'placing', '定位': 'positioning', '安置': 'situating', '安装': 'installing',
-        '设置': 'setting', '调整': 'adjusting', '修改': 'modifying', '改变': 'changing', '转变': 'transforming',
-        '转换': 'converting', '适应': 'adapting', '适合': 'fitting', '匹配': 'matching', '对应': 'corresponding',
-        '关联': 'relating', '连接': 'connecting', '加入': 'joining', '联合': 'uniting', '结合': 'combining',
-        '合并': 'merging', '混合': 'blending'
+        '语言': 'sprache',
+        '英语': 'englisch',
+        '中文': 'chinesisch',
+        '翻译': 'übersetzen',
+        '你好世界': 'hallo welt',
+        '晚安': 'gute nacht',
+        '零': 'null',
+        '一': 'eins',
+        '二': 'zwei',
+        '三': 'drei',
+        '四': 'vier',
+        '五': 'fünf',
+        '六': 'sechs',
+        '七': 'sieben',
+        '八': 'acht',
+        '九': 'neun',
+        '十': 'zehn',
+        '百': 'hundert',
+        '千': 'tausend',
+        '百万': 'million',
+        '十亿': 'milliarde',
+        '红色': 'rot',
+        '蓝色': 'blau',
+        '绿色': 'grün',
+        '黄色': 'gelb',
+        '黑色': 'schwarz',
+        '白色': 'weiß',
+        '橙子': 'orange',
+        '紫色': 'lila',
+        '粉色': 'rosa',
+        '棕色': 'braun',
+        '狗': 'hund',
+        '猫': 'katze',
+        '鸟': 'vogel',
+        '鱼': 'fisch',
+        '马': 'pferd',
+        '牛': 'kuh',
+        '羊': 'schaf',
+        '猪': 'schwein',
+        '鸡肉': 'huhn',
+        '鸭': 'ente',
+        '兔子': 'kaninchen',
+        '苹果': 'apfel',
+        '香蕉': 'banane',
+        '葡萄': 'traube',
+        '草莓': 'erdbeere',
+        '西瓜': 'wassermelone',
+        '菠萝': 'ananas',
+        '芒果': 'mango',
+        '梨': 'birne',
+        '桃子': 'pfirsich',
+        '番茄': 'tomate',
+        '土豆': 'kartoffel',
+        '胡萝卜': 'karotte',
+        '洋葱': 'zwiebel',
+        '卷心菜': 'kohl',
+        '西兰花': 'brokkoli',
+        '菠菜': 'spinat',
+        '玉米': 'mais',
+        '黄瓜': 'gurke',
+        '胡椒': 'pfeffer',
+        '太阳': 'sonne',
+        '月亮': 'mond',
+        '星星': 'stern',
+        '云': 'wolke',
+        '雨': 'regen',
+        '雪': 'schnee',
+        '风': 'wind',
+        '风暴': 'sturm',
+        '天气': 'wetter',
+        '温度': 'temperatur',
+        '教师': 'lehrer',
+        '医生': 'arzt',
+        '工程师': 'ingenieur',
+        '学生': 'student',
+        '工人': 'arbeiter',
+        '农民': 'bauer',
+        '司机': 'fahrer',
+        '烹饪': 'kochen',
+        '艺术家': 'künstler',
+        '科学家': 'wissenschaftler',
+        '中国': 'china',
+        '美国': 'amerika',
+        '英国': 'england',
+        '法国': 'frankreich',
+        '德国': 'deutschland',
+        '日本': 'japan',
+        '韩国': 'korea',
+        '俄罗斯': 'russland',
+        '印度': 'indien',
+        '澳大利亚': 'australien',
+        '北京': 'peking',
+        '上海': 'shanghai',
+        '广州': 'guangzhou',
+        '深圳': 'shenzhen',
+        '香港': 'hongkong',
+        '纽约': 'new york',
+        '伦敦': 'london',
+        '巴黎': 'paris',
+        '东京': 'tokyo',
+        '首尔': 'seoul',
+        '公交车': 'bus',
+        '火车': 'zug',
+        '飞机': 'flugzeug',
+        '船': 'schiff',
+        '自行车': 'fahrrad',
+        '摩托车': 'motorrad',
+        '出租车': 'taxi',
+        '地铁': 'u-bahn',
+        '小船': 'boot',
+        '卡车': 'lastwagen',
+        '学校': 'schule',
+        '教室': 'klassenraum',
+        '笔': 'stift',
+        '铅笔': 'bleistift',
+        '纸': 'papier',
+        '作业': 'hausaufgaben',
+        '考试': 'prüfung',
+        '头': 'kopf',
+        '眼睛': 'auge',
+        '耳朵': 'ohr',
+        '鼻子': 'nase',
+        '嘴': 'mund',
+        '手': 'hand',
+        '脚': 'fuß',
+        '腿': 'bein',
+        '手臂': 'arm',
+        '心脏': 'herz',
+        '衬衫': 'hemd',
+        '裤子': 'hose',
+        '裙子': 'kleid',
+        '鞋子': 'schuhe',
+        '帽子': 'hut',
+        '外套': 'mantel',
+        '夹克': 'jacke',
+        '袜子': 'socken',
+        '手套': 'handschuhe',
+        '围巾': 'schal',
+        '早晨': 'morgen',
+        '下午': 'nachmittag',
+        '晚上': 'abend',
+        '夜晚': 'nacht',
+        '黎明': 'morgengrauen',
+        '黄昏': 'dämmerung',
+        '分钟': 'minute',
+        '小时': 'stunde',
+        '秒': 'sekunde',
+        '时钟': 'uhr',
+        '北': 'norden',
+        '南': 'süden',
+        '东': 'ost',
+        '西': 'westen',
+        '左': 'links',
+        '上': 'oben',
+        '下': 'runter',
+        '前': 'front',
+        '后': 'zurück',
+        '吃': 'essen',
+        '喝': 'trinken',
+        '睡觉': 'schlafen',
+        '工作': 'arbeiten',
+        '学习': 'studieren',
+        '戏剧': 'spielen',
+        '读': 'lesen',
+        '写': 'schreiben',
+        '说': 'sprechen',
+        '听': 'hören',
+        '看': 'sehen',
+        '去': 'gehen',
+        '来': 'kommen',
+        '买': 'kaufen',
+        '卖': 'verkaufen',
+        '美丽': 'schön',
+        '丑陋': 'hässlich',
+        '富有': 'reich',
+        '贫穷': 'arm',
+        '强壮': 'stark',
+        '虚弱': 'schwach',
+        '高': 'groß',
+        '矮': 'kurz',
+        '长': 'lang',
+        '重': 'schwer',
+        '轻': 'licht',
+        '清洁': 'reinigen',
+        '脏': 'schmutzig',
+        '容易': 'einfach',
+        '困难': 'schwierig',
+        '重要': 'wichtig',
+        '有趣': 'interessant',
+        '乏味': 'langweilig',
+        '多少钱': 'wie viel',
+        '几点': 'wie spät',
+        '在哪里': 'wo ist',
+        '多大': 'wie alt',
+        '你能帮我吗': 'kannst du mir helfen',
+        '我需要帮助': 'ich brauche hilfe',
+        '打扰一下': 'entschuldigung',
+        '我不明白': 'ich verstehe nicht',
+        '你能重复吗': 'kannst du wiederholen',
+        '说慢一点': 'langsam sprechen',
+        '我同意': 'ich stimme zu',
+        '我不同意': 'ich stimme nicht zu',
+        '也许': 'vielleicht',
+        '可能': 'wahrscheinlich',
+        '当然': 'natürlich',
+        '没问题': 'kein problem',
+        '不客气': 'bitte',
+        '祝你今天愉快': 'einen schönen tag',
+        '回头见': 'bis später',
+        '保重': 'aufpassen',
+        '跑': 'laufen',
+        '走': 'gehen',
+        '跳': 'springen',
+        '飞': 'fliegen',
+        '游泳': 'schwimmen',
+        '驾驶': 'fahren',
+        '骑': 'fahren',
+        '爬': 'klettern',
+        '舞蹈': 'tanz',
+        '唱歌': 'singen',
+        '笑': 'lachen',
+        '哭': 'weinen',
+        '思考': 'denken',
+        '知道': 'wissen',
+        '理解': 'verstehen',
+        '记住': 'erinnern',
+        '忘记': 'vergessen',
+        '相信': 'glauben',
+        '希望': 'hoffen',
+        '想要': 'wollen',
+        '需要': 'brauchen',
+        '喜欢': 'mögen',
+        '爱': 'liebe',
+        '讨厌': 'hassen',
+        '更喜欢': 'bevorzugen',
+        '选择': 'wählen',
+        '决定': 'entscheiden',
+        '计划': 'plan',
+        '尝试': 'versuchen',
+        '失败': 'scheitern',
+        '成功': 'gelingen',
+        '赢': 'gewinnen',
+        '输': 'verlieren',
+        '战斗': 'kämpfen',
+        '争论': 'streiten',
+        '同意': 'zustimmen',
+        '不同意': 'nicht zustimmen',
+        '接受': 'akzeptieren',
+        '拒绝': 'ablehnen',
+        '邀请': 'einladen',
+        '参观': 'besuchen',
+        '旅行': 'reisen',
+        '移动': 'bewegen',
+        '停留': 'bleiben',
+        '离开': 'verlassen',
+        '到达': 'ankommen',
+        '返回': 'zurückkehren',
+        '进入': 'eintreten',
+        '退出': 'ausgang',
+        '打开': 'öffnen',
+        '近': 'schließen',
+        '开始': 'starten',
+        '停止': 'stoppen',
+        '继续': 'fortsetzen',
+        '完成': 'beenden',
+        '结束': 'ende',
+        '开始': 'beginnen',
+        '创建': 'erstellen',
+        '建造': 'bauen',
+        '制作': 'machen',
+        '生产': 'produzieren',
+        '种植': 'wachsen',
+        '烘焙': 'backen',
+        '洗': 'waschen',
+        '修理': 'reparieren',
+        '打破': 'brechen',
+        '破坏': 'zerstören',
+        '切割': 'schneiden',
+        '打': 'schlagen',
+        '推': 'schieben',
+        '拉': 'ziehen',
+        '携带': 'tragen',
+        '举起': 'aufzug',
+        '扔': 'werfen',
+        '接住': 'fangen',
+        '踢': 'treten',
+        '挑选': 'auswählen',
+        '给予': 'geben',
+        '拿取': 'nehmen',
+        '接收': 'erhalten',
+        '发送': 'senden',
+        '带来': 'bringen',
+        '跟随': 'folgen',
+        '领导': 'führen',
+        '加入': 'beitreten',
+        '分离': 'trennen',
+        '连接': 'verbinden',
+        '比较': 'vergleichen',
+        '测量': 'maß',
+        '计数': 'zählen',
+        '计算': 'rechnen',
+        '添加': 'hinzufügen',
+        '减去': 'subtrahieren',
+        '乘': 'multiplizieren',
+        '除': 'teilen',
+        '增加': 'erhöhen',
+        '减少': 'abnehmen',
+        '改变': 'wechseln',
+        '变成': 'werden',
+        '转向': 'drehen',
+        '出现': 'erscheinen',
+        '消失': 'verschwinden',
+        '表演': 'zeigen',
+        '隐藏': 'verstecken',
+        '寻找': 'finden',
+        '搜索': 'suchen',
+        '发现': 'entdecken',
+        '探索': 'erkunden',
+        '发明': 'erfinden',
+        '设计': 'entwurf',
+        '画画': 'zeichnen',
+        '绘画': 'farbe',
+        '上色': 'farbe',
+        '拍照': 'fotografie',
+        '记录': 'aufzeichnen',
+        '游戏': 'spiel',
+        '运动': 'sport',
+        '平静': 'ruhig',
+        '兴奋': 'aufgeregt',
+        '无聊': 'gelangweilt',
+        '惊讶': 'überrascht',
+        '困惑': 'verwirrt',
+        '害怕': 'ängstlich',
+        '勇敢': 'mutig',
+        '紧张': 'nervös',
+        '放松': 'entspannt',
+        '压力': 'gestresst',
+        '自豪': 'stolz',
+        '羞愧': 'beschämt',
+        '嫉妒': 'eifersüchtig',
+        '慷慨': 'großzügig',
+        '自私': 'egoistisch',
+        '善良': 'freundlich',
+        '残忍': 'grausam',
+        '礼貌': 'höflich',
+        '粗鲁': 'unhöflich',
+        '诚实': 'ehrlich',
+        '不诚实': 'unehrlich',
+        '友好': 'freundlich',
+        '不友好': 'unfreundlich',
+        '社交': 'sozial',
+        '反社交': 'asozial',
+        '外向': 'aufgeschlossen',
+        '害羞': 'schüchtern',
+        '自信': 'zuversichtlich',
+        '不安全': 'unsicher',
+        '聪明': 'intelligent',
+        '愚蠢': 'dumm',
+        '明智': 'weise',
+        '愚蠢': 'töricht',
+        '有创意': 'kreativ',
+        '富有想象力': 'fantasievoll',
+        '实用': 'praktisch',
+        '不实用': 'unpraktisch',
+        '逻辑': 'logisch',
+        '情感': 'emotional',
+        '理性': 'rational',
+        '不理性': 'irrational',
+        '耐心': 'patient',
+        '不耐烦': 'ungeduldig',
+        '勤奋': 'fleißig',
+        '懒惰': 'faul',
+        '活跃': 'aktiv',
+        '被动': 'passiv',
+        '精力充沛': 'energiegeladen',
+        '健康': 'gesund',
+        '生病': 'krank',
+        '健康': 'passen',
+        '不健康': 'ungeeignet',
+        '灵活': 'flexibel',
+        '僵硬': 'steif',
+        '迅速': 'schnell',
+        '敏捷': 'schnell',
+        '年轻': 'jung',
+        '古老': 'antik',
+        '现代': 'modern',
+        '新鲜': 'frisch',
+        '不新鲜': 'altbacken',
+        '生的': 'roh',
+        '煮熟的': 'gekocht',
+        '温暖': 'warm',
+        '凉爽': 'kühl',
+        '冰冻': 'gefrieren',
+        '煮': 'kochen',
+        '湿': 'nass',
+        '干': 'trocken',
+        '湿润': 'feucht',
+        '潮湿': 'feucht',
+        '湿润': 'feucht',
+        '明亮': 'hell',
+        '黑暗': 'dunkel',
+        '厚': 'dick',
+        '薄': 'dünn',
+        '宽': 'breit',
+        '窄': 'eng',
+        '深': 'tief',
+        '浅': 'flach',
+        '高': 'hoch',
+        '低': 'niedrig',
+        '远': 'weit',
+        '近': 'nahe',
+        '远': 'fern',
+        '昂贵': 'teuer',
+        '便宜': 'günstig',
+        '有价值': 'wertvoll',
+        '无价值': 'wertlos',
+        '珍贵': 'kostbar',
+        '普通': 'gemeinsam',
+        '稀有': 'selten',
+        '独特': 'einzigartig',
+        '正常': 'normal',
+        '奇怪': 'seltsam',
+        '怪异': 'seltsam',
+        '普通': 'gewöhnlich',
+        '特别': 'besonders',
+        '非凡': 'außergewöhnlich',
+        '简单': 'einfach',
+        '复杂': 'komplex',
+        '硬': 'hart',
+        '软': 'weich',
+        '光滑': 'glatt',
+        '粗糙': 'rau',
+        '锋利': 'scharf',
+        '钝': 'stumpf',
+        '清晰': 'klar',
+        '不清楚': 'unklar',
+        '明显': 'offensichtlich',
+        '隐藏': 'versteckt',
+        '可见': 'sichtbar',
+        '不可见': 'unsichtbar',
+        '透明': 'transparent',
+        '不透明': 'undurchsichtig',
+        '大声': 'laut',
+        '安静': 'ruhig',
+        '沉默': 'still',
+        '嘈杂': 'laut',
+        '甜': 'süß',
+        '酸': 'sauer',
+        '苦': 'bitter',
+        '咸': 'salzig',
+        '辣': 'scharf',
+        '美味': 'lecker',
+        '好吃': 'lecker',
+        '糟糕': 'schrecklich',
+        '恶心': 'ekelhaft',
+        '面包': 'brot',
+        '米饭': 'reis',
+        '面条': 'nudeln',
+        '意大利面': 'nudeln',
+        '披萨': 'pizza',
+        '汉堡': 'hamburger',
+        '三明治': 'sandwich',
+        '奶酪': 'käse',
+        '黄油': 'butter',
+        '牛奶': 'milch',
+        '酸奶': 'joghurt',
+        '奶油': 'creme',
+        '鸡蛋': 'ei',
+        '肉': 'fleisch',
+        '牛肉': 'rindfleisch',
+        '猪肉': 'schweinefleisch',
+        '海鲜': 'meeresfrüchte',
+        '虾': 'garnele',
+        '螃蟹': 'krabbe',
+        '汤': 'suppe',
+        '沙拉': 'salat',
+        '蔬菜': 'gemüse',
+        '水果': 'frucht',
+        '蛋糕': 'kuchen',
+        '饼干': 'keks',
+        '巧克力': 'schokolade',
+        '冰淇淋': 'eiscreme',
+        '糖果': 'süßigkeit',
+        '糖': 'zucker',
+        '盐': 'salz',
+        '油': 'öl',
+        '醋': 'essig',
+        '酱': 'soße',
+        '香料': 'gewürz',
+        '香草': 'kraut',
+        '面粉': 'mehl',
+        '咖啡': 'kaffee',
+        '茶': 'tee',
+        '果汁': 'saft',
+        '苏打水': 'limonade',
+        '啤酒': 'bier',
+        '葡萄酒': 'wein',
+        '酒精': 'alkohol',
+        '早餐': 'frühstück',
+        '午餐': 'mittagessen',
+        '晚餐': 'abendessen',
+        '零食': 'snack',
+        '餐': 'mahlzeit',
+        '菜': 'gericht',
+        '美食': 'küche',
+        '食谱': 'rezept',
+        '桌子': 'tisch',
+        '椅子': 'stuhl',
+        '沙发': 'sofa',
+        '床': 'bett',
+        '书桌': 'schreibtisch',
+        '架子': 'regal',
+        '橱柜': 'schrank',
+        '衣柜': 'kleiderschrank',
+        '镜子': 'spiegel',
+        '灯': 'lampe',
+        '灯泡': 'glühbirne',
+        '手表': 'uhr',
+        '电池': 'batterie',
+        '钥匙': 'schlüssel',
+        '锁': 'schloss',
+        '门': 'tür',
+        '窗户': 'fenster',
+        '墙': 'wand',
+        '地板': 'boden',
+        '天花板': 'decke',
+        '屋顶': 'dach',
+        '花园': 'garten',
+        '院子': 'hof',
+        '厨房': 'küche',
+        '浴室': 'badezimmer',
+        '卧室': 'schlafzimmer',
+        '客厅': 'wohnzimmer',
+        '餐厅': 'speisesaal',
+        '车库': 'garage',
+        '地下室': 'keller',
+        '阁楼': 'dachboden',
+        '阳台': 'balkon',
+        '楼梯': 'treppe',
+        '电梯': 'aufzug',
+        '冰箱': 'kühlschrank',
+        '冰柜': 'gefrierschrank',
+        '烤箱': 'ofen',
+        '微波炉': 'mikrowelle',
+        '炉子': 'herd',
+        '洗碗机': 'geschirrspüler',
+        '洗衣机': 'waschmaschine',
+        '烘干机': 'trockner',
+        '吸尘器': 'vakuum',
+        '扫帚': 'besen',
+        '拖把': 'wischmopp',
+        '毛巾': 'handtuch',
+        '肥皂': 'seife',
+        '洗发水': 'shampoo',
+        '牙刷': 'zahnbürste',
+        '牙膏': 'zahnpasta',
+        '梳子': 'kamm',
+        '刷子': 'bürste',
+        '剃须刀': 'rasierer',
+        '剪刀': 'schere',
+        '刀': 'messer',
+        '叉': 'gabel',
+        '勺': 'löffel',
+        '盘子': 'teller',
+        '碗': 'schüssel',
+        '杯子': 'tasse',
+        '玻璃': 'glas',
+        '马克杯': 'becher',
+        '瓶子': 'flasche',
+        '罐子': 'glas',
+        '锅': 'topf',
+        '平底锅': 'pfanne',
+        '篮子': 'korb',
+        '包': 'tasche',
+        '背包': 'rucksack',
+        '手提箱': 'koffer',
+        '钱包': 'geldbörse',
+        '钱包': 'geldbörse',
+        '雨伞': 'regenschirm',
+        '垃圾桶': 'mülleimer',
+        '山': 'berg',
+        '小山': 'hügel',
+        '山谷': 'tal',
+        '河流': 'fluss',
+        '湖泊': 'see',
+        '海洋': 'ozean',
+        '海': 'meer',
+        '海滩': 'strand',
+        '沙漠': 'wüste',
+        '森林': 'wald',
+        '丛林': 'dschungel',
+        '木头': 'holz',
+        '公园': 'park',
+        '田野': 'feld',
+        '农场': 'bauernhof',
+        '岛屿': 'insel',
+        '火山': 'vulkan',
+        '地震': 'erdbeben',
+        '洪水': 'überschwemmung',
+        '干旱': 'dürre',
+        '飓风': 'hurrikan',
+        '龙卷风': 'tornado',
+        '海啸': 'tsunami',
+        '火': 'feuer',
+        '空气': 'luft',
+        '冰': 'eis',
+        '冰雹': 'hagel',
+        '雾': 'nebel',
+        '天空': 'himmel',
+        '行星': 'planet',
+        '地球': 'erde',
+        '宇宙': 'universum',
+        '星系': 'galaxie',
+        '太空': 'raum',
+        '重力': 'schwerkraft',
+        '大气层': 'atmosphäre',
+        '氧气': 'sauerstoff',
+        '二氧化碳': 'kohlenstoffdioxid',
+        '污染': 'verschmutzung',
+        '环境': 'umwelt',
+        '自然': 'natur',
+        '生态系统': 'ökosystem',
+        '气候': 'klima',
+        '季节': 'saison',
+        '春天': 'frühling',
+        '夏天': 'sommer',
+        '秋天': 'herbst',
+        '冬天': 'winter',
+        '植物': 'pflanze',
+        '树': 'baum',
+        '花': 'blume',
+        '草': 'gras',
+        '叶子': 'blatt',
+        '根': 'wurzel',
+        '树枝': 'zweig',
+        '种子': 'samen',
+        '庄稼': 'ernte',
+        '土壤': 'boden',
+        '沙子': 'sand',
+        '岩石': 'stein',
+        '石头': 'stein',
+        '金属': 'metall',
+        '金': 'gold',
+        '银': 'silber',
+        '铜': 'kupfer',
+        '铁': 'eisen',
+        '钢': 'stahl',
+        '塑料': 'plastik',
+        '橡胶': 'gummi',
+        '皮革': 'leder',
+        '织物': 'stoff',
+        '棉花': 'baumwolle',
+        '羊毛': 'wolle',
+        '丝绸': 'seide',
+        '尼龙': 'nylon',
+        '材料': 'material',
+        '物质': 'stoff',
+        '大学': 'universität',
+        '学院': 'hochschule',
+        '班级': 'klasse',
+        '课程': 'lektion',
+        '科目': 'fach',
+        '数学': 'mathe',
+        '科学': 'wissenschaft',
+        '生物学': 'biologie',
+        '化学': 'chemie',
+        '物理学': 'physik',
+        '地理学': 'geografie',
+        '历史': 'geschichte',
+        '文学': 'literatur',
+        '艺术': 'kunst',
+        '音乐': 'musik',
+        '哲学': 'philosophie',
+        '心理学': 'psychologie',
+        '社会学': 'soziologie',
+        '经济学': 'wirtschaft',
+        '政治学': 'politik',
+        '法律': 'recht',
+        '医学': 'medizin',
+        '工程学': 'ingenieurwesen',
+        '建筑学': 'architektur',
+        '计算机科学': 'informatik',
+        '信息技术': 'informationstechnologie',
+        '商业': 'geschäft',
+        '管理层': 'management',
+        '市场营销': 'vermarkten',
+        '会计': 'buchhaltung',
+        '金融': 'finanzen',
+        '银行业': 'bankwesen',
+        '教授': 'professor',
+        '小学生': 'schüler',
+        '毕业生': 'graduieren',
+        '本科生': 'student',
+        '研究生': 'postgraduiert',
+        '博士学位': 'doktorgrad',
+        '学位': 'grad',
+        '文凭': 'diplom',
+        '证书': 'zertifikat',
+        '资格': 'qualifikation',
+        '技能': 'fähigkeit',
+        '知识': 'wissen',
+        '智慧': 'weisheit',
+        '智力': 'intelligenz',
+        '记忆': 'gedächtnis',
+        '专注': 'konzentration',
+        '注意力': 'aufmerksamkeit',
+        '学习': 'lernen',
+        '学习': 'studieren',
+        '研究': 'forschung',
+        '实验': 'experiment',
+        '观察': 'beobachtung',
+        '分析': 'analyse',
+        '理论': 'theorie',
+        '实践': 'übung',
+        '经验': 'erfahrung',
+        '专业知识': 'fachwissen',
+        '精通': 'meisterschaft',
+        '教科书': 'lehrbuch',
+        '笔记本': 'notizbuch',
+        '字典': 'wörterbuch',
+        '百科全书': 'encyklopädie',
+        '图书馆': 'bibliothek',
+        '实验室': 'labor',
+        '工作室': 'werkstatt',
+        '研讨会': 'seminar',
+        '会议': 'konferenz',
+        '讲座': 'vorlesung',
+        '演示': 'präsentation',
+        '任务': 'aufgabe',
+        '项目': 'projekt',
+        '论文': 'these',
+        '学位论文': 'dissertation',
+        '测试': 'test',
+        '测验': 'quiz',
+        '评估': 'bewertung',
+        '评价': 'bewertung',
+        '成绩': 'note',
+        '分数': 'marke',
+        '得分': 'punktzahl',
+        '结果': 'ergebnis',
+        '成就': 'leistung',
+        '成功': 'erfolg',
+        '失败': 'misserfolg',
+        '进步': 'fortschritt',
+        '发展': 'entwicklung',
+        '提高': 'verbesserung',
+        '教育': 'bildung',
+        '教学': 'unterrichten',
+        '训练': 'training',
+        '指导': 'anleitung',
+        '指导': 'anleitung',
+        '建议': 'rat',
+        '反馈': 'rückmeldung',
+        '批评': 'kritik',
+        '表扬': 'loben',
+        '奖励': 'belohnung',
+        '惩罚': 'strafe',
+        '纪律': 'disziplin',
+        '规则': 'regeln',
+        '规定': 'vorschriften',
+        '政策': 'richtlinie',
+        '工作': 'job',
+        '职业': 'karriere',
+        '职业': 'beruf',
+        '职业': 'beruf',
+        '就业': 'beschäftigung',
+        '失业': 'arbeitslosigkeit',
+        '退休': 'rente',
+        '晋升': 'beförderung',
+        '降职': 'degradierung',
+        '薪水': 'gehalt',
+        '工资': 'lohn',
+        '收入': 'einkommen',
+        '收入': 'verdienen',
+        '奖金': 'bonus',
+        '福利': 'nutzen',
+        '养老金': 'rente',
+        '保险': 'versicherung',
+        '合同': 'vertrag',
+        '协议': 'vereinbarung',
+        '责任': 'verantwortung',
+        '职责': 'pflicht',
+        '任务': 'aufgabe',
+        '截止日期': 'frist',
+        '时间表': 'zeitplan',
+        '会议': 'treffen',
+        '约会': 'termin',
+        '面试': 'interview',
+        '申请': 'anwendung',
+        '简历': 'lebenslauf',
+        '简历': 'lebenslauf',
+        '能力': 'fähigkeit',
+        '才能': 'talent',
+        '执照': 'lizenz',
+        '办公室': 'büro',
+        '工厂': 'fabrik',
+        '仓库': 'lagerhaus',
+        '商店': 'laden',
+        '商店': 'laden',
+        '市场': 'markt',
+        '公司': 'firma',
+        '公司': 'gesellschaft',
+        '组织': 'organisation',
+        '机构': 'institution',
+        '政府': 'regierung',
+        '部门': 'abteilung',
+        '部门': 'division',
+        '团队': 'team',
+        '小组': 'gruppe',
+        '委员会': 'ausschuss',
+        '董事会': 'brett',
+        '领导力': 'führung',
+        '主管': 'aufseher',
+        '经理': 'manager',
+        '导演': 'direktor',
+        '高管': 'geschäftsführer',
+        '总裁': 'präsident',
+        '首席执行官': 'geschäftsführer',
+        '首席财务官': 'finanzvorstand',
+        '首席技术官': 'cto',
+        '合伙人': 'partner',
+        '合伙人': 'verbinden',
+        '助理': 'assistent',
+        '秘书': 'sekretär',
+        '接待员': 'rezeptionist',
+        '职员': 'angestellter',
+        '收银员': 'kassierer',
+        '会计': 'buchhalter',
+        '审计员': 'prüfer',
+        '顾问': 'berater',
+        '顾问': 'berater',
+        '分析师': 'analyst',
+        '专家': 'spezialist',
+        '专家': 'experte',
+        '技术员': 'techniker',
+        '建筑师': 'architekt',
+        '设计师': 'designer',
+        '开发人员': 'entwickler',
+        '程序员': 'programmierer',
+        '研究员': 'forscher',
+        '作家': 'schriftsteller',
+        '作者': 'autor',
+        '记者': 'journalist',
+        '编辑': 'redakteur',
+        '出版商': 'verleger',
+        '画家': 'maler',
+        '雕塑家': 'bildhauer',
+        '音乐家': 'musiker',
+        '作曲家': 'komponist',
+        '歌手': 'sänger',
+        '演员': 'schauspieler',
+        '女演员': 'schauspielerin',
+        '制片人': 'produzent',
+        '摄影师': 'fotograf',
+        '厨师': 'koch',
+        '面包师': 'bäcker',
+        '屠夫': 'metzger',
+        '园丁': 'gärtner',
+        '木匠': 'tischler',
+        '水管工': 'klempner',
+        '电工': 'elektriker',
+        '机械师': 'mechaniker',
+        '飞行员': 'pilot',
+        '水手': 'seemann',
+        '士兵': 'soldat',
+        '警察': 'polizei',
+        '官员': 'offizier',
+        '消防员': 'feuerwehrmann',
+        '护士': 'krankenschwester',
+        '牙医': 'zahnarzt',
+        '兽医': 'tierarzt',
+        '药剂师': 'apotheker',
+        '治疗师': 'therapeut',
+        '心理学家': 'psychologe',
+        '顾问': 'berater',
+        '律师': 'anwalt',
+        '法官': 'richten',
+        '校长': 'direktor',
+        '爱好': 'hobby',
+        '兴趣': 'interesse',
+        '活动': 'aktivität',
+        '乐趣': 'spaß',
+        '娱乐': 'unterhaltung',
+        '娱乐': 'unterhaltung',
+        '娱乐': 'freizeit',
+        '休闲': 'freizeit',
+        '放松': 'entspannung',
+        '休息': 'ruhe',
+        '假期': 'urlaub',
+        '假日': 'urlaub',
+        '旅行': 'reise',
+        '旅程': 'reise',
+        '冒险': 'abenteuer',
+        '短途旅行': 'ausflug',
+        '旅游': 'tour',
+        '观光': 'besichtigung',
+        '露营': 'zelten',
+        '徒步旅行': 'wandern',
+        '攀爬': 'klettern',
+        '游泳': 'schwimmen',
+        '潜水': 'tauchen',
+        '冲浪': 'surfen',
+        '滑雪': 'skifahren',
+        '滑冰': 'skaten',
+        '钓鱼': 'fischen',
+        '狩猎': 'jagen',
+        '高尔夫': 'golf',
+        '网球': 'tennis',
+        '足球': 'fußball',
+        '篮球': 'basketball',
+        '排球': 'volleyball',
+        '棒球': 'baseball',
+        '板球': 'kricket',
+        '橄榄球': 'rugby',
+        '曲棍球': 'hockey',
+        '羽毛球': 'badminton',
+        '乒乓球': 'tischtennis',
+        '保龄球': 'bowlen',
+        '国际象棋': 'schach',
+        '跳棋': 'damen',
+        '纸牌': 'karten',
+        '扑克': 'poker',
+        '骰子': 'würfel',
+        '拼图': 'rätsel',
+        '填字游戏': 'kreuzworträtsel',
+        '数独': 'sudoku',
+        '电影': 'film',
+        '电影': 'film',
+        '电影院': 'kino',
+        '剧院': 'theater',
+        '音乐会': 'konzert',
+        '表演': 'leistung',
+        '歌剧': 'oper',
+        '芭蕾舞': 'ballett',
+        '歌曲': 'lied',
+        '唱歌': 'singen',
+        '乐队': 'band',
+        '管弦乐队': 'orchester',
+        '乐器': 'instrument',
+        '吉他': 'gitarre',
+        '钢琴': 'klavier',
+        '小提琴': 'geige',
+        '鼓': 'schlagzeug',
+        '小号': 'trompete',
+        '长笛': 'flöte',
+        '萨克斯管': 'saxophon',
+        '麦克风': 'mikrofon',
+        '收音机': 'radio',
+        '电视': 'fernsehen',
+        '电视': 'fernseher',
+        '笔记本电脑': 'laptop',
+        '平板电脑': 'tablet',
+        '智能手机': 'smartphone',
+        '相机': 'kamera',
+        '视频': 'video',
+        '照片': 'foto',
+        '图片': 'bild',
+        '绘画': 'malen',
+        '绘画': 'zeichnung',
+        '雕塑': 'skulptur',
+        '博物馆': 'museum',
+        '画廊': 'galerie',
+        '展览': 'ausstellung',
+        '节日': 'festival',
+        '庆祝': 'feier',
+        '聚会': 'party',
+        '收集': 'versammlung',
+        '事件': 'veranstaltung',
+        '仪式': 'zeremonie',
+        '婚礼': 'hochzeit',
+        '生日': 'geburtstag',
+        '周年纪念': 'jubiläum',
+        '圣诞节': 'weihnachten',
+        '复活节': 'ostern',
+        '万圣节': 'halloween',
+        '新年': 'neujahr',
+        '烟花': 'feuerwerk',
+        '游行': 'parade',
+        '狂欢节': 'karneval',
+        '野餐': 'picknick',
+        '烧烤': 'grill',
+        '早午餐': 'brunch',
+        '晚餐': 'abendessen',
+        '盛宴': 'fest',
+        '宴会': 'bankett',
+        '招待会': 'empfang',
+        '俱乐部': 'verein',
+        '酒吧': 'bar',
+        '酒吧': 'kneipe',
+        '餐厅': 'restaurant',
+        '咖啡馆': 'café',
+        '迪斯科': 'disco',
+        '夜总会': 'nachtclub',
+        '赌场': 'kasino',
+        '游乐园': 'freizeitpark',
+        '主题公园': 'freizeitpark',
+        '动物园': 'zoo',
+        '水族馆': 'aquarium',
+        '游乐场': 'spielplatz',
+        '游泳池': 'pool',
+        '水疗中心': 'kurort',
+        '健身房': 'fitnessstudio',
+        '健身中心': 'fitnessstudio',
+        '体育场': 'stadion',
+        '竞技场': 'arena',
+        '课程': 'kurs',
+        '约会': 'datum',
+        '社交': 'sozialisieren',
+        '聊天': 'plaudern',
+        '谈话': 'sprechen',
+        '讨论': 'diskussion',
+        '对话': 'gespräch',
+        '辩论': 'debatte',
+        '争论': 'argument',
+        '阅读': 'lesen',
+        '写作': 'schreiben',
+        '研究': 'forschen',
+        '思考': 'denken',
+        '反思': 'reflektieren',
+        '冥想': 'meditieren',
+        '祈祷': 'beten',
+        '崇拜': 'anbeten',
+        '志愿服务': 'freiwilligenarbeit',
+        '捐赠': 'spenden',
+        '帮助': 'helfen',
+        '支持': 'unterstützen',
+        '关心': 'fürsorglich',
+        '分享': 'teilen',
+        '给予': 'geben',
+        '接收': 'erhalten',
+        '交换': 'austauschen',
+        '交易': 'handeln',
+        '购买': 'kaufen',
+        '销售': 'verkaufen',
+        '购物': 'einkaufen',
+        '浏览': 'surfen',
+        '搜索': 'suchen',
+        '探索': 'erkunden',
+        '发现': 'entdecken',
+        '实验': 'experimentieren',
+        '尝试': 'versuchen',
+        '测试': 'testen',
+        '练习': 'üben',
+        '锻炼': 'trainieren',
+        '锻炼': 'trainieren',
+        '放松': 'entspannen',
+        '休息': 'ausruhen',
+        '睡觉': 'schlafen',
+        '小睡': 'ein nickerchen machen',
+        '梦想': 'träumen',
+        '想象': 'vorstellen',
+        '创造': 'erstellen',
+        '发明': 'erfinden',
+        '设计': 'gestalten',
+        '建造': 'gebäude',
+        '制作': 'machen',
+        '烹饪': 'kochen',
+        '烘焙': 'backen',
+        '烧烤': 'grillen',
+        '煎': 'braten',
+        '蒸': 'dampfen',
+        '烤': 'braten',
+        '砍': 'hacken',
+        '切割': 'schneiden',
+        '切片': 'schneiden',
+        '混合': 'mischen',
+        '搅拌': 'rühren',
+        '打': 'schlagen',
+        '搅打': 'schlagen',
+        '揉': 'kneten',
+        '滚动': 'rollen',
+        '折叠': 'falten',
+        '塑造': 'formen',
+        '塑造': 'formen',
+        '雕刻': 'schnitzen',
+        '素描': 'skizzieren',
+        '上色': 'färben',
+        '装饰': 'dekorieren',
+        '安排': 'organisieren',
+        '组织': 'organisieren',
+        '计划': 'planen',
+        '准备': 'vorbereiten',
+        '设置': 'einrichten',
+        '清洁': 'reinigen',
+        '清洗': 'waschen',
+        '擦拭': 'abwischen',
+        '除尘': 'abstauben',
+        '扫地': 'fegen',
+        '拖地': 'wischen',
+        '吸尘': 'staubsaugen',
+        '抛光': 'polieren',
+        '擦洗': 'schrubben',
+        '冲洗': 'spülen',
+        '干燥': 'trocknen',
+        '悬挂': 'hängen',
+        '熨烫': 'bügeln',
+        '缝纫': 'nähen',
+        '编织': 'stricken',
+        '钩编': 'häkeln',
+        '刺绣': 'sticken',
+        '修补': 'reparieren',
+        '修理': 'reparieren',
+        '修理': 'reparieren',
+        '调整': 'anpassen',
+        '修改': 'ändern',
+        '改变': 'wechseln',
+        '替换': 'ersetzen',
+        '安装': 'installieren',
+        '组装': 'zusammenbauen',
+        '拆卸': 'zerlegen',
+        '连接': 'verbinden',
+        '断开': 'trennen',
+        '连接': 'anhängen',
+        '分离': 'abtrennen',
+        '固定': 'befestigen',
+        '解开': 'lösen',
+        '系': 'binden',
+        '解开': 'entschnüren',
+        '捆绑': 'binden',
+        '包裹': 'einwickeln',
+        '打开包装': 'auswickeln',
+        '打包': 'packen',
+        '拆包': 'auspacken',
+        '装载': 'laden',
+        '卸载': 'entladen',
+        '携带': 'tragen',
+        '运输': 'transportieren',
+        '递送': 'liefern',
+        '发送': 'senden',
+        '收集': 'sammeln',
+        '存储': 'lagern',
+        '保存': 'behalten',
+        '保存': 'sparen',
+        '保存': 'bewahren',
+        '保护': 'schützen',
+        '守卫': 'bewachen',
+        '防御': 'verteidigen',
+        '攻击': 'angreifen',
+        '战斗': 'kämpfen',
+        '竞争': 'konkurrieren',
+        '获胜': 'gewinnen',
+        '失去': 'verlieren',
+        '成功': 'gelingen',
+        '失败': 'versagen',
+        '实现': 'erreichen',
+        '完成': 'erreichen',
+        '完成': 'beenden',
+        '完成': 'abschließen',
+        '结束': 'ende',
+        '开始': 'beginnen',
+        '开始': 'anfang',
+        '继续': 'fortsetzen',
+        '停止': 'anhalten',
+        '暂停': 'pausieren',
+        '等待': 'warten',
+        '希望': 'hoffen',
+        '希望': 'wünschen',
+        '渴望': 'wünschen',
+        '想要': 'verlangen',
+        '需要': 'brauchen',
+        '需要': 'erfordern',
+        '要求': 'fordern',
+        '请求': 'anfordern',
+        '询问': 'fragen',
+        '质疑': 'befragen',
+        '询问': 'nachfragen',
+        '调查': 'untersuchen',
+        '检查': 'untersuchen',
+        '检查': 'inspizieren',
+        '观察': 'beobachten',
+        '观看': 'anschauen',
+        '看': 'schauen',
+        '看见': 'sehen',
+        '观看': 'ansehen',
+        '见证': 'bezeugen',
+        '注意到': 'bemerken',
+        '发现': 'erkennen',
+        '认出': 'erkennen',
+        '识别': 'identifizieren',
+        '找到': 'finden',
+        '寻找': 'suchen',
+        '旅行': 'reisen',
+        '旅行': 'reisen',
+        '旅游': 'reisen',
+        '参观': 'besichtigen',
+        '漫游': 'umherwandern',
+        '漫游': 'umherziehen',
+        '漂移': 'treiben',
+        '航行': 'segeln',
+        '巡航': 'kreuzen',
+        '飞行': 'fliegen',
+        '翱翔': 'aufsteigen',
+        '滑翔': 'gleiten',
+        '漂浮': 'schweben',
+        '跳入': 'tauchen',
+        '跳跃': 'springen',
+        '跳跃': 'springen',
+        '跳跃': 'hüpfen',
+        '跳跃': 'springen',
+        '跑步': 'laufen',
+        '慢跑': 'joggen',
+        '冲刺': 'sprinten',
+        '猛冲': 'rasen',
+        '匆忙': 'hetzen',
+        '匆忙': 'eilen',
+        '加速': 'rasen',
+        '比赛': 'rennen',
+        '追逐': 'jagen',
+        '跟随': 'folgen',
+        '追求': 'verfolgen',
+        '追踪': 'verfolgen',
+        '追踪': 'nachzeichnen',
+        '领导': 'führen',
+        '引导': 'führen',
+        '指导': 'leiten',
+        '展示': 'zeigen',
+        '演示': 'demonstrieren',
+        '教育': 'bilden',
+        '教练': 'coaching',
+        '指导': 'unterrichten',
+        '建议': 'beraten',
+        '咨询': 'beratung',
+        '咨询': 'beratung',
+        '推荐': 'empfehlen',
+        '建议': 'vorschlagen',
+        '提议': 'vorschlagen',
+        '提供': 'anbieten',
+        '呈现': 'präsentieren',
+        '提供': 'bereitstellen',
+        '供应': 'liefern',
+        '提供': 'einrichten',
+        '装备': 'ausstatten',
+        '安排': 'planen',
+        '协调': 'koordinieren',
+        '管理': 'leiten',
+        '监督': 'überwachen',
+        '监督': 'überwachen',
+        '监控': 'überwachen',
+        '控制': 'steuern',
+        '调节': 'regeln',
+        '管理': 'regieren',
+        '统治': 'urteil',
+        '命令': 'befehlen',
+        '命令': 'bestellen',
+        '告诉': 'erzählen',
+        '通知': 'informieren',
+        '通知': 'benachrichtigen',
+        '宣布': 'ankündigen',
+        '宣布': 'erklären',
+        '宣布': 'verkünden',
+        '广播': 'senden',
+        '出版': 'verlegen',
+        '打印': 'drucken',
+        '记录': 'aufnahme',
+        '记录': 'dokumentieren',
+        '报告': 'berichten',
+        '描述': 'beschreiben',
+        '解释': 'erklären',
+        '澄清': 'klären',
+        '定义': 'definieren',
+        '指定': 'spezifizieren',
+        '详细说明': 'detaillieren',
+        '概述': 'skizzieren',
+        '总结': 'zusammenfassen',
+        '审查': 'überprüfen',
+        '分析': 'analysieren',
+        '记忆': 'auswendig lernen',
+        '记住': 'erinnern',
+        '回忆': 'erinnern',
+        '回忆': 'erinnern',
+        '提醒': 'erinnern',
+        '忘记': 'vergessen',
+        '忽视': 'ignorieren',
+        '忽视': 'vernachlässigen',
+        '忽视': 'überblicken',
+        '错过': 'fehlen',
+        '定位': 'lokalisieren',
+        '发现': 'aufdecken',
+        '揭示': 'enthüllen',
+        '暴露': 'enthüllen',
+        '展示': 'anzeigen',
+        '展览': 'ausstellen',
+        '贡献': 'beitragen',
+        '分发': 'verteilen',
+        '分割': 'teilen',
+        '分裂': 'spalten',
+        '分离': 'trennen',
+        '移除': 'entfernen',
+        '消除': 'beseitigen',
+        '擦除': 'löschen',
+        '删除': 'löschen',
+        '摧毁': 'zerstören',
+        '损坏': 'beschädigen',
+        '打破': 'brechen',
+        '破裂': 'knacken',
+        '粉碎': 'zerbrechen',
+        '撕裂': 'zerreißen',
+        '撕扯': 'zerreißen',
+        '砍': 'hacken',
+        '砍': 'schneiden',
+        '刺穿': 'piercing',
+        '刺穿': 'durchstechen',
+        '刺': 'stechen',
+        '射击': 'schießen',
+        '开火': 'abschuss',
+        '扔': 'werfen',
+        '抛': 'werfen',
+        '投': 'besetzung',
+        '抛': 'werfen',
+        '猛投': 'werfen',
+        '发射': 'starten',
+        '弹出': 'auswerfen',
+        '驱逐': 'ausstoßen',
+        '强迫': 'zwingen',
+        '推': 'schieben',
+        '按': 'pressen',
+        '挤压': 'quetschen',
+        '压碎': 'zerquetschen',
+        '磨碎': 'mahlen',
+        '重击': 'schlagen',
+        '击打': 'schlagen',
+        '打击': 'schlagen',
+        '拍打': 'schlagen',
+        '拳击': 'schlagen',
+        '踢': 'treten',
+        '踩踏': 'stampfen',
+        '践踏': 'trampeln',
+        '踩': 'stempeln',
+        '踏': 'schreiten',
+        '走路': 'gehen',
+        '行进': 'marschieren',
+        '游行': 'paraden',
+        '巡逻': 'patrouillieren',
+        '下沉': 'sinken',
+        '溺水': 'ertrinken',
+        '跳舞': 'tanzen',
+        '旋转': 'wirbeln',
+        '旋转': 'spinnen',
+        '转动': 'drehen',
+        '旋转': 'drehen',
+        '旋转': 'drehen',
+        '环绕': 'kreisen',
+        '环绕': 'umkreisen',
+        '包围': 'umgebend',
+        '环绕': 'umkreisen',
+        '包围': 'umschließen',
+        '覆盖': 'abdecken',
+        '包装': 'verpacken',
+        '装箱': 'boxen',
+        '包含': 'enthalten',
+        '持有': 'halten',
+        '移动': 'bewegen',
+        '移动': 'verschieben',
+        '转移': 'übertragen',
+        '搬迁': 'umziehen',
+        '放置': 'platzieren',
+        '定位': 'positionieren',
+        '安置': 'positionieren',
+        '设置': 'einstellung',
+        '改变': 'ändern',
+        '转变': 'verwandeln',
+        '转换': 'umwandeln',
+        '适应': 'anpassen',
+        '适应': 'unterbringen',
+        '适合': 'anpassen',
+        '匹配': 'abgleichen',
+        '对应': 'entsprechend',
+        '关联': 'beziehen',
+        '连接': 'verbinden',
+        '加入': 'beitreten',
+        '联合': 'vereinen',
+        '结合': 'kombinieren',
+        '合并': 'verschmelzen',
+        '混合': 'mischen',
+        '弯曲': 'biegen',
+        '弯曲': 'dehnen',
+        '弯曲': 'krümmen',
+        '扭曲': 'verdrehen',
+        '缠绕': 'kurvenreich',
+        '盘绕': 'aufwickeln',
+        '螺旋': 'spiralieren',
+        '卷曲': 'curling',
     },
 
     /**
-     * 翻译文本
-     * @param {string} text - 要翻译的文本
-     * @param {string} from - 源语言代码
-     * @param {string} to - 目标语言代码
-     * @returns {Promise<string>} 翻译后的文本
+     * Deutschen Text ins Chinesische übersetzen
+     * @param {string} text - Deutscher Text
+     * @returns {string} Übersetzter chinesischer Text
      */
-    async translate(text, from, to) {
-        // 如果文本为空，直接返回
-        if (!text.trim()) return '';
-
-        // 限制文本长度
-        if (text.length > 5000) {
-            throw new Error('文本过长，请控制在5000字符以内');
-        }
-
-        // 检测语言
-        const detectedLang = this.detectLanguage(text);
-        
-        // 如果检测到的语言与指定的源语言不匹配，使用检测到的语言
-        if (from !== 'auto' && from !== detectedLang) {
-            console.warn(`检测到的语言(${detectedLang})与指定语言(${from})不匹配，使用检测到的语言`);
-            from = detectedLang;
-        }
-
-        // 如果源语言和目标语言相同，直接返回原文本
-        if (from === to) {
-            return text;
-        }
-
-        // 只支持中英互译
-        if ((from === 'zh' && to === 'en') || (from === 'en' && to === 'zh')) {
-            if (from === 'zh' && to === 'en') {
-                return this.translateZhToEn(text);
-            } else {
-                return this.translateEnToZh(text);
-            }
-        }
-
-        // 不支持的语言对
-        throw new Error(`本地翻译不支持从${from}到${to}的翻译`);
-    },
-
-    /**
-     * 英文翻译为中文
-     * @param {string} text - 英文文本
-     * @returns {string} 翻译后的中文文本
-     */
-    translateEnToZh(text) {
-        // 将文本转为小写以匹配字典
+    translateDeToZh(text) {
+        // Text in Kleinbuchstaben umwandeln, um mit dem Wörterbuch abzugleichen
         const lowerText = text.toLowerCase();
 
-        // 检查完整的文本是否在字典中
-        if (this.enToZhDict[lowerText]) {
-            return this.enToZhDict[lowerText];
+        // Prüfen, ob der gesamte Text im Wörterbuch enthalten ist
+        if (this.deToZhDict[lowerText]) {
+            return this.deToZhDict[lowerText];
         }
 
-        // 按句子分割文本
+        // Text in Sätze aufteilen
         const sentences = text.split(/[.!?。！？]\s*/g);
         const translatedSentences = [];
 
         for (const sentence of sentences) {
             if (!sentence.trim()) continue;
 
-            // 尝试翻译整个句子
+            // Versuchen, den gesamten Satz zu übersetzen
             const lowerSentence = sentence.toLowerCase().trim();
-            if (this.enToZhDict[lowerSentence]) {
-                translatedSentences.push(this.enToZhDict[lowerSentence]);
+            if (this.deToZhDict[lowerSentence]) {
+                translatedSentences.push(this.deToZhDict[lowerSentence]);
                 continue;
             }
 
-            // 尝试匹配常见句式和语境
-            const contextTranslation = this.translateEnToZhWithContext(sentence);
+            // Versuchen, häufige Satzmuster und Kontexte zu erkennen
+            const contextTranslation = this.translateDeToZhWithContext(sentence);
             if (contextTranslation) {
                 translatedSentences.push(contextTranslation);
                 continue;
             }
 
-            // 如果整句没有匹配，尝试按单词翻译
+            // Wenn der ganze Satz nicht passt, wortweise übersetzen
             const words = sentence.split(/\s+/);
             const translatedWords = [];
-            
-            // 处理英文语法和时态
+
+            // Grammatik und Zeitform behandeln
             let previousWord = '';
-            
+
             for (let i = 0; i < words.length; i++) {
                 const word = words[i];
                 const lowerWord = word.toLowerCase();
-                
-                // 处理标点符号
+
+                // Satzzeichen behandeln
                 const punctuation = word.match(/[.,!?;:()"'']/g);
                 const cleanWord = word.replace(/[.,!?;:()"'']/g, '');
-                
-                if (this.enToZhDict[cleanWord.toLowerCase()]) {
-                    let translatedWord = this.enToZhDict[cleanWord.toLowerCase()];
-                    
-                    // 根据语境调整翻译
-                    translatedWord = this.adjustTranslationByContext(
-                        translatedWord, 
-                        cleanWord.toLowerCase(), 
-                        previousWord, 
+
+                if (this.deToZhDict[cleanWord.toLowerCase()]) {
+                    let translatedWord = this.deToZhDict[cleanWord.toLowerCase()];
+
+                    // Übersetzung je nach Kontext anpassen
+                    translatedWord = this.adjustDeToZhByContext(
+                        translatedWord,
+                        cleanWord.toLowerCase(),
+                        previousWord,
                         i < words.length - 1 ? words[i + 1].toLowerCase() : ''
                     );
-                    
+
                     translatedWords.push(translatedWord);
-                    
-                    // 添加标点符号
+
+                    // Satzzeichen hinzufügen
                     if (punctuation) {
                         translatedWords.push(punctuation.join(''));
                     }
                 } else {
-                    // 如果单词没有翻译，保留原单词
+                    // Wenn das Wort keine Übersetzung hat, Originalwort beibehalten
                     translatedWords.push(word);
                 }
-                
+
                 previousWord = cleanWord.toLowerCase();
             }
 
-            // 将翻译后的单词组合为句子（中文不需要空格）
+            // Übersetzte Wörter zu einem Satz zusammenfügen (Chinesisch benötigt keine Leerzeichen)
             const translatedSentence = translatedWords.join('');
             translatedSentences.push(translatedSentence);
         }
 
-        // 组合翻译后的句子
+        // Übersetzte Sätze zusammenfügen
         return translatedSentences.join('。');
     },
 
     /**
-     * 中文翻译为英文
-     * @param {string} text - 中文文本
-     * @returns {string} 翻译后的英文文本
+     * Chinesischen Text ins Deutsche übersetzen
+     * @param {string} text - Chinesischer Text
+     * @returns {string} Übersetzter deutscher Text
      */
-    translateZhToEn(text) {
-        // 检查完整的文本是否在字典中
-        if (this.zhToEnDict[text]) {
-            return this.zhToEnDict[text];
+    translateZhToDe(text) {
+        // Prüfen, ob der gesamte Text im Wörterbuch enthalten ist
+        if (this.zhToDeDict[text]) {
+            return this.zhToDeDict[text];
         }
 
-        // 按句子分割文本
+        // Text in Sätze aufteilen
         const sentences = text.split(/[.!?。！？]\s*/g);
         const translatedSentences = [];
 
         for (const sentence of sentences) {
             if (!sentence.trim()) continue;
 
-            // 尝试翻译整个句子
-            if (this.zhToEnDict[sentence.trim()]) {
-                translatedSentences.push(this.zhToEnDict[sentence.trim()]);
+            // Versuchen, den gesamten Satz zu übersetzen
+            if (this.zhToDeDict[sentence.trim()]) {
+                translatedSentences.push(this.zhToDeDict[sentence.trim()]);
                 continue;
             }
 
-            // 尝试匹配常见句式和语境
-            const contextTranslation = this.translateZhToEnWithContext(sentence);
+            // Versuchen, häufige Satzmuster und Kontexte zu erkennen
+            const contextTranslation = this.translateZhToDeWithContext(sentence);
             if (contextTranslation) {
                 translatedSentences.push(contextTranslation);
                 continue;
             }
 
-            // 中文翻译比较复杂，此处使用更智能的分词和语境处理
+            // Chinesische Übersetzung ist komplexer, hier wird eine intelligentere Wort- und Kontextbehandlung verwendet
             let translated = false;
             let result = sentence;
 
-            // 先尝试匹配最长的短语（优先匹配长短语）
-            const sortedPhrases = Object.keys(this.zhToEnDict).sort((a, b) => b.length - a.length);
-            
+            // Zuerst versuchen, die längste Phrase zu finden (lange Phrasen bevorzugt abgleichen)
+            const sortedPhrases = Object.keys(this.zhToDeDict).sort((a, b) => b.length - a.length);
+
             for (const zhPhrase of sortedPhrases) {
                 if (sentence.includes(zhPhrase)) {
-                    const enPhrase = this.zhToEnDict[zhPhrase];
-                    
-                    // 根据语境调整翻译
-                    const adjustedPhrase = this.adjustZhToEnByContext(enPhrase, zhPhrase, sentence);
-                    
-                    // 替换匹配到的短语
+                    const dePhrase = this.zhToDeDict[zhPhrase];
+
+                    // Übersetzung je nach Kontext anpassen
+                    const adjustedPhrase = this.adjustZhToDeByContext(dePhrase, zhPhrase, sentence);
+
+                    // Gefundene Phrase ersetzen
                     result = result.replace(new RegExp(zhPhrase, 'g'), adjustedPhrase);
                     translated = true;
                 }
             }
 
-            // 如果有翻译，处理结果
+            // Wenn übersetzt wurde, Ergebnis verarbeiten
             if (translated) {
-                // 处理未翻译的部分
+                // Nicht übersetzte Teile behandeln
                 const remainingParts = result.split(/[\u4e00-\u9fff]+/);
                 const translatedParts = result.split(/[^\u4e00-\u9fff]+/);
-                
-                // 组合翻译结果
+
+                // Übersetzungsergebnis zusammenfügen
                 let finalResult = '';
                 for (let i = 0; i < Math.max(remainingParts.length, translatedParts.length); i++) {
                     if (i < translatedParts.length && translatedParts[i]) {
@@ -1020,438 +3067,434 @@ const LocalTranslate = {
                         finalResult += remainingParts[i];
                     }
                 }
-                
+
                 translatedSentences.push(finalResult.trim());
             } else {
-                // 如果没有匹配到任何短语，尝试单字翻译
+                // Wenn keine Phrase gefunden wurde, zeichenweise übersetzen
                 const characters = sentence.split('');
                 const translatedChars = [];
-                
+
                 for (const char of characters) {
-                    if (this.zhToEnDict[char]) {
-                        translatedChars.push(this.zhToEnDict[char]);
+                    if (this.zhToDeDict[char]) {
+                        translatedChars.push(this.zhToDeDict[char]);
                     } else if (/[\u4e00-\u9fff]/.test(char)) {
-                        // 是中文字符但不在字典中
+                        // Chinesisches Zeichen, aber nicht im Wörterbuch
                         translatedChars.push(`[${char}]`);
                     } else {
-                        // 非中文字符，直接保留
+                        // Kein chinesisches Zeichen, direkt beibehalten
                         translatedChars.push(char);
                     }
                 }
-                
+
                 const translatedSentence = translatedChars.join(' ');
                 translatedSentences.push(translatedSentence);
             }
         }
 
-        // 组合翻译后的句子
+        // Übersetzte Sätze zusammenfügen
         return translatedSentences.join('. ').replace(/\s+\./g, '.').replace(/\s+/g, ' ');
     },
 
     /**
-     * 验证语言代码是否有效
-     * @param {string} langCode - 语言代码
-     * @returns {boolean} 是否有效
+     * Prüft, ob ein Sprachcode gültig ist
+     * @param {string} langCode - Sprachcode
+     * @returns {boolean} Ob gültig
      */
     isValidLanguageCode(langCode) {
-        const validLanguages = ['auto', 'zh', 'en'];
+        const validLanguages = ['auto', 'zh', 'de'];
         return validLanguages.includes(langCode);
     },
 
     /**
-     * 检测文本语言
-     * @param {string} text - 要检测的文本
-     * @returns {string} 检测到的语言代码 ('en'或'zh')
+     * Sprache des Textes erkennen
+     * @param {string} text - Zu erkennender Text
+     * @returns {string} Erkannter Sprachcode ('de' oder 'zh')
      */
     detectLanguage(text) {
-        // 如果文本为空，返回默认语言
-        if (!text.trim()) return 'en';
-        
-        // 简单的语言检测逻辑
-        // 如果包含中文字符，则认为是中文
+        // Wenn der Text leer ist, Standardsprache zurückgeben
+        if (!text.trim()) return 'de';
+
+        // Einfache Spracherkennungslogik
+        // Wenn chinesische Zeichen enthalten sind, wird es als Chinesisch angesehen
         const chineseRegex = /[\u4e00-\u9fff]/;
         if (chineseRegex.test(text)) {
             return 'zh';
         }
-        
-        // 否则认为是英文
-        return 'en';
+
+        // Andernfalls wird es als Deutsch angesehen
+        return 'de';
     },
 
     /**
-     * 根据语境翻译英文句子
-     * @param {string} sentence - 英文句子
-     * @returns {string} 翻译后的中文句子
+     * Deutschen Satz je nach Kontext übersetzen
+     * @param {string} sentence - Deutscher Satz
+     * @returns {string} Übersetzter chinesischer Satz
      */
-    translateEnToZhWithContext(sentence) {
+    translateDeToZhWithContext(sentence) {
         const lowerSentence = sentence.toLowerCase().trim();
-        
-        // 常见句式和语境的翻译
+
+        // Übersetzung häufiger Satzmuster und Kontexte
         const contextPatterns = [
-            // 疑问句
-            { pattern: /^(how|what|where|when|why|who|which) (are|is|do|does|did|can|could|will|would|should)\b/, 
+            // Fragesätze
+            { pattern: /^(wie|was|wo|wann|warum|wer|welche) (ist|sind|bist|machst|machen|kannst|könntest|wirst|würdest|solltest)\b/,
               template: (match) => {
                 const questionWords = {
-                  'how': '如何', 'what': '什么', 'where': '在哪里', 'when': '何时',
-                  'why': '为什么', 'who': '谁', 'which': '哪个'
+                  'wie': '如何', 'was': '什么', 'wo': '在哪里', 'wann': '何时',
+                  'warum': '为什么', 'wer': '谁', 'welche': '哪个'
                 };
                 const verbWords = {
-                  'are': '是', 'is': '是', 'do': '做', 'does': '做', 'did': '做了',
-                  'can': '能', 'could': '能', 'will': '将', 'would': '会', 'should': '应该'
+                  'ist': '是', 'sind': '是', 'bist': '是', 'machst': '做', 'machen': '做',
+                  'kannst': '能', 'könntest': '能', 'wirst': '将', 'würdest': '会', 'solltest': '应该'
                 };
                 const questionWord = match[1];
                 const verbWord = match[2];
                 return questionWords[questionWord] + verbWords[verbWord];
               }
             },
-            
-            // 问候语
-            { pattern: /^(good morning|good afternoon|good evening|hello|hi)\b/, 
+
+            // Begrüßungen
+            { pattern: /^(guten morgen|guten tag|guten abend|hallo|hi)\b/,
               template: (match) => {
                 const greetings = {
-                  'good morning': '早上好', 'good afternoon': '下午好', 
-                  'good evening': '晚上好', 'hello': '你好', 'hi': '嗨'
+                  'guten morgen': '早上好', 'guten tag': '下午好',
+                  'guten abend': '晚上好', 'hallo': '你好', 'hi': '嗨'
                 };
                 return greetings[match[1].toLowerCase()];
               }
             },
-            
-            // 感谢语
-            { pattern: /^(thank you|thanks)\b/, 
+
+            // Dank
+            { pattern: /^(danke|vielen dank)\b/,
               template: (match) => '谢谢'
             },
-            
-            // 道歉语
-            { pattern: /^(sorry|excuse me|pardon me)\b/, 
+
+            // Entschuldigung
+            { pattern: /^(es tut mir leid|entschuldigung|verzeihung)\b/,
               template: (match) => {
                 const apologies = {
-                  'sorry': '对不起', 'excuse me': '打扰一下', 'pardon me': '请原谅'
+                  'es tut mir leid': '对不起', 'entschuldigung': '打扰一下', 'verzeihung': '请原谅'
                 };
                 return apologies[match[1].toLowerCase()];
               }
             },
-            
-            // 告别语
-            { pattern: /^(goodbye|bye|see you|see you later)\b/, 
+
+            // Verabschiedung
+            { pattern: /^(auf wiedersehen|tschüss|bis dann|bis später)\b/,
               template: (match) => {
                 const goodbyes = {
-                  'goodbye': '再见', 'bye': '再见', 
-                  'see you': '再见', 'see you later': '回头见'
+                  'auf wiedersehen': '再见', 'tschüss': '再见',
+                  'bis dann': '再见', 'bis später': '回头见'
                 };
                 return goodbyes[match[1].toLowerCase()];
               }
             },
-            
-            // 请求帮助
-            { pattern: /^(can you help me|i need help)\b/, 
+
+            // Um Hilfe bitten
+            { pattern: /^(kannst du mir helfen|ich brauche hilfe)\b/,
               template: (match) => {
                 const helpRequests = {
-                  'can you help me': '你能帮我吗', 'i need help': '我需要帮助'
+                  'kannst du mir helfen': '你能帮我吗', 'ich brauche hilfe': '我需要帮助'
                 };
                 return helpRequests[match[1].toLowerCase()];
               }
             },
-            
-            // 时间询问
-            { pattern: /^(what time|what is the time)\b/, 
+
+            // Nach der Zeit fragen
+            { pattern: /^(wie spät ist es|wie spät)\b/,
               template: (match) => '几点了'
             },
-            
-            // 价格询问
-            { pattern: /^(how much|what is the price)\b/, 
+
+            // Nach dem Preis fragen
+            { pattern: /^(wie viel kostet das|wie viel)\b/,
               template: (match) => '多少钱'
             },
-            
-            // 位置询问
-            { pattern: /^(where is|where are)\b/, 
+
+            // Nach dem Ort fragen
+            { pattern: /^(wo ist|wo sind)\b/,
               template: (match) => '在哪里'
             },
-            
-            // 同意/不同意
-            { pattern: /^(i agree|i disagree)\b/, 
+
+            // Zustimmung/Ablehnung
+            { pattern: /^(ich stimme zu|ich stimme nicht zu)\b/,
               template: (match) => {
                 const agreements = {
-                  'i agree': '我同意', 'i disagree': '我不同意'
+                  'ich stimme zu': '我同意', 'ich stimme nicht zu': '我不同意'
                 };
                 return agreements[match[1].toLowerCase()];
               }
             }
         ];
-        
-        // 检查每个模式
+
+        // Jedes Muster prüfen
         for (const { pattern, template } of contextPatterns) {
             const match = lowerSentence.match(pattern);
             if (match) {
                 return template(match);
             }
         }
-        
+
         return null;
     },
 
     /**
-     * 根据语境翻译中文句子
-     * @param {string} sentence - 中文句子
-     * @returns {string} 翻译后的英文句子
+     * Chinesischen Satz je nach Kontext übersetzen
+     * @param {string} sentence - Chinesischer Satz
+     * @returns {string} Übersetzter deutscher Satz
      */
-    translateZhToEnWithContext(sentence) {
+    translateZhToDeWithContext(sentence) {
         const trimmedSentence = sentence.trim();
-        
-        // 常见句式和语境的翻译
+
+        // Übersetzung häufiger Satzmuster und Kontexte
         const contextPatterns = [
-            // 疑问句
-            { pattern: /^(如何|什么|在哪里|何时|为什么|谁|哪个)(是|做|能|将|会|应该)/, 
+            // Fragesätze
+            { pattern: /^(如何|什么|在哪里|何时|为什么|谁|哪个)(是|做|能|将|会|应该)/,
               template: (match) => {
                 const questionWords = {
-                  '如何': 'how', '什么': 'what', '在哪里': 'where', '何时': 'when',
-                  '为什么': 'why', '谁': 'who', '哪个': 'which'
+                  '如何': 'wie', '什么': 'was', '在哪里': 'wo', '何时': 'wann',
+                  '为什么': 'warum', '谁': 'wer', '哪个': 'welche'
                 };
                 const verbWords = {
-                  '是': 'is', '做': 'do', '能': 'can', '将': 'will', 
-                  '会': 'would', '应该': 'should'
+                  '是': 'ist', '做': 'machst', '能': 'kannst', '将': 'wirst',
+                  '会': 'würdest', '应该': 'solltest'
                 };
                 return questionWords[match[1]] + ' ' + verbWords[match[2]];
               }
             },
-            
-            // 问候语
-            { pattern: /^(早上好|下午好|晚上好|你好|嗨)/, 
+
+            // Begrüßungen
+            { pattern: /^(早上好|下午好|晚上好|你好|嗨)/,
               template: (match) => {
                 const greetings = {
-                  '早上好': 'good morning', '下午好': 'good afternoon', 
-                  '晚上好': 'good evening', '你好': 'hello', '嗨': 'hi'
+                  '早上好': 'guten morgen', '下午好': 'guten tag',
+                  '晚上好': 'guten abend', '你好': 'hallo', '嗨': 'hi'
                 };
                 return greetings[match[1]];
               }
             },
-            
-            // 感谢语
-            { pattern: /^(谢谢|多谢)/, 
-              template: (match) => 'thank you'
+
+            // Dank
+            { pattern: /^(谢谢|多谢)/,
+              template: (match) => 'danke'
             },
-            
-            // 道歉语
-            { pattern: /^(对不起|打扰一下|请原谅)/, 
+
+            // Entschuldigung
+            { pattern: /^(对不起|打扰一下|请原谅)/,
               template: (match) => {
                 const apologies = {
-                  '对不起': 'sorry', '打扰一下': 'excuse me', '请原谅': 'pardon me'
+                  '对不起': 'es tut mir leid', '打扰一下': 'entschuldigung', '请原谅': 'verzeihung'
                 };
                 return apologies[match[1]];
               }
             },
-            
-            // 告别语
-            { pattern: /^(再见|回头见)/, 
+
+            // Verabschiedung
+            { pattern: /^(再见|回头见)/,
               template: (match) => {
                 const goodbyes = {
-                  '再见': 'goodbye', '回头见': 'see you later'
+                  '再见': 'auf wiedersehen', '回头见': 'bis später'
                 };
                 return goodbyes[match[1]];
               }
             },
-            
-            // 请求帮助
-            { pattern: /^(你能帮我吗|我需要帮助)/, 
+
+            // Um Hilfe bitten
+            { pattern: /^(你能帮我吗|我需要帮助)/,
               template: (match) => {
                 const helpRequests = {
-                  '你能帮我吗': 'can you help me', '我需要帮助': 'i need help'
+                  '你能帮我吗': 'kannst du mir helfen', '我需要帮助': 'ich brauche hilfe'
                 };
                 return helpRequests[match[1]];
               }
             },
-            
-            // 时间询问
-            { pattern: /^(几点了|现在几点)/, 
-              template: (match) => 'what time is it'
+
+            // Nach der Zeit fragen
+            { pattern: /^(几点了|现在几点)/,
+              template: (match) => 'wie spät ist es'
             },
-            
-            // 价格询问
-            { pattern: /^(多少钱|价格多少)/, 
-              template: (match) => 'how much'
+
+            // Nach dem Preis fragen
+            { pattern: /^(多少钱|价格多少)/,
+              template: (match) => 'wie viel kostet das'
             },
-            
-            // 位置询问
-            { pattern: /^(在哪里|在什么地方)/, 
-              template: (match) => 'where is'
+
+            // Nach dem Ort fragen
+            { pattern: /^(在哪里|在什么地方)/,
+              template: (match) => 'wo ist es'
             },
-            
-            // 同意/不同意
-            { pattern: /^(我同意|我不同意)/, 
+
+            // Zustimmung/Ablehnung
+            { pattern: /^(我同意|我不同意)/,
               template: (match) => {
                 const agreements = {
-                  '我同意': 'i agree', '我不同意': 'i disagree'
+                  '我同意': 'ich stimme zu', '我不同意': 'ich stimme nicht zu'
                 };
                 return agreements[match[1]];
               }
             }
         ];
-        
-        // 检查每个模式
+
+        // Jedes Muster prüfen
         for (const { pattern, template } of contextPatterns) {
             const match = trimmedSentence.match(pattern);
             if (match) {
                 return template(match);
             }
         }
-        
+
         return null;
     },
 
     /**
-     * 根据语境调整英文到中文的翻译
-     * @param {string} translation - 原始翻译
-     * @param {string} word - 原始单词
-     * @param {string} previousWord - 前一个单词
-     * @param {string} nextWord - 后一个单词
-     * @returns {string} 调整后的翻译
+     * Übersetzung von Deutsch nach Chinesisch je nach Kontext anpassen
+     * @param {string} translation - Ursprüngliche Übersetzung
+     * @param {string} word - Ursprüngliches Wort
+     * @param {string} previousWord - Vorheriges Wort
+     * @param {string} nextWord - Nächstes Wort
+     * @returns {string} Angepasste Übersetzung
      */
-    adjustTranslationByContext(translation, word, previousWord, nextWord) {
-        // 处理时态和语法
-        if (word === 'be' || word === 'is' || word === 'are' || word === 'am') {
+    adjustDeToZhByContext(translation, word, previousWord, nextWord) {
+        // Zeitform und Grammatik behandeln
+        if (word === 'sein' || word === 'ist' || word === 'sind' || word === 'bin' || word === 'bist') {
             return '是';
         }
-        
-        if (word === 'have' || word === 'has') {
+
+        if (word === 'haben' || word === 'hat' || word === 'habe') {
             return '有';
         }
-        
-        if (word === 'do' || word === 'does') {
+
+        if (word === 'tun' || word === 'tut' || word === 'mache' || word === 'machst') {
             return '做';
         }
-        
-        if (word === 'will' || word === 'would') {
+
+        if (word === 'werde' || word === 'wirst' || word === 'wird' || word === 'würde') {
             return '将';
         }
-        
-        if (word === 'can' || word === 'could') {
+
+        if (word === 'kann' || word === 'kannst' || word === 'könnte') {
             return '能';
         }
-        
-        // 处理否定词
-        if (word === 'not' || word === "n't") {
+
+        // Verneinung behandeln
+        if (word === 'nicht' || word === 'kein' || word === 'keine') {
             return '不';
         }
-        
-        // 处理冠词
-        if (word === 'a' || word === 'an') {
+
+        // Artikel behandeln
+        if (word === 'ein' || word === 'eine' || word === 'einen') {
             return '一个';
         }
-        
-        if (word === 'the') {
+
+        if (word === 'der' || word === 'die' || word === 'das') {
             return '这个';
         }
-        
-        // 处理介词
+
+        // Präpositionen behandeln
         if (word === 'in') {
             return '在';
         }
-        
-        if (word === 'on') {
+
+        if (word === 'auf') {
             return '在';
         }
-        
-        if (word === 'at') {
+
+        if (word === 'bei' || word === 'an') {
             return '在';
         }
-        
-        if (word === 'to') {
+
+        if (word === 'zu') {
             return '到';
         }
-        
-        if (word === 'from') {
+
+        if (word === 'von') {
             return '从';
         }
-        
-        if (word === 'with') {
+
+        if (word === 'mit') {
             return '和';
         }
-        
-        if (word === 'and') {
+
+        if (word === 'und') {
             return '和';
         }
-        
-        if (word === 'or') {
+
+        if (word === 'oder') {
             return '或';
         }
-        
-        if (word === 'but') {
+
+        if (word === 'aber') {
             return '但是';
         }
-        
+
         return translation;
     },
 
     /**
-     * 根据语境调整中文到英文的翻译
-     * @param {string} translation - 原始翻译
-     * @param {string} phrase - 原始短语
-     * @param {string} sentence - 完整句子
-     * @returns {string} 调整后的翻译
+     * Übersetzung von Chinesisch nach Deutsch je nach Kontext anpassen
+     * @param {string} translation - Ursprüngliche Übersetzung
+     * @param {string} phrase - Ursprüngliche Phrase
+     * @param {string} sentence - Vollständiger Satz
+     * @returns {string} Angepasste Übersetzung
      */
-    adjustZhToEnByContext(translation, phrase, sentence) {
-        // 处理量词
+    adjustZhToDeByContext(translation, phrase, sentence) {
+        // Mengenangaben und Artikel (mit Genus) behandeln
         if (phrase === '一个' && sentence.includes('苹果')) {
-            return 'an apple';
+            return 'ein Apfel';
         }
-        
+
         if (phrase === '一个' && sentence.includes('橙子')) {
-            return 'an orange';
+            return 'eine Orange';
         }
-        
-        if (phrase === '一个' && /[aeiou]/i.test(translation[0])) {
-            return 'an ' + translation;
-        }
-        
+
         if (phrase === '一个') {
-            return 'a ' + translation;
+            return 'ein ' + translation;
         }
-        
-        // 处理时态助词
+
+        // Vergangenheitspartikel behandeln
         if (phrase === '了' && sentence.includes('吃')) {
-            return 'ate';
+            return 'gegessen';
         }
-        
+
         if (phrase === '了' && sentence.includes('看')) {
-            return 'saw';
+            return 'gesehen';
         }
-        
+
         if (phrase === '了' && sentence.includes('去')) {
-            return 'went';
+            return 'gegangen';
         }
-        
+
         if (phrase === '了') {
-            return 'ed';
+            return 'te';
         }
-        
-        // 处理进行时
+
+        // Verlaufsform behandeln
         if (phrase === '在' && sentence.includes('吃')) {
-            return 'eating';
+            return 'am Essen';
         }
-        
+
         if (phrase === '在' && sentence.includes('看')) {
-            return 'watching';
+            return 'am Zuschauen';
         }
-        
+
         if (phrase === '在' && sentence.includes('工作')) {
-            return 'working';
+            return 'am Arbeiten';
         }
-        
-        // 处理否定
+
+        // Verneinung behandeln
         if (phrase === '不' && sentence.includes('是')) {
-            return 'not';
+            return 'nicht';
         }
-        
+
         if (phrase === '不' && sentence.includes('能')) {
-            return 'cannot';
+            return 'kann nicht';
         }
-        
+
         if (phrase === '不' && sentence.includes('会')) {
-            return 'will not';
+            return 'wird nicht';
         }
-        
+
         return translation;
     }
 };
 
-// 导出模块到全局作用域
+// Modul in den globalen Geltungsbereich exportieren
 window.LocalTranslate = LocalTranslate;
