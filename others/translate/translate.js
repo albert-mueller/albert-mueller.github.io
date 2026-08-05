@@ -191,8 +191,18 @@ const TranslateApp = {
                 }
             }
 
-            // 保存到本地存储
-            localStorage.setItem('translateApiConfig', JSON.stringify(apiConfig));
+            // 保存到本地存储（移除敏感字段，避免明文持久化）
+            const safeApiConfig = JSON.parse(JSON.stringify(apiConfig));
+            if (safeApiConfig.baidu) {
+                delete safeApiConfig.baidu.secretKey;
+            }
+            if (safeApiConfig.youdao) {
+                delete safeApiConfig.youdao.secretKey;
+            }
+            if (safeApiConfig.google) {
+                delete safeApiConfig.google.apiKey;
+            }
+            localStorage.setItem('translateApiConfig', JSON.stringify(safeApiConfig));
 
             return true;
         } catch (e) {
@@ -272,8 +282,18 @@ const TranslateApp = {
                 TranslateAPI.setService(currentService);
             }
 
-            // 保存到本地存储
-            localStorage.setItem('translateApiConfig', JSON.stringify(apiConfig));
+            // 保存到本地存储（移除敏感字段，避免明文持久化）
+            const safeApiConfig = JSON.parse(JSON.stringify(apiConfig));
+            if (safeApiConfig.baidu) {
+                delete safeApiConfig.baidu.secretKey;
+            }
+            if (safeApiConfig.youdao) {
+                delete safeApiConfig.youdao.secretKey;
+            }
+            if (safeApiConfig.google) {
+                delete safeApiConfig.google.apiKey;
+            }
+            localStorage.setItem('translateApiConfig', JSON.stringify(safeApiConfig));
 
             // 更新API状态
             this.checkApiStatus();
@@ -1300,7 +1320,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const baiduAppId = baiduAppIdElement.value;
             const baiduSecretKey = baiduSecretKeyElement.value;
             if (baiduAppId && baiduSecretKey) {
-                TranslateApp.saveApiConfig('api', 'baidu', baiduAppId, baiduSecretKey);
+                // 不在本地存储中持久化密钥，仅在当前运行时设置
+                TranslateApp.saveApiConfig('api', 'baidu', baiduAppId, '');
                 TranslateAPI.setApiKey('baidu', baiduAppId, baiduSecretKey);
             }
         }
@@ -1312,7 +1333,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const youdaoAppId = youdaoAppIdElement.value;
             const youdaoSecretKey = youdaoSecretKeyElement.value;
             if (youdaoAppId && youdaoSecretKey) {
-                TranslateApp.saveApiConfig('api', 'youdao', youdaoAppId, youdaoSecretKey);
+                // 不在本地存储中持久化密钥，仅在当前运行时设置
+                TranslateApp.saveApiConfig('api', 'youdao', youdaoAppId, '');
                 TranslateAPI.setApiKey('youdao', youdaoAppId, youdaoSecretKey);
             }
         }
