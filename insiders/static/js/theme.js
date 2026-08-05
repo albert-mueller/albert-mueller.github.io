@@ -64,7 +64,7 @@ const ThemeManager = {
             document.documentElement.setAttribute('data-theme', 'dark');
             if (this.toggleBtn) {
                 this.toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-                this.toggleBtn.setAttribute('title', '切换到浅色模式');
+                this.toggleBtn.setAttribute('title', 'Zu hellem Modus wechseln');
             }
             // 更新浏览器主题色
             this.updateThemeColor('#232323');
@@ -72,7 +72,7 @@ const ThemeManager = {
             document.documentElement.removeAttribute('data-theme');
             if (this.toggleBtn) {
                 this.toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-                this.toggleBtn.setAttribute('title', '切换到深色模式');
+                this.toggleBtn.setAttribute('title', 'Zu dunklem Modus wechseln');
             }
             // 更新浏览器主题色
             this.updateThemeColor('#f9f9f9');
@@ -131,7 +131,7 @@ const ThemeManager = {
         notification.style.color = 'var(--text-color)';
         
         // 设置提示内容
-        notification.textContent = theme === 'dark' ? '已切换到深色模式' : '已切换到浅色模式';
+        notification.textContent = theme === 'dark' ? 'Zu dunklem Modus gewechselt' : 'Zu hellem Modus gewechselt';
         
         // 添加到文档中
         document.body.appendChild(notification);
@@ -194,7 +194,7 @@ const ImageViewer = {
             });
             
             // 添加鼠标悬停提示
-            img.setAttribute('title', '点击查看大图');
+            img.setAttribute('title', 'Klicken, um größeres Bild anzuzeigen');
             
             // 添加放大镜图标指示器
             this.addZoomIndicator(img);
