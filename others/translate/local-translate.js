@@ -2916,6 +2916,50 @@ const LocalTranslate = {
         '卷曲': 'curling',
     },
 
+
+    /**
+     * Text übersetzen
+     * @param {string} text - Zu übersetzender Text
+     * @param {string} from - Quellsprachcode
+     * @param {string} to - Zielsprachcode
+     * @returns {Promise<string>} Übersetzter Text
+     */
+    async translate(text, from, to) {
+        // Wenn der Text leer ist, direkt zurückgeben
+        if (!text.trim()) return '';
+
+        // Textlänge begrenzen
+        if (text.length > 5000) {
+            throw new Error('Text zu lang, bitte auf maximal 5000 Zeichen begrenzen');
+        }
+
+        // Sprache erkennen
+        const detectedLang = this.detectLanguage(text);
+
+        // Wenn die erkannte Sprache nicht mit der angegebenen Quellsprache übereinstimmt, die erkannte Sprache verwenden
+        if (from !== 'auto' && from !== detectedLang) {
+            console.warn(`Erkannte Sprache (${detectedLang}) stimmt nicht mit angegebener Sprache (${from}) überein, verwende erkannte Sprache`);
+            from = detectedLang;
+        }
+
+        // Wenn Quell- und Zielsprache gleich sind, Originaltext direkt zurückgeben
+        if (from === to) {
+            return text;
+        }
+
+        // Unterstützt nur Chinesisch-Deutsch-Übersetzung
+        if ((from === 'zh' && to === 'de') || (from === 'de' && to === 'zh')) {
+            if (from === 'zh' && to === 'de') {
+                return this.translateZhToDe(text);
+            } else {
+                return this.translateDeToZh(text);
+            }
+        }
+
+        // Nicht unterstütztes Sprachpaar
+        throw new Error(`Lokale Übersetzung unterstützt keine Übersetzung von ${from} nach ${to}`);
+    },
+
     /**
      * Deutschen Text ins Chinesische übersetzen
      * @param {string} text - Deutscher Text
