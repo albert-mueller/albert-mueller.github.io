@@ -7,28 +7,28 @@
 // 本示例同时提供百度翻译和有道翻译两种API接口
 
 // 立即检查本地翻译状态
-console.log('api.js加载时检查本地翻译状态...');
-console.log('window.LocalTranslate立即检查:', window.LocalTranslate);
+console.log('Beim Laden von api.js lokalen Übersetzungsstatus prüfen...');
+console.log('window.LocalTranslate sofort prüfen:', window.LocalTranslate);
 
 // 等待DOM加载完成后检查本地翻译状态
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM加载完成，检查本地翻译状态...');
-    console.log('window.LocalTranslate DOM加载后:', window.LocalTranslate);
+    console.log('DOM geladen, lokalen Übersetzungsstatus prüfen...');
+    console.log('window.LocalTranslate nach DOM-Ladung:', window.LocalTranslate);
     if (window.LocalTranslate) {
-        console.log('本地翻译已加载！');
+        console.log('Lokale Übersetzung geladen!');
     } else {
-        console.log('本地翻译未加载，将在后续调用中检查');
+        console.log('Lokale Übersetzung nicht geladen, wird bei späteren Aufrufen geprüft');
     }
 });
 
 // 延迟1秒后再次检查，确保所有脚本都加载完成
 setTimeout(function() {
-    console.log('延迟1秒后检查本地翻译状态...');
-    console.log('window.LocalTranslate延迟检查:', window.LocalTranslate);
+    console.log('Nach 1‑Sekunden-Verzögerung lokalen Übersetzungsstatus prüfen...');
+    console.log('window.LocalTranslate verzögerte Prüfung:', window.LocalTranslate);
     if (window.LocalTranslate) {
-        console.log('延迟检查后：本地翻译已加载！');
+        console.log('Nach verzögerter Prüfung: Lokale Übersetzung geladen!');
     } else {
-        console.log('延迟检查后：本地翻译仍未加载');
+        console.log('Nach verzögerter Prüfung: Lokale Übersetzung immer noch nicht geladen');
     }
 }, 1000);
 
@@ -91,34 +91,34 @@ const TranslateAPI = {
 
         // 验证语言代码
         if (!this.isValidLanguageCode(from) || !this.isValidLanguageCode(to)) {
-            throw new Error('不支持的语言代码');
+            throw new Error('Nicht unterstützter Sprachcode');
         }
 
         // 限制文本长度
         if (text.length > 5000) {
-            throw new Error('文本过长，请控制在5000字符以内');
+            throw new Error('Text zu lang, bitte auf maximal 5000 Zeichen beschränken');
         }
 
-        console.log('开始翻译，输入文本:', text, '从', from, '到', to);
-        console.log('window.LocalTranslate状态:', window.LocalTranslate);
+        console.log('Übersetzung starten, Eingabetext:', text, 'Von', from, 'Nach', to);
+        console.log('window.LocalTranslate‑Status:', window.LocalTranslate);
 
         try {
             // 首先尝试使用本地翻译（如果可用）
             if (window.LocalTranslate && typeof window.LocalTranslate.translate === 'function') {
-                console.log('本地翻译对象存在，准备调用...');
+                console.log('Lokales Übersetzungsobjekt vorhanden, Aufruf wird vorbereitet...');
                 try {
-                    console.log('尝试使用本地翻译...');
+                    console.log('Versuche, lokale Übersetzung zu verwenden...');
                     const localResult = window.LocalTranslate.translate(text, from, to);
-                    console.log('本地翻译结果:', localResult);
+                    console.log('Lokales Übersetzungsergebnis:', localResult);
                     if (localResult && localResult.trim() !== '') {
-                        console.log('使用本地翻译成功:', localResult);
+                        console.log('Lokale Übersetzung erfolgreich verwendet:', localResult);
                         return localResult;
                     }
                 } catch (localError) {
-                    console.warn('本地翻译失败，尝试API翻译:', localError.message);
+                    console.warn('Lokale Übersetzung fehlgeschlagen, API‑Übersetzung wird versucht:', localError.message);
                 }
             } else {
-                console.log('本地翻译不可用，检查window.LocalTranslate:', window.LocalTranslate);
+                console.log('Lokale Übersetzung nicht verfügbar, prüfe window.LocalTranslate:', window.LocalTranslate);
             }
 
             // 检查API配置是否完整
@@ -130,7 +130,7 @@ const TranslateAPI = {
                 if (window.LocalTranslate && typeof window.LocalTranslate.translate === 'function') {
                     return `[本地翻译] 请配置API密钥以获得更多翻译功能`;
                 } else {
-                    throw new Error('API密钥未配置，请先配置翻译API密钥');
+                    throw new Error('API‑Schlüssel nicht konfiguriert, bitte zuerst den Übersetzungs‑API‑Schlüssel einrichten');
                 }
             }
 
@@ -147,12 +147,12 @@ const TranslateAPI = {
                 // 如果百度未配置，但有有道配置，使用有道
                 result = await this.youdaoTranslate(text, from, to);
             } else {
-                throw new Error('没有可用的翻译服务，请配置API密钥');
+                throw new Error('Kein Übersetzungsdienst verfügbar, bitte API‑Schlüssel konfigurieren');
             }
 
             // 验证翻译结果
             if (!result || result.trim() === '') {
-                throw new Error('翻译结果为空');
+                throw new Error('Übersetzungsergebnis ist leer');
             }
 
             return result;
@@ -160,7 +160,7 @@ const TranslateAPI = {
             console.error(`翻译失败 (${retryCount}次重试剩余):`, error);
             
             // 如果是网络错误或超时，尝试重试
-            if (retryCount > 0 && (error.message.includes('网络') || error.message.includes('超时') || error.message.includes('请求失败'))) {
+            if (retryCount > 0 && (error.message.includes('Netzwerk') || error.message.includes('Zeitüberschreitung') || error.message.includes('Anfrage fehlgeschlagen'))) {
                 console.log(`重试翻译，剩余重试次数: ${retryCount}`);
                 // 等待一段时间后重试
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -181,7 +181,7 @@ const TranslateAPI = {
     async baiduTranslate(text, from, to) {
         // 检查API密钥
         if (!this.config.baidu.appId || !this.config.baidu.secretKey) {
-            throw new Error('百度翻译API密钥未配置');
+            throw new Error('Baidu‑Übersetzungs‑API‑Schlüssel nicht konfiguriert');
         }
 
         // 语言代码转换
@@ -243,7 +243,7 @@ const TranslateAPI = {
                 return data.trans_result[0].dst;
             }
 
-            throw new Error('百度翻译API返回格式错误');
+            throw new Error('Baidu‑Übersetzungs‑API Rückgabeformatfehler');
         } catch (error) {
             throw new Error(`百度翻译请求失败: ${error.message}`);
         }
@@ -260,7 +260,7 @@ const TranslateAPI = {
         // 检查API配置
         const { apiUrl, appId, secretKey } = this.config.youdao;
         if (!appId || !secretKey) {
-            throw new Error('有道翻译API密钥未配置');
+            throw new Error('Youdao‑Übersetzungs‑API‑Schlüssel nicht konfiguriert');
         }
 
         // 有道API特定参数
@@ -357,17 +357,17 @@ const TranslateAPI = {
             if (window.LocalTranslate && typeof window.LocalTranslate.translate === 'function') {
                 try {
                     // 测试本地翻译
-                    console.log('测试本地翻译可用性...');
-                    const testResult = window.LocalTranslate.translate('hello', 'en', 'zh');
+                    console.log('Teste Verfügbarkeit der lokalen Übersetzung...');
+                    const testResult = window.LocalTranslate.translate('hallo', 'de', 'zh');
                     if (testResult && testResult.trim() !== '') {
-                        console.log('本地翻译可用，测试结果:', testResult);
+                        console.log('Lokale Übersetzung verfügbar, Testergebnis:', testResult);
                         return { status: 'available', service: 'local' };
                     }
                 } catch (error) {
-                    console.warn('本地翻译测试失败:', error);
+                    console.warn('Lokaler Übersetzungstest fehlgeschlagen:', error);
                 }
             } else {
-                console.log('本地翻译不可用，window.LocalTranslate:', window.LocalTranslate);
+                console.log('Lokale Übersetzung nicht verfügbar, window.LocalTranslate:', window.LocalTranslate);
             }
 
             // 检查是否有API配置
@@ -375,15 +375,15 @@ const TranslateAPI = {
             const hasYoudaoConfig = this.config.youdao.appId && this.config.youdao.secretKey;
             
             if (!hasBaiduConfig && !hasYoudaoConfig) {
-                console.warn('API密钥未配置');
+                console.warn('API‑Schlüssel nicht konfiguriert');
                 return false;
             }
 
             // 测试翻译一个简单的词
-            const result = await this.translate('hello', 'en', 'zh', 0);
+            const result = await this.translate('hallo', 'de', 'zh', 0);
             return !!(result && result.trim());
         } catch (error) {
-            console.error('API状态检查失败:', error);
+            console.error('API‑Statusprüfung fehlgeschlagen:', error);
             return false;
         }
     }
