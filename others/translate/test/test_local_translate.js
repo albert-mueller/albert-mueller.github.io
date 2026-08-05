@@ -1,82 +1,82 @@
 /**
- * 本地翻译功能测试
- * 测试local-translate.js的核心功能
+ * Lokale Übersetzungsfunktionstest
+ * Testet die Kernfunktionalität von local-translate.js
  */
 
-// 测试本地翻译模块
+// Testet das lokale Übersetzungsmodul
 function testLocalTranslate() {
-    console.log('=== 开始本地翻译功能测试 ===');
+    console.log('=== Beginn des lokalen Übersetzungstests ===');
     
-    // 测试1: 检查LocalTranslate对象是否存在
-    console.log('测试1: 检查LocalTranslate对象');
+    // Test 1: Überprüfen, ob das LocalTranslate-Objekt existiert
+    console.log('Test 1: Überprüfen des LocalTranslate-Objekts');
     if (typeof LocalTranslate !== 'undefined') {
-        console.log('✅ LocalTranslate对象存在');
-        console.log('LocalTranslate类型:', typeof LocalTranslate);
-        console.log('LocalTranslate.translate类型:', typeof LocalTranslate.translate);
+        console.log('✅ LocalTranslate-Objekt existiert');
+        console.log('LocalTranslate-Typ:', typeof LocalTranslate);
+        console.log('LocalTranslate.translate-Typ:', typeof LocalTranslate.translate);
     } else {
-        console.error('❌ LocalTranslate对象不存在');
+        console.error('❌ LocalTranslate-Objekt fehlt');
         return;
     }
     
-    // 测试2: 简单翻译测试
-    console.log('\n测试2: 简单翻译测试');
+    // Test 2: Einfacher Übersetzungstest
+    console.log('\nTest 2: Einfacher Übersetzungstest');
     try {
-        const result1 = LocalTranslate.translate('hello', 'en', 'zh');
-        console.log('hello ->', result1);
-        console.log('✅ 英文到中文翻译成功');
+        const result1 = LocalTranslate.translate('hallo', 'de', 'zh');
+        console.log('hallo ->', result1);
+        console.log('✅ Deutsch nach Chinesisch Übersetzung erfolgreich');
         
-        const result2 = LocalTranslate.translate('你好', 'zh', 'en');
+        const result2 = LocalTranslate.translate('你好', 'zh', 'de');
         console.log('你好 ->', result2);
-        console.log('✅ 中文到英文翻译成功');
+        console.log('✅ Chinesisch nach Deutsch Übersetzung erfolgreich');
     } catch (error) {
-        console.error('❌ 简单翻译测试失败:', error);
+        console.error('❌ Einfacher Übersetzungstest fehlgeschlagen:', error);
     }
     
-    // 测试3: 复杂句子翻译
-    console.log('\n测试3: 复杂句子翻译');
+    // Test 3: Komplexer Satz Übersetzung
+    console.log('\nTest 3: Komplexer Satz Übersetzung');
     try {
-        const result3 = LocalTranslate.translate('good morning world', 'en', 'zh');
-        console.log('good morning world ->', result3);
-        console.log('✅ 复杂句子翻译成功');
+        const result3 = LocalTranslate.translate('guten morgen welt', 'de', 'zh');
+        console.log('guten morgen welt ->', result3);
+        console.log('✅ Komplexer Satz Übersetzung erfolgreich');
     } catch (error) {
-        console.error('❌ 复杂句子翻译测试失败:', error);
+        console.error('❌ Komplexer Satz Übersetzungstest fehlgeschlagen:', error);
     }
     
-    // 测试4: 边界情况测试
-    console.log('\n测试4: 边界情况测试');
+    // Test 4: Randfalltest
+    console.log('\nTest 4: Randfalltest');
     try {
-        const result4 = LocalTranslate.translate('', 'en', 'zh');
-        console.log('空字符串 ->', result4);
-        console.log('✅ 空字符串处理成功');
+        const result4 = LocalTranslate.translate('', 'de', 'zh');
+        console.log('Leerer String ->', result4);
+        console.log('✅ Leerer String Verarbeitung erfolgreich');
         
-        const result5 = LocalTranslate.translate('hello', 'en', 'en');
-        console.log('相同语言翻译 ->', result5);
-        console.log('✅ 相同语言处理成功');
+        const result5 = LocalTranslate.translate('hallo', 'de', 'de');
+        console.log('Gleiche Sprache Übersetzung ->', result5);
+        console.log('✅ Gleiche Sprache Verarbeitung erfolgreich');
     } catch (error) {
-        console.error('❌ 边界情况测试失败:', error);
+        console.error('❌ Randfalltest fehlgeschlagen:', error);
     }
     
-    // 测试5: 性能测试
-    console.log('\n测试5: 性能测试');
+    // Test 5: Leistungstest
+    console.log('\nTest 5: Leistungstest');
     try {
         const start = performance.now();
         for (let i = 0; i < 100; i++) {
-            LocalTranslate.translate('hello world', 'en', 'zh');
+            LocalTranslate.translate('hallo welt', 'de', 'zh');
         }
         const end = performance.now();
-        console.log('100次翻译耗时:', (end - start).toFixed(2), 'ms');
-        console.log('✅ 性能测试通过');
+        console.log('100 Übersetzungen Dauer:', (end - start).toFixed(2), 'ms');
+        console.log('✅ Leistungstest bestanden');
     } catch (error) {
-        console.error('❌ 性能测试失败:', error);
+        console.error('❌ Leistungstest fehlgeschlagen:', error);
     }
     
-    console.log('\n=== 本地翻译功能测试完成 ===');
+    console.log('\n=== Lokaler Übersetzungstest abgeschlossen ===');
 }
 
-// 如果LocalTranslate可用，自动运行测试
+// Wenn LocalTranslate verfügbar ist, automatischer Testlauf
 if (typeof LocalTranslate !== 'undefined') {
-    // 延迟1秒执行测试，确保页面完全加载
+    // Verzögere 1 Sekunde vor dem Test, um sicherzustellen, dass die Seite vollständig geladen ist
     setTimeout(testLocalTranslate, 1000);
 } else {
-    console.warn('LocalTranslate未定义，测试无法运行');
+    console.warn('LocalTranslate ist nicht definiert, Test kann nicht ausgeführt werden');
 }
