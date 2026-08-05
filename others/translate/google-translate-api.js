@@ -36,17 +36,17 @@ const GoogleTranslateAPI = {
 
         // 检查API密钥是否配置
         if (!this.config.apiKey) {
-            throw new Error('Google翻译API密钥未配置');
+            throw new Error('Google-Übersetzungs-API-Schlüssel nicht konfiguriert');
         }
 
         // 验证语言代码
         if (!this.isValidLanguageCode(from) || !this.isValidLanguageCode(to)) {
-            throw new Error('不支持的语言代码');
+            throw new Error('Nicht unterstützter Sprachcode');
         }
 
         // 限制文本长度
         if (text.length > 5000) {
-            throw new Error('文本过长，请控制在5000字符以内');
+            throw new Error('Text zu lang, bitte auf maximal 5000 Zeichen beschränken');
         }
 
         try {
@@ -95,7 +95,7 @@ const GoogleTranslateAPI = {
 
             // 检查是否有有效的翻译结果
             if (!data.data || !data.data.translations || data.data.translations.length === 0) {
-                throw new Error('翻译结果为空');
+                throw new Error('Übersetzungsergebnis ist leer');
             }
 
             // 返回翻译结果
@@ -104,7 +104,7 @@ const GoogleTranslateAPI = {
             console.error(`Google翻译出错 (${retryCount}次重试剩余):`, error);
             
             // 如果是网络错误或超时，尝试重试
-            if (retryCount > 0 && (error.name === 'AbortError' || error.message.includes('网络') || error.message.includes('超时') || error.message.includes('请求失败'))) {
+            if (retryCount > 0 && (error.name === 'AbortError' || error.message.includes('Netzwerk') || error.message.includes('Zeitüberschreitung') || error.message.includes('Anfrage fehlgeschlagen'))) {
                 console.log(`重试Google翻译，剩余重试次数: ${retryCount}`);
                 // 等待一段时间后重试
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -137,10 +137,10 @@ const GoogleTranslateAPI = {
             }
 
             // 简单翻译测试
-            await this.translate('hello', 'en', 'zh');
+            await this.translate('hallo', 'de', 'zh');
             return true;
         } catch (error) {
-            console.error('Google API状态检查失败:', error);
+            console.error('Google-API-Statusprüfung fehlgeschlagen:', error);
             return false;
         }
     },
@@ -151,7 +151,7 @@ const GoogleTranslateAPI = {
      */
     async getLanguages() {
         if (!this.config.apiKey) {
-            throw new Error('Google翻译API密钥未配置');
+            throw new Error('Google-Übersetzungs-API-Schlüssel nicht konfiguriert');
         }
 
         try {
@@ -173,7 +173,7 @@ const GoogleTranslateAPI = {
             const data = await response.json();
             return data.data.languages;
         } catch (error) {
-            console.error('获取支持语言列表失败:', error);
+            console.error('Abrufen der unterstützten Sprachliste fehlgeschlagen:', error);
             throw new Error(`获取语言列表失败: ${error.message}`);
         }
     }
