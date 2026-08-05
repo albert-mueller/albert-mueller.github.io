@@ -1,25 +1,25 @@
-# 翻译应用开发任务清单
+# Aufgabenliste für die Entwicklung der Übersetzungsanwendung
 
-## 新功能
-1. 本地翻译功能集成 ✅
-2. 多API翻译服务支持（百度、有道、Google）✅
-3. 实时翻译功能 ✅
-4. 语音朗读功能 ✅
-5. 翻译历史记录
-6. 文件翻译支持 ✅
+## Neue Funktionen
+1. Integration der lokalen Übersetzungsfunktion ✅
+2. Unterstützung mehrerer API-Übersetzungsdienste (Baidu, Youdao, Google)✅
+3. Echtzeit-Übersetzungsfunktion ✅
+4. Sprachausgabe-Funktion ✅
+5. Übersetzungshistorie
+6. Dateiübersetzungsunterstützung ✅
 
-## Bug修复
-1. 修复API配置保存问题 ✅
-2. 修复翻译重试机制 ✅
-3. 修复移动端显示问题
-4. 修复本地翻译加载顺序问题 ✅
-5. 修复同步函数错误使用await的问题 ✅
+## Bugfixes
+1. Behebung des Problems beim Speichern der API-Konfiguration ✅
+2. Behebung des Übersetzungs-Wiederholungsmechanismus ✅
+3. Behebung des Anzeigeproblems auf Mobilgeräten
+4. Behebung des Ladefolgenproblems der lokalen Übersetzung ✅
+5. Behebung des Problems, dass await fälschlicherweise in synchronen Funktionen verwendet wurde ✅
 
-## 改进
-1. 优化翻译速度 ✅
-2. 改进用户界面 ✅
-3. 添加更多语言支持
-4. 增强本地翻译词典 ✅
-5. 添加翻译测试页面 ✅
-6. 创建交互式自动化测试页面 ✅
-7. 实现性能测试和边界情况测试 ✅
+## Verbesserungen
+1. Optimierung der Übersetzungsgeschwindigkeit ✅
+2. Verbesserung der Benutzeroberfläche ✅
+3. Hinzufügen weiterer Sprachunterstützung
+4. Erweiterung des lokalen Übersetzungswörterbuchs ✅
+5. Hinzufügen einer Übersetzungstestseite ✅
+6. Erstellung einer interaktiven automatisierten Testseite ✅
+7. Implementierung von Leistungstests und Grenzfalltests ✅
