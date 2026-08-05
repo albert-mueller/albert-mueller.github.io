@@ -1,82 +1,82 @@
-# PyQuick 网站下载界面优化 - TODO
+# PyQuick Website-Downloadseiten-Optimierung - TODO
 
-## 项目概述
-优化PyQuick网站的下载界面风格，包括稳定版、测试版和开发版的下载功能，采用现代化设计语言和最佳用户体验实践。
+## Projektübersicht
+Optimierung der Download-Oberfläche der PyQuick-Website, einschließlich Download-Funktionen für stabile, Test- und Entwicklungsversionen, mit moderner Designsprache und besten Praktiken für Benutzererfahrung.
 
-## New Features
-1. **统一现代化设计语言**：为所有下载页面创建统一的视觉风格
-2. **响应式布局**：适配各种屏幕尺寸和设备
-3. **性能优化**：优化CSS和JavaScript性能
-4. **用户体验改进**：简化下载流程，增加确认对话框
-5. **操作系统自动检测**：根据用户操作系统自动筛选合适的版本
+## Neue Funktionen
+1. **Einheitliche moderne Designsprache**: Einheitlichen visuellen Stil für alle Download-Seiten erstellen
+2. **Responsive Layout**: An verschiedene Bildschirmgrößen und Geräte anpassen
+3. **Performance-Optimierung**: Optimierung der CSS- und JavaScript-Performance
+4. **Verbesserung der Benutzererfahrung**: Download-Prozess vereinfachen, Bestätigungsdialog hinzufügen
+5. **Automatische Erkennung des Betriebssystems**: Passende Versionen basierend auf dem Betriebssystem des Benutzers automatisch auswählen
 
-## Bug Fixes
-1. **修复HTML结构兼容性问题**：更新JavaScript以匹配新的HTML结构
-2. **修复CSS类名引用问题**：确保所有样式正确应用
-3. **修复下载确认功能**：重新实现下载确认对话框
+## Fehlerbehebungen
+1. **Behebung von HTML-Strukturkompatibilitätsproblemen**: JavaScript aktualisieren, um mit der neuen HTML-Struktur übereinzustimmen
+2. **Behebung von CSS-Klassenreferenzproblemen**: Sicherstellen, dass alle Stile korrekt angewendet werden
+3. **Behebung der Download-Bestätigungsfunktion**: Download-Bestätigungsdialog neu implementieren
 
-## Improvements
-1. **CSS性能优化**：减少重绘和重排，使用硬件加速
-2. **JavaScript性能优化**：使用事件委托，减少内存占用
-3. **代码结构优化**：模块化JavaScript代码，提高可维护性
-4. **视觉设计优化**：使用现代化渐变背景和卡片设计
-5. **动画性能优化**：使用will-change属性和requestAnimationFrame
+## Verbesserungen
+1. **CSS-Performance-Optimierung**: Reduzierung von Repaints und Reflows, Nutzung von Hardwarebeschleunigung
+2. **JavaScript-Performance-Optimierung**: Ereignis-Delegierung verwenden, Speicherverbrauch reduzieren
+3. **Code-Struktur-Optimierung**: Modularisierung des JavaScript-Codes, Wartbarkeit erhöhen
+4. **Visuelle Design-Optimierung**: Moderne Gradient-Hintergründe und Karten-Design verwenden
+5. **Animations-Performance-Optimierung**: will-change-Attribut und requestAnimationFrame verwenden
 
-## 文件变更详情
+## Details zu Dateiänderungen
 
-### 新增文件
-- `/data/static/css/downloads.css` - 统一的下载页面样式文件
+### Neue Dateien
+- `/data/static/css/downloads.css` - Einheitliche CSS-Datei für die Download-Seite
 
-### 修改文件
-- `/data/stable.html` - 稳定版下载页面（现代化重构）
-- `/data/beta.html` - 测试版下载页面（现代化重构）
-- `/data/dev.html` - 开发版下载页面（现代化重构）
-- `/data/static/js/common.js` - 共享JavaScript功能（适配新结构）
+### Geänderte Dateien
+- `/data/stable.html` - Stabile Version Download-Seite (moderne Neugestaltung)
+- `/data/beta.html` - Beta-Version Download-Seite (moderne Neugestaltung)
+- `/data/dev.html` - Entwickler-Version Download-Seite (moderne Neugestaltung)
+- `/data/static/js/common.js` - Gemeinsame JavaScript-Funktionalität (angepasst an neue Struktur)
 
-### 设计特色
-1. **渐变背景动画**：每个版本有独特的渐变背景
-2. **卡片式布局**：现代化的卡片设计，带悬停效果
-3. **图标系统**：使用Font Awesome图标增强视觉体验
-4. **导航按钮组**：方便在不同版本间切换
-5. **信息提示框**：清晰的状态和警告信息
+### Design-Features
+1. **Gradient-Hintergrund-Animation**: Jede Version hat einen einzigartigen Gradient-Hintergrund
+2. **Kartenbasiertes Layout**: Modernes Karten-Design mit Hover-Effekt
+3. **Icon-System**: Font Awesome Icons zur Verbesserung der visuellen Erfahrung verwenden
+4. **Navigations-Button-Gruppe**: Ermöglicht einfachen Wechsel zwischen den Versionen
+5. **Informations-Toast**: Klare Status- und Warnmeldungen
 
-### 技术实现
-1. **CSS变量系统**：统一的颜色和样式管理
-2. **硬件加速**：使用transform和will-change优化性能
-3. **事件委托**：减少事件监听器数量
-4. **响应式设计**：使用媒体查询适配移动设备
-5. **渐进增强**：确保在不支持JavaScript的环境中基本功能可用
+### Technische Umsetzung
+1. **CSS-Variablen-System**: Einheitliche Farb- und Stilverwaltung
+2. **Hardware-Beschleunigung**: transform und will-change zur Performance-Optimierung verwenden
+3. **Ereignis-Delegierung**: Anzahl der Event-Listener reduzieren
+4. **Responsive Design**: Media Queries zur Anpassung an mobile Geräte verwenden
+5. **Progressive Enhancement**: Sicherstellen, dass Grundfunktionen in JavaScript-freien Umgebungen verfügbar sind
 
-## 测试要求
-1. **功能测试**：验证所有下载链接正常工作
-2. **响应式测试**：在不同屏幕尺寸下测试布局
-3. **性能测试**：检查页面加载速度和动画流畅度
-4. **浏览器兼容性测试**：在主流浏览器中测试功能
+## Testanforderungen
+1. **Funktionstest**: Alle Download-Links auf korrekte Funktion prüfen
+2. **Responsive Test**: Layout auf verschiedenen Bildschirmgrößen testen
+3. **Performance-Test**: Seitenladegeschwindigkeit und Animationsflüssigkeit prüfen
+4. **Browser-Kompatibilitätstest**: Funktionen in gängigen Browsern testen
 
-## 完成状态
-✅ 下载页面优化已完成
-✅ 所有页面已测试通过
-✅ 性能优化已实施
-✅ 响应式设计已实现
+## Abschlussstatus
+✅ Download-Seiten-Optimierung abgeschlossen 
+✅ Alle Seiten erfolgreich getestet 
+✅ Performance-Optimierung umgesetzt 
+✅ Responsive Design implementiert
 
-## 新的优化任务
+## Neue Optimierungsaufgaben
 
-### New Features:
-1. 为insiders页面添加现代化头部设计（包含图标和版本徽章）
-2. 为pyquick介绍页面添加现代化头部设计
-3. 为问题反馈页面添加现代化头部设计
-4. 统一所有页面的CSS变量和设计语言
-5. 添加Font Awesome图标支持
-6. 优化响应式设计
+### Neue Funktionen:
+1. Modernes Header-Design für die Insiders‑Seite hinzufügen (inklusive Symbol und Versionsabzeichen)
+2. Modernes Header-Design für die Pyquick‑Intro‑Seite hinzufügen
+3. Modernes Header-Design für die Feedback‑Seite hinzufügen
+4. Einheitliche CSS‑Variablen und Designsprache für alle Seiten
+5. Unterstützung für Font Awesome‑Icons hinzufügen
+6. Responsives Design optimieren
 
-### Bug Fixes:
-1. 修复insiders页面缺少Font Awesome CDN链接的问题
-2. 修复pyquick页面缺少Font Awesome CDN链接的问题
-3. 修复问题反馈页面缺少Font Awesome CDN链接的问题
+### Fehlerbehebungen:
+1. Problem beheben, dass der Insiders‑Seite der Font Awesome CDN‑Link fehlt
+2. Problem beheben, dass der Pyquick‑Seite der Font Awesome CDN‑Link fehlt
+3. Problem beheben, dass der Feedback‑Seite der Font Awesome CDN‑Link fehlt
 
-### Improvements:
-1. 优化页面加载性能
-2. 增强毛玻璃效果和动画效果
-3. 统一按钮和卡片样式
-4. 优化颜色主题系统
-5. 增强用户体验和视觉吸引力
+### Verbesserungen:
+1. Seitenladeleistung optimieren
+2. Glasige Effekte und Animationen verstärken
+3. Einheitliche Button‑ und Kartenstile
+4. Farbsystem‑Themen optimieren
+5. Benutzererlebnis und visuelle Attraktivität verbessern
