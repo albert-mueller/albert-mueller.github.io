@@ -282,16 +282,19 @@ const TranslateApp = {
                 TranslateAPI.setService(currentService);
             }
 
-            // 保存到本地存储（移除敏感字段，避免明文持久化）
-            const safeApiConfig = JSON.parse(JSON.stringify(apiConfig));
-            if (safeApiConfig.baidu) {
-                delete safeApiConfig.baidu.secretKey;
+            // 保存到本地存储（仅持久化非敏感字段，避免明文持久化密钥）
+            const safeApiConfig = {
+                service: currentService
+            };
+            if (baiduAppId) {
+                safeApiConfig.baidu = {
+                    appId: baiduAppId
+                };
             }
-            if (safeApiConfig.youdao) {
-                delete safeApiConfig.youdao.secretKey;
-            }
-            if (safeApiConfig.google) {
-                delete safeApiConfig.google.apiKey;
+            if (youdaoAppId) {
+                safeApiConfig.youdao = {
+                    appId: youdaoAppId
+                };
             }
             localStorage.setItem('translateApiConfig', JSON.stringify(safeApiConfig));
 
