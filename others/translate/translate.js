@@ -172,7 +172,7 @@ const TranslateApp = {
         try {
             let apiConfig = JSON.parse(localStorage.getItem('translateApiConfig') || '{}');
 
-            // 更新配置
+            // 更新配置（运行时对象可包含敏感字段，不做持久化）
             if (service === 'current') {
                 apiConfig.service = provider;
                 this.currentService = provider;
@@ -182,27 +182,24 @@ const TranslateApp = {
                 }
 
                 if (provider === 'google') {
-                    // Google翻译只需要一个apiKey
+                    // Google翻译只需要一个apiKey（仅运行时使用）
                     apiConfig[provider].apiKey = appId;
                 } else {
-                    // 百度和有道翻译需要appId和secretKey
+                    // 百度和有道翻译需要appId和secretKey（仅运行时使用）
                     apiConfig[provider].appId = appId;
                     apiConfig[provider].secretKey = secretKey;
                 }
             }
 
-            // 保存到本地存储（移除敏感字段，避免明文持久化）
-            const safeApiConfig = JSON.parse(JSON.stringify(apiConfig));
-            if (safeApiConfig.baidu) {
-                delete safeApiConfig.baidu.secretKey;
+            // 仅持久化非敏感字段，避免明文存储密钥
+            const persistedConfig = { service: apiConfig.service || this.currentService };
+            if (apiConfig.baidu && apiConfig.baidu.appId) {
+                persistedConfig.baidu = { appId: apiConfig.baidu.appId };
             }
-            if (safeApiConfig.youdao) {
-                delete safeApiConfig.youdao.secretKey;
+            if (apiConfig.youdao && apiConfig.youdao.appId) {
+                persistedConfig.youdao = { appId: apiConfig.youdao.appId };
             }
-            if (safeApiConfig.google) {
-                delete safeApiConfig.google.apiKey;
-            }
-            localStorage.setItem('translateApiConfig', JSON.stringify(safeApiConfig));
+            localStorage.setItem('translateApiConfig', JSON.stringify(persistedConfig));
 
             return true;
         } catch (e) {
@@ -332,7 +329,7 @@ const TranslateApp = {
             // 获取Google翻译API配置
             const googleApiKey = document.getElementById('google-api-key').value.trim();
 
-            // 创建配置对象
+            // 创建运行时配置对象（可包含敏感字段，仅用于当前会话）
             let apiConfig = {};
 
             // 设置当前服务
@@ -370,8 +367,15 @@ const TranslateApp = {
                 TranslateAPI.setService(currentService);
             }
 
-            // 保存到本地存储
-            localStorage.setItem('translateApiConfig', JSON.stringify(apiConfig));
+            // 仅保存非敏感配置到本地存储，避免明文持久化密钥
+            const persistedConfig = { service: currentService };
+            if (baiduAppId) {
+                persistedConfig.baidu = { appId: baiduAppId };
+            }
+            if (youdaoAppId) {
+                persistedConfig.youdao = { appId: youdaoAppId };
+            }
+            localStorage.setItem('translateApiConfig', JSON.stringify(persistedConfig));
 
             // 更新API状态
             this.checkApiStatus();
