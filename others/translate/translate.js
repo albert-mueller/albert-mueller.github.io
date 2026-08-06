@@ -172,7 +172,7 @@ const TranslateApp = {
         try {
             let apiConfig = JSON.parse(localStorage.getItem('translateApiConfig') || '{}');
 
-            // 更新配置
+            // 更新配置（运行时对象可包含敏感字段，不做持久化）
             if (service === 'current') {
                 apiConfig.service = provider;
                 this.currentService = provider;
@@ -182,27 +182,24 @@ const TranslateApp = {
                 }
 
                 if (provider === 'google') {
-                    // Google翻译只需要一个apiKey
+                    // Google翻译只需要一个apiKey（仅运行时使用）
                     apiConfig[provider].apiKey = appId;
                 } else {
-                    // 百度和有道翻译需要appId和secretKey
+                    // 百度和有道翻译需要appId和secretKey（仅运行时使用）
                     apiConfig[provider].appId = appId;
                     apiConfig[provider].secretKey = secretKey;
                 }
             }
 
-            // 保存到本地存储（移除敏感字段，避免明文持久化）
-            const safeApiConfig = JSON.parse(JSON.stringify(apiConfig));
-            if (safeApiConfig.baidu) {
-                delete safeApiConfig.baidu.secretKey;
+            // 仅持久化非敏感字段，避免明文存储密钥
+            const persistedConfig = { service: apiConfig.service || this.currentService };
+            if (apiConfig.baidu && apiConfig.baidu.appId) {
+                persistedConfig.baidu = { appId: apiConfig.baidu.appId };
             }
-            if (safeApiConfig.youdao) {
-                delete safeApiConfig.youdao.secretKey;
+            if (apiConfig.youdao && apiConfig.youdao.appId) {
+                persistedConfig.youdao = { appId: apiConfig.youdao.appId };
             }
-            if (safeApiConfig.google) {
-                delete safeApiConfig.google.apiKey;
-            }
-            localStorage.setItem('translateApiConfig', JSON.stringify(safeApiConfig));
+            localStorage.setItem('translateApiConfig', JSON.stringify(persistedConfig));
 
             return true;
         } catch (e) {
