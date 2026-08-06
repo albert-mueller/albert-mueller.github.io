@@ -814,13 +814,28 @@ async function showComparisonView(originalText, modifiedText, translation) {
     const originalTranslation = document.createElement('div');
     if (originalTranslation && originalTranslation.className !== undefined) {
         originalTranslation.className = 'translation-option';
-        originalTranslation.innerHTML = `
-            <div class="option-header">
-                <div class="option-title">原始翻译</div>
-                <button class="use-translation" data-translation="${translation}">使用此翻译</button>
-            </div>
-            <div class="option-content">${translation}</div>
-        `;
+
+        const originalHeader = document.createElement('div');
+        originalHeader.className = 'option-header';
+
+        const originalTitle = document.createElement('div');
+        originalTitle.className = 'option-title';
+        originalTitle.textContent = '原始翻译';
+
+        const originalButton = document.createElement('button');
+        originalButton.className = 'use-translation';
+        originalButton.setAttribute('data-translation', translation);
+        originalButton.textContent = '使用此翻译';
+
+        originalHeader.appendChild(originalTitle);
+        originalHeader.appendChild(originalButton);
+
+        const originalContent = document.createElement('div');
+        originalContent.className = 'option-content';
+        originalContent.textContent = translation;
+
+        originalTranslation.appendChild(originalHeader);
+        originalTranslation.appendChild(originalContent);
         comparisonContent.appendChild(originalTranslation);
     } else {
         console.warn('originalTranslation-Element oder dessen className-Attribut fehlt');
@@ -836,13 +851,28 @@ async function showComparisonView(originalText, modifiedText, translation) {
                 const modifiedTranslation = document.createElement('div');
                 if (modifiedTranslation && modifiedTranslation.className !== undefined) {
                     modifiedTranslation.className = 'translation-option';
-                    modifiedTranslation.innerHTML = `
-                        <div class="option-header">
-                            <div class="option-title">近义词翻译</div>
-                            <button class="use-translation" data-translation="${modifiedTranslationText}">使用此翻译</button>
-                        </div>
-                        <div class="option-content">${modifiedTranslationText}</div>
-                    `;
+
+                    const modifiedHeader = document.createElement('div');
+                    modifiedHeader.className = 'option-header';
+
+                    const modifiedTitle = document.createElement('div');
+                    modifiedTitle.className = 'option-title';
+                    modifiedTitle.textContent = '近义词翻译';
+
+                    const modifiedButton = document.createElement('button');
+                    modifiedButton.className = 'use-translation';
+                    modifiedButton.setAttribute('data-translation', modifiedTranslationText);
+                    modifiedButton.textContent = '使用此翻译';
+
+                    modifiedHeader.appendChild(modifiedTitle);
+                    modifiedHeader.appendChild(modifiedButton);
+
+                    const modifiedContent = document.createElement('div');
+                    modifiedContent.className = 'option-content';
+                    modifiedContent.textContent = modifiedTranslationText;
+
+                    modifiedTranslation.appendChild(modifiedHeader);
+                    modifiedTranslation.appendChild(modifiedContent);
                     comparisonContent.appendChild(modifiedTranslation);
                 } else {
                     console.warn('modifiedTranslation-Element oder dessen className-Attribut fehlt');
