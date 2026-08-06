@@ -279,6 +279,33 @@
         "url": "https://github.com/dortania/MetallibSupportPkg/releases/download/15.6.1-24G90/MetallibSupportPkg-15.6.1-24G90.pkg"
     },
     {
+        "build": "24G214",
+        "version": "15.7",
+        "date": "2025-08-18",
+        "sha1sum": "44395a740fbb363b960be02e00fa5ae3591c2f85",
+        "name": "MetallibSupportPkg 15.7 RC 3 build 24G214",
+        "seen": "2026-01-19",
+        "url": "https://github.com/dortania/MetallibSupportPkg/releases/download/15.7-24G214/MetallibSupportPkg-15.7-24G214.pkg"
+    },
+    {
+        "build": "24G210",
+        "version": "15.7",
+        "date": "2025-08-11",
+        "sha1sum": "6c024fdc7277ac656c4aa09f32aae2e980c5dfaf",
+        "name": "MetallibSupportPkg 15.7 RC 2 build 24G210",
+        "seen": "2026-01-19",
+        "url": "https://github.com/dortania/MetallibSupportPkg/releases/download/15.7-24G210/MetallibSupportPkg-15.7-24G210.pkg"
+    },
+    {
+        "build": "24G207",
+        "version": "15.7",
+        "date": "2025-08-05",
+        "sha1sum": "2a145219bce7a8b3f7925470e50af60704d0b191",
+        "name": "MetallibSupportPkg 15.7 RC build 24G207",
+        "seen": "2026-01-19",
+        "url": "https://github.com/dortania/MetallibSupportPkg/releases/download/15.7-24G207/MetallibSupportPkg-15.7-24G207.pkg"
+    },
+    {
         "build": "24G84",
         "version": "15.6",
         "date": "2025-07-21",
@@ -486,6 +513,15 @@
         "url": "https://github.com/dortania/MetallibSupportPkg/releases/download/15.3-24D5034f/MetallibSupportPkg-15.3-24D5034f.pkg"
     },
     {
+        "build": "24C101",
+        "version": "15.2",
+        "date": "2024-12-11",
+        "sha1sum": "2728cc52d32c9bfe6182833eab9720a928d3666a",
+        "name": "MetallibSupportPkg 15.2 build 24C101",
+        "seen": "2026-01-05",
+        "url": "https://github.com/dortania/MetallibSupportPkg/releases/download/15.2-24C101/MetallibSupportPkg-15.2-24C101.pkg"
+    },
+    {
         "build": "24C100",
         "version": "15.2",
         "date": "2024-12-09",
@@ -583,6 +619,15 @@
         "name": "MetallibSupportPkg 15.1 RC build 24B82",
         "seen": "2024-10-21",
         "url": "https://github.com/dortania/MetallibSupportPkg/releases/download/15.1-24B82/MetallibSupportPkg-15.1-24B82.pkg"
+    },
+    {
+        "build": "24B5077a",
+        "version": "15.1",
+        "date": "2024-10-15",
+        "sha1sum": "1aeed6d2545223648b65e55c0e4a91600d4883a6",
+        "name": "MetallibSupportPkg 15.1 beta 7 build 24B5077a",
+        "seen": "2026-01-19",
+        "url": "https://github.com/dortania/MetallibSupportPkg/releases/download/15.1-24B5077a/MetallibSupportPkg-15.1-24B5077a.pkg"
     },
     {
         "build": "24B5070a",
