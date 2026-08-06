@@ -1610,18 +1610,18 @@ function saveSettings() {
             baidu: {
                 enabled: document.getElementById('baidu-enabled')?.checked || false,
                 appId: document.getElementById('baidu-app-id')?.value || '',
-                apiKey: document.getElementById('baidu-api-key')?.value || '',
-                apiSecret: document.getElementById('baidu-api-secret')?.value || ''
+                apiKey: '',
+                apiSecret: ''
             },
             youdao: {
                 enabled: document.getElementById('youdao-enabled')?.checked || false,
                 appId: document.getElementById('youdao-app-id')?.value || '',
-                apiKey: document.getElementById('youdao-api-key')?.value || '',
-                apiSecret: document.getElementById('youdao-api-secret')?.value || ''
+                apiKey: '',
+                apiSecret: ''
             },
             google: {
                 enabled: document.getElementById('google-enabled')?.checked || false,
-                apiKey: document.getElementById('google-api-key')?.value || ''
+                apiKey: ''
             },
             local: {
                 enabled: document.getElementById('local-enabled')?.checked || false
@@ -1655,8 +1655,8 @@ function saveApiConfig(service) {
             settings.apiServices.baidu = {
                 enabled: baiduEnabled?.checked || false,
                 appId: baiduAppId?.value || '',
-                apiKey: baiduApiKey?.value || '',
-                apiSecret: baiduApiSecret?.value || ''
+                apiKey: '',
+                apiSecret: ''
             };
             break;
         case 'youdao':
@@ -1668,8 +1668,8 @@ function saveApiConfig(service) {
             settings.apiServices.youdao = {
                 enabled: youdaoEnabled?.checked || false,
                 appId: youdaoAppId?.value || '',
-                apiKey: youdaoApiKey?.value || '',
-                apiSecret: youdaoApiSecret?.value || ''
+                apiKey: '',
+                apiSecret: ''
             };
             break;
         case 'google':
@@ -1678,7 +1678,7 @@ function saveApiConfig(service) {
             
             settings.apiServices.google = {
                 enabled: googleEnabled?.checked || false,
-                apiKey: googleApiKey?.value || ''
+                apiKey: ''
             };
             break;
         case 'local':
