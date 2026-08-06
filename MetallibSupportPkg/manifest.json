@@ -2,10 +2,10 @@
     {
         "build": "25G72",
         "version": "26.6",
-        "date": "2026-06-15",
-        "sha1sum": "2b910063ed4c454d0c507563aab8b4b0c39782fe",
+        "date": "2026-07-31",
+        "sha1sum": "a8ee7971dc8fd4e087274121c015d7159ba0a3c0",
         "name": "MetallibSupportPkg 26.6 build 25G72",
-        "seen": "2026-06-15",
+        "seen": "2026-08-06",
         "url": "https://github.com/pyquick/MetallibSupportPkg/releases/download/26.6-25G72/MetallibSupportPkg-26.6-25G72.pkg"
     },
     {
