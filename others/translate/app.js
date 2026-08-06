@@ -2315,20 +2315,45 @@ function handleFileUpload(file) {
     const fileIcon = getFileIcon(file.type);
     const fileSize = formatFileSize(file.size);
     
-    fileItem.innerHTML = `
-        <div class="file-info">
-            <div class="file-icon">${fileIcon}</div>
-            <div class="file-details">
-                <div class="file-name">${file.name}</div>
-                <div class="file-size">${fileSize}</div>
-            </div>
-        </div>
-        <div class="file-actions">
-            <button class="icon-button remove-file-button" title="Datei entfernen">
-                <span>×</span>
-            </button>
-        </div>
-    `;
+    const fileInfo = document.createElement('div');
+    fileInfo.className = 'file-info';
+
+    const fileIconElement = document.createElement('div');
+    fileIconElement.className = 'file-icon';
+    fileIconElement.textContent = fileIcon;
+
+    const fileDetails = document.createElement('div');
+    fileDetails.className = 'file-details';
+
+    const fileNameElement = document.createElement('div');
+    fileNameElement.className = 'file-name';
+    fileNameElement.textContent = file.name;
+
+    const fileSizeElement = document.createElement('div');
+    fileSizeElement.className = 'file-size';
+    fileSizeElement.textContent = fileSize;
+
+    fileDetails.appendChild(fileNameElement);
+    fileDetails.appendChild(fileSizeElement);
+
+    fileInfo.appendChild(fileIconElement);
+    fileInfo.appendChild(fileDetails);
+
+    const fileActions = document.createElement('div');
+    fileActions.className = 'file-actions';
+
+    const removeButtonElement = document.createElement('button');
+    removeButtonElement.className = 'icon-button remove-file-button';
+    removeButtonElement.title = 'Datei entfernen';
+
+    const removeButtonIcon = document.createElement('span');
+    removeButtonIcon.textContent = '×';
+
+    removeButtonElement.appendChild(removeButtonIcon);
+    fileActions.appendChild(removeButtonElement);
+
+    fileItem.appendChild(fileInfo);
+    fileItem.appendChild(fileActions);
     
     fileItems.appendChild(fileItem);
     if (fileList && fileList.style) {
