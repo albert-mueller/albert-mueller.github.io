@@ -329,7 +329,7 @@ const TranslateApp = {
             // 获取Google翻译API配置
             const googleApiKey = document.getElementById('google-api-key').value.trim();
 
-            // 创建配置对象
+            // 创建运行时配置对象（可包含敏感字段，仅用于当前会话）
             let apiConfig = {};
 
             // 设置当前服务
@@ -367,8 +367,15 @@ const TranslateApp = {
                 TranslateAPI.setService(currentService);
             }
 
-            // 保存到本地存储
-            localStorage.setItem('translateApiConfig', JSON.stringify(apiConfig));
+            // 仅保存非敏感配置到本地存储，避免明文持久化密钥
+            const persistedConfig = { service: currentService };
+            if (baiduAppId) {
+                persistedConfig.baidu = { appId: baiduAppId };
+            }
+            if (youdaoAppId) {
+                persistedConfig.youdao = { appId: youdaoAppId };
+            }
+            localStorage.setItem('translateApiConfig', JSON.stringify(persistedConfig));
 
             // 更新API状态
             this.checkApiStatus();
