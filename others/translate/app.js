@@ -11,6 +11,17 @@ let currentSynonyms = []; // 当前近义词列表
 let selectedSynonym = null; // 选择的近义词
 let translationQuality = 0; // 翻译质量评分
 
+// Escaped für die sichere Einfügung nutzergesteuerter Texte via innerHTML (verhindert XSS)
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // ===== DOM 元素 =====
 document.addEventListener('DOMContentLoaded', function() {
     // 获取DOM元素
@@ -1335,8 +1346,8 @@ function createHistoryItem(item) {
                 <span>☆</span>
             </button>
         </div>
-        <div class="history-item-text">${item.sourceText}</div>
-        <div class="history-item-translation">${item.translation}</div>
+        <div class="history-item-text">${escapeHtml(item.sourceText)}</div>
+        <div class="history-item-translation">${escapeHtml(item.translation)}</div>
     `;
     
     // 点击历史记录项，填充到翻译区域
@@ -1393,8 +1404,8 @@ function createFavoriteItem(item) {
                 <span>×</span>
             </button>
         </div>
-        <div class="favorite-item-text">${item.sourceText}</div>
-        <div class="favorite-item-translation">${item.translation}</div>
+        <div class="favorite-item-text">${escapeHtml(item.sourceText)}</div>
+        <div class="favorite-item-translation">${escapeHtml(item.translation)}</div>
     `;
     
     // 点击收藏项，填充到翻译区域
