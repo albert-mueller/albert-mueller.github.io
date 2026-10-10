@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenCore Legacy Patcher – Instructions for T2 Macs</title>
+  <meta name="description" content="What to do once you reach the &quot;Reboot to apply&quot; screen in OpenCore Legacy Patcher on a T2 Mac.">
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    :root {
+      --bg: #ffffff; --fg: #1d1d1f; --muted: #6e6e73; --card: #f5f5f7;
+      --border: #d2d2d7; --accent: #0066cc; --warn-bg: #fff4e5; --warn-border: #f5a623;
+      --code-bg: #f0f0f2;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111113; --fg: #f5f5f7; --muted: #a1a1a6; --card: #1c1c1f;
+        --border: #3a3a3d; --accent: #4da3ff; --warn-bg: #2b2213; --warn-border: #c98a1a;
+        --code-bg: #26262a;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--fg);
+      font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    main { max-width: 820px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    h1 { font-size: 2rem; line-height: 1.25; margin: 0 0 .5rem; }
+    h2 { font-size: 1.35rem; margin: 2.5rem 0 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    p.lead { color: var(--muted); margin-top: 0; }
+    a { color: var(--accent); }
+    ul.models { columns: 2; column-gap: 2rem; padding-left: 1.2rem; }
+    @media (max-width: 520px) { ul.models { columns: 1; } }
+    .note {
+      background: var(--warn-bg); border-left: 4px solid var(--warn-border);
+      padding: .9rem 1.1rem; border-radius: 8px; margin: 1.5rem 0;
+    }
+    ol.steps { list-style: none; counter-reset: step; padding: 0; margin: 0; }
+    ol.steps > li {
+      counter-increment: step; position: relative;
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 1rem 1.1rem 1rem 3.4rem; margin: 0 0 1rem;
+    }
+    ol.steps > li::before {
+      content: counter(step); position: absolute; left: 1rem; top: 1rem;
+      width: 1.8rem; height: 1.8rem; border-radius: 50%;
+      background: var(--accent); color: #fff; font-weight: 600; font-size: .9rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    ol.steps img {
+      display: block; max-width: 100%; height: auto; margin-top: .8rem;
+      border-radius: 8px; border: 1px solid var(--border);
+    }
+    ol.steps img.small { max-width: 380px; }
+    code {
+      background: var(--code-bg); padding: .15em .4em; border-radius: 5px;
+      font: .92em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    pre { background: var(--code-bg); padding: .8rem 1rem; border-radius: 8px; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    kbd {
+      border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px;
+      padding: .05em .4em; font: .9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: var(--card);
+    }
+    .de { color: var(--muted); }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>OpenCore Legacy Patcher – Instructions for T2 Macs</h1>
+  <p class="lead">What you need to do once you reach the <em>Reboot to apply</em> screen on a T2 Mac.</p>
+
+  <p>This guide applies to the following Macs <strong>only</strong>:</p>
+  <ul class="models">
+    <li>iMac 2020 (Intel)</li>
+    <li>iMac Pro 2017</li>
+    <li>Mac mini 2018</li>
+    <li>MacBook Air 2018</li>
+    <li>MacBook Air 2019</li>
+    <li>MacBook Air 2020</li>
+    <li>MacBook Pro 2018</li>
+    <li>MacBook Pro 2019</li>
+    <li>MacBook Pro 2020 (two Thunderbolt 3 ports)</li>
+  </ul>
+
+  <p>To be able to boot OpenCore, you need to disable <strong>Secure Boot</strong> and <strong>System Integrity Protection (SIP)</strong> on T2 Macs. Why? T2 Macs don't trust OpenCore, so Secure Boot blocks it. Disabling SIP is also absolutely required to boot the installation media. If T2 Macs trusted any boot manager, they would also trust a malicious one, which would be a serious security risk.</p>
+
+  <div class="note">These instructions are for T2 Macs only. They do <strong>not</strong> apply to non-T2 Macs.</div>
+
+  <h2>Part 1 – Disable Find My</h2>
+  <ol class="steps">
+    <li>Once you reach <em>Reboot to apply</em>, don't restart yet. Before restarting your T2 Mac into OpenCore, you need to disable Find My first – otherwise it triggers Activation Lock and CPU throttling.
+      <img class="small" src="https://github.com/user-attachments/assets/6eda34be-65a4-454d-b904-9c3217db5d66" alt="OpenCore Legacy Patcher showing the Reboot to apply prompt" width="372" height="482" loading="lazy"></li>
+    <li>Open <strong>System Settings</strong> <span class="de">(Systemeinstellungen)</span>.
+      <img src="https://github.com/user-attachments/assets/9c92a89b-2cff-46fb-874a-3476ddd36368" alt="System Settings" width="2300" height="1437" loading="lazy"></li>
+    <li>Go to <strong>Apple Account</strong>.
+      <img src="https://github.com/user-attachments/assets/c8aa6013-fb0b-4240-b9e3-596940fb0a23" alt="Apple Account in System Settings" width="1874" height="1474" loading="lazy"></li>
+    <li>Go to <strong>iCloud</strong>.
+      <img src="https://github.com/user-attachments/assets/37a63153-afe3-4e0a-98e6-885513c9294a" alt="iCloud settings" width="1874" height="1474" loading="lazy"></li>
+    <li>Go to <strong>Show All</strong> <span class="de">(Alle anzeigen)</span>.
+      <img src="https://github.com/user-attachments/assets/e96a0c9b-a08b-49af-a20c-f1f5850e3154" alt="iCloud – Show All" width="1874" height="1474" loading="lazy"></li>
+    <li>Click on <strong>Find My Mac</strong> <span class="de">(Meinen Mac suchen)</span>.
+      <img src="https://github.com/user-attachments/assets/d0461762-24a8-439a-9754-8df5ad45c51e" alt="Find My Mac setting" width="1786" height="1386" loading="lazy"></li>
+    <li>Disable Find My.</li>
+    <li>Go back to the restart prompt in OpenCore Legacy Patcher.</li>
+    <li>Click on <strong>Reboot</strong>.</li>
+    <li>Click on <strong>Restart</strong> <span class="de">(Neu starten)</span>.
+      <img class="small" src="https://github.com/user-attachments/assets/696ac25f-5ae9-4cfb-bbdb-1e226b0fd15a" alt="Restart confirmation dialog" width="563" height="286" loading="lazy"></li>
+  </ol>
+
+  <h2>Part 2 – Disable Secure Boot in macOS Recovery</h2>
+  <ol class="steps" style="counter-reset: step 10;">
+    <li>Once the screen turns black, get ready to hold <kbd>⌘ Command</kbd> + <kbd>R</kbd>.</li>
+    <li>As soon as you hear the chime, immediately hold <kbd>⌘ Command</kbd> + <kbd>R</kbd> until you see a progress bar.
+      <img src="https://github.com/user-attachments/assets/34f34e38-e8e2-4578-82b2-199485eaae2a" alt="Boot progress bar" width="2100" height="1576" loading="lazy"></li>
+    <li>You have now booted into the macOS Recovery of your native macOS. Open the <strong>Utilities</strong> <span class="de">(Dienstprogramme)</span> menu.
+      <img src="https://github.com/user-attachments/assets/e3cb7b3c-b4eb-438b-91f4-21484ad02a0e" alt="Utilities menu in macOS Recovery" width="2100" height="1576" loading="lazy"></li>
+    <li>Choose <strong>Startup Security Utility</strong> <span class="de">(Startsicherheitsprogramm)</span>.
+      <img src="https://github.com/user-attachments/assets/5036d4c5-8ca1-4008-a2c6-8dbb387c94b7" alt="Startup Security Utility menu item" width="2100" height="1576" loading="lazy"></li>
+    <li>At <em>Authentication required</em> <span class="de">(Authentifizierung erforderlich)</span>, click <strong>Enter macOS password</strong> <span class="de">(macOS-Passwort eingeben)</span>.
+      <img src="https://github.com/user-attachments/assets/d5d02623-4ee6-42e7-9a07-84528ebdbde8" alt="Authentication required dialog" width="2100" height="1576" loading="lazy"></li>
+    <li>Set <strong>Secure Boot</strong> to <strong>No Security</strong> <span class="de">(Ohne Sicherheit)</span> and <strong>Allowed Boot Media</strong> <span class="de">(Erlaubte Boot-Medien)</span> to <strong>Allow booting from external or removable media</strong> <span class="de">(Starten von externen oder Wechselmedien erlauben)</span>.
+      <img src="https://github.com/user-attachments/assets/4c88f484-e345-412d-8315-65c43eb0e45b" alt="Startup Security Utility with No Security and external boot allowed" width="2100" height="1576" loading="lazy"></li>
+    <li>Close this window.
+      <img src="https://github.com/user-attachments/assets/7609949e-608d-4a00-80f9-ff13cfc3500a" alt="Closing Startup Security Utility" width="2100" height="1576" loading="lazy"></li>
+  </ol>
+
+  <h2>Part 3 – Disable SIP</h2>
+  <ol class="steps" style="counter-reset: step 17;">
+    <li>Go to <strong>Utilities</strong> <span class="de">(Dienstprogramme)</span> &rsaquo; <strong>Terminal</strong>.
+      <img src="https://github.com/user-attachments/assets/3016daca-f94d-41df-9380-04411a10320a" alt="Opening Terminal from the Utilities menu" width="2100" height="1576" loading="lazy"></li>
+    <li>Type the following and press Enter:
+      <pre><code>csrutil disable &amp;&amp; csrutil authenticated-root disable</code></pre>
+      <img src="https://github.com/user-attachments/assets/82ff1341-ea15-478b-ba9a-008cf7b9094b" alt="Terminal after running csrutil disable" width="5712" height="4284" loading="lazy"></li>
+  </ol>
+
+  <h2>Part 4 – Boot OpenCore and the installer</h2>
+  <ol class="steps" style="counter-reset: step 19;">
+    <li>Click the Apple logo &rsaquo; <strong>Restart</strong>.</li>
+    <li>Hold the <kbd>⌥ Option</kbd> key.</li>
+    <li>Choose <strong>EFI Boot</strong>.
+      <img src="https://github.com/user-attachments/assets/1ad19aed-6b1e-4174-87c5-13db0dc02f40" alt="Startup Manager with EFI Boot" width="2100" height="1576" loading="lazy"></li>
+    <li>Press <kbd>Space</kbd>.</li>
+    <li>Using the arrow keys, select <strong>Reset NVRAM</strong> and press <kbd>Enter</kbd>.</li>
+    <li>The system will now restart.</li>
+    <li>Select <strong>Install macOS</strong> with the arrow keys and press <kbd>Enter</kbd>.
+      <img src="https://github.com/user-attachments/assets/dded1c8d-f7c4-4d5d-947f-4025535ff5d3" alt="OpenCore picker with Install macOS selected" width="2100" height="1576" loading="lazy"></li>
+  </ol>
+
+  <h2>Kernel panic or stall?</h2>
+  <p>If you see a kernel panic or a stall at the Apple logo, please report the kernel panic or stall here: <a href="https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/issues">github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/issues</a> – or in the affected repository if you are using a fork instead. If you have already erased your drive, I recommend downgrading after reporting the kernel panic.</p>
+
+  <footer>
+    Previously published in the now-archived repository
+    <a href="https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2-Instructions-for-T2-Macs">OpenCore-Legacy-Patcher-T2-Instructions-for-T2-Macs</a> (MIT License).
+  </footer>
+</main>
+</body>
+</html>
