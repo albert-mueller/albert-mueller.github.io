@@ -8,15 +8,15 @@
   <link rel="icon" href="/favicon.ico">
   <style>
     :root {
-      --bg: #ffffff; --fg: #1d1d1f; --muted: #6e6e73; --card: #f5f5f7;
+      --bg: #ffffff; --fg: #1d1d1f; --muted: #6e6e73; --card: #f5f5f7; --win: #ffffff;
       --border: #d2d2d7; --accent: #0066cc; --warn-bg: #fff4e5; --warn-border: #f5a623;
-      --code-bg: #f0f0f2;
+      --code-bg: #f0f0f2; --term: #1e1e1e; --term-fg: #e6e6e6; --ok: #34c759; --off: #c7c7cc;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #111113; --fg: #f5f5f7; --muted: #a1a1a6; --card: #1c1c1f;
+        --bg: #111113; --fg: #f5f5f7; --muted: #a1a1a6; --card: #1c1c1f; --win: #26262a;
         --border: #3a3a3d; --accent: #4da3ff; --warn-bg: #2b2213; --warn-border: #c98a1a;
-        --code-bg: #26262a;
+        --code-bg: #26262a; --term: #0b0b0c; --off: #48484a;
       }
     }
     * { box-sizing: border-box; }
@@ -47,11 +47,21 @@
       background: var(--accent); color: #fff; font-weight: 600; font-size: .9rem;
       display: flex; align-items: center; justify-content: center;
     }
-    ol.steps img {
-      display: block; max-width: 100%; height: auto; margin-top: .8rem;
-      border-radius: 8px; border: 1px solid var(--border);
-    }
-    ol.steps img.small { max-width: 380px; }
+    svg.fig { display: block; width: 100%; height: auto; margin-top: .8rem; max-width: 560px; }
+    svg.fig.narrow { max-width: 320px; }
+    svg.fig text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: var(--fg); }
+    svg.fig .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    svg.fig .muted { fill: var(--muted); }
+    svg.fig .win { fill: var(--win); stroke: var(--border); }
+    svg.fig .bar { fill: var(--card); }
+    svg.fig .line { stroke: var(--border); }
+    svg.fig .acc { fill: var(--accent); }
+    svg.fig .acc-s { stroke: var(--accent); fill: none; }
+    svg.fig .white { fill: #fff; }
+    svg.fig .off { fill: var(--off); }
+    svg.fig .term { fill: var(--term); }
+    svg.fig .term-t { fill: var(--term-fg); }
+    svg.fig .ok { fill: var(--ok); }
     code {
       background: var(--code-bg); padding: .15em .4em; border-radius: 5px;
       font: .92em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -92,70 +102,163 @@
   <h2>Part 1 – Disable Find My</h2>
   <ol class="steps">
     <li>Once you reach <em>Reboot to apply</em>, don't restart yet. Before restarting your T2 Mac into OpenCore, you need to disable Find My first – otherwise it triggers Activation Lock and CPU throttling.
-      <img class="small" src="https://github.com/user-attachments/assets/6eda34be-65a4-454d-b904-9c3217db5d66" alt="OpenCore Legacy Patcher showing the Reboot to apply prompt" width="372" height="482" loading="lazy"></li>
-    <li>Open <strong>System Settings</strong> <span class="de">(Systemeinstellungen)</span>.
-      <img src="https://github.com/user-attachments/assets/9c92a89b-2cff-46fb-874a-3476ddd36368" alt="System Settings" width="2300" height="1437" loading="lazy"></li>
-    <li>Go to <strong>Apple Account</strong>.
-      <img src="https://github.com/user-attachments/assets/c8aa6013-fb0b-4240-b9e3-596940fb0a23" alt="Apple Account in System Settings" width="1874" height="1474" loading="lazy"></li>
-    <li>Go to <strong>iCloud</strong>.
-      <img src="https://github.com/user-attachments/assets/37a63153-afe3-4e0a-98e6-885513c9294a" alt="iCloud settings" width="1874" height="1474" loading="lazy"></li>
-    <li>Go to <strong>Show All</strong> <span class="de">(Alle anzeigen)</span>.
-      <img src="https://github.com/user-attachments/assets/e96a0c9b-a08b-49af-a20c-f1f5850e3154" alt="iCloud – Show All" width="1874" height="1474" loading="lazy"></li>
+      <svg class="fig narrow" viewBox="0 0 320 170" role="img" aria-label="OpenCore Legacy Patcher dialog asking to reboot">
+        <rect class="win" x="1" y="1" width="318" height="168" rx="12"/>
+        <text x="160" y="42" text-anchor="middle" font-size="16" font-weight="600">Reboot to apply</text>
+        <text x="160" y="70" text-anchor="middle" font-size="12" class="muted">OpenCore has finished installing to disk.</text>
+        <text x="160" y="88" text-anchor="middle" font-size="12" class="muted">Would you like to restart?</text>
+        <rect class="bar" x="40" y="116" width="110" height="32" rx="8" stroke="var(--border)"/>
+        <text x="95" y="137" text-anchor="middle" font-size="13">Not now</text>
+        <rect class="acc" x="170" y="116" width="110" height="32" rx="8"/>
+        <text x="225" y="137" text-anchor="middle" font-size="13" class="white" style="fill:#fff">Reboot</text>
+        <text x="160" y="163" text-anchor="middle" font-size="10" class="muted">← don't click yet</text>
+      </svg></li>
+    <li>Open <strong>System Settings</strong> <span class="de">(Systemeinstellungen)</span>.</li>
+    <li>Go to <strong>Apple Account</strong> (your name at the top of the sidebar).</li>
+    <li>Go to <strong>iCloud</strong>.</li>
+    <li>Go to <strong>Show All</strong> <span class="de">(Alle anzeigen)</span>.</li>
     <li>Click on <strong>Find My Mac</strong> <span class="de">(Meinen Mac suchen)</span>.
-      <img src="https://github.com/user-attachments/assets/d0461762-24a8-439a-9754-8df5ad45c51e" alt="Find My Mac setting" width="1786" height="1386" loading="lazy"></li>
-    <li>Disable Find My.</li>
+      <svg class="fig" viewBox="0 0 560 120" role="img" aria-label="Path: System Settings, Apple Account, iCloud, Show All, Find My Mac">
+        <g font-size="13">
+          <rect class="win" x="1" y="20" width="118" height="36" rx="18"/><text x="60" y="43" text-anchor="middle">System Settings</text>
+          <text x="128" y="43" class="muted">›</text>
+          <rect class="win" x="140" y="20" width="110" height="36" rx="18"/><text x="195" y="43" text-anchor="middle">Apple Account</text>
+          <text x="259" y="43" class="muted">›</text>
+          <rect class="win" x="271" y="20" width="70" height="36" rx="18"/><text x="306" y="43" text-anchor="middle">iCloud</text>
+          <text x="350" y="43" class="muted">›</text>
+          <rect class="win" x="362" y="20" width="80" height="36" rx="18"/><text x="402" y="43" text-anchor="middle">Show All</text>
+          <text x="451" y="43" class="muted">›</text>
+          <rect class="acc" x="463" y="20" width="96" height="36" rx="18"/><text x="511" y="43" text-anchor="middle" style="fill:#fff">Find My Mac</text>
+        </g>
+        <text x="1" y="90" font-size="12" class="muted">Systemeinstellungen › Apple Account › iCloud › Alle anzeigen › Meinen Mac suchen</text>
+      </svg></li>
+    <li>Disable Find My.
+      <svg class="fig" viewBox="0 0 560 70" role="img" aria-label="Find My Mac switch turned off">
+        <rect class="win" x="1" y="1" width="558" height="68" rx="10"/>
+        <text x="20" y="31" font-size="15" font-weight="600">Find My Mac</text>
+        <text x="20" y="51" font-size="12" class="muted">Meinen Mac suchen</text>
+        <rect class="off" x="482" y="22" width="52" height="28" rx="14"/>
+        <circle class="white" cx="497" cy="36" r="12" style="fill:#fff"/>
+        <text x="470" y="41" font-size="12" text-anchor="end" class="muted">Off</text>
+      </svg></li>
     <li>Go back to the restart prompt in OpenCore Legacy Patcher.</li>
     <li>Click on <strong>Reboot</strong>.</li>
-    <li>Click on <strong>Restart</strong> <span class="de">(Neu starten)</span>.
-      <img class="small" src="https://github.com/user-attachments/assets/696ac25f-5ae9-4cfb-bbdb-1e226b0fd15a" alt="Restart confirmation dialog" width="563" height="286" loading="lazy"></li>
+    <li>Click on <strong>Restart</strong> <span class="de">(Neu starten)</span> to confirm.</li>
   </ol>
 
   <h2>Part 2 – Disable Secure Boot in macOS Recovery</h2>
   <ol class="steps" style="counter-reset: step 10;">
     <li>Once the screen turns black, get ready to hold <kbd>⌘ Command</kbd> + <kbd>R</kbd>.</li>
     <li>As soon as you hear the chime, immediately hold <kbd>⌘ Command</kbd> + <kbd>R</kbd> until you see a progress bar.
-      <img src="https://github.com/user-attachments/assets/34f34e38-e8e2-4578-82b2-199485eaae2a" alt="Boot progress bar" width="2100" height="1576" loading="lazy"></li>
-    <li>You have now booted into the macOS Recovery of your native macOS. Open the <strong>Utilities</strong> <span class="de">(Dienstprogramme)</span> menu.
-      <img src="https://github.com/user-attachments/assets/e3cb7b3c-b4eb-438b-91f4-21484ad02a0e" alt="Utilities menu in macOS Recovery" width="2100" height="1576" loading="lazy"></li>
+      <svg class="fig narrow" viewBox="0 0 320 110" role="img" aria-label="Hold Command and R keys">
+        <rect class="win" x="40" y="10" width="110" height="80" rx="12" stroke-width="2"/>
+        <text x="95" y="48" text-anchor="middle" font-size="26">⌘</text>
+        <text x="95" y="76" text-anchor="middle" font-size="13" class="muted">command</text>
+        <text x="175" y="58" text-anchor="middle" font-size="24" class="muted">+</text>
+        <rect class="win" x="200" y="10" width="80" height="80" rx="12" stroke-width="2"/>
+        <text x="240" y="60" text-anchor="middle" font-size="28" font-weight="600">R</text>
+        <text x="160" y="106" text-anchor="middle" font-size="11" class="muted">hold right after the chime</text>
+      </svg></li>
+    <li>You have now booted into the macOS Recovery of your native macOS. Open the <strong>Utilities</strong> <span class="de">(Dienstprogramme)</span> menu in the menu bar.</li>
     <li>Choose <strong>Startup Security Utility</strong> <span class="de">(Startsicherheitsprogramm)</span>.
-      <img src="https://github.com/user-attachments/assets/5036d4c5-8ca1-4008-a2c6-8dbb387c94b7" alt="Startup Security Utility menu item" width="2100" height="1576" loading="lazy"></li>
-    <li>At <em>Authentication required</em> <span class="de">(Authentifizierung erforderlich)</span>, click <strong>Enter macOS password</strong> <span class="de">(macOS-Passwort eingeben)</span>.
-      <img src="https://github.com/user-attachments/assets/d5d02623-4ee6-42e7-9a07-84528ebdbde8" alt="Authentication required dialog" width="2100" height="1576" loading="lazy"></li>
+      <svg class="fig" viewBox="0 0 560 150" role="img" aria-label="Utilities menu with Startup Security Utility selected">
+        <rect class="bar" x="1" y="1" width="558" height="30" rx="6" stroke="var(--border)"/>
+        <text x="20" y="21" font-size="13" font-weight="600">macOS Recovery</text>
+        <text x="150" y="21" font-size="13">File</text>
+        <text x="190" y="21" font-size="13">Edit</text>
+        <rect class="acc" x="226" y="5" width="70" height="22" rx="5"/>
+        <text x="261" y="21" font-size="13" text-anchor="middle" style="fill:#fff">Utilities</text>
+        <rect class="win" x="226" y="34" width="250" height="100" rx="8"/>
+        <rect class="acc" x="232" y="42" width="238" height="26" rx="5"/>
+        <text x="244" y="60" font-size="13" style="fill:#fff">Startup Security Utility</text>
+        <text x="244" y="90" font-size="13">Terminal</text>
+        <text x="244" y="118" font-size="13" class="muted">Network Utility</text>
+      </svg></li>
+    <li>At <em>Authentication required</em> <span class="de">(Authentifizierung erforderlich)</span>, click <strong>Enter macOS password</strong> <span class="de">(macOS-Passwort eingeben)</span> and log in with an administrator account.</li>
     <li>Set <strong>Secure Boot</strong> to <strong>No Security</strong> <span class="de">(Ohne Sicherheit)</span> and <strong>Allowed Boot Media</strong> <span class="de">(Erlaubte Boot-Medien)</span> to <strong>Allow booting from external or removable media</strong> <span class="de">(Starten von externen oder Wechselmedien erlauben)</span>.
-      <img src="https://github.com/user-attachments/assets/4c88f484-e345-412d-8315-65c43eb0e45b" alt="Startup Security Utility with No Security and external boot allowed" width="2100" height="1576" loading="lazy"></li>
-    <li>Close this window.
-      <img src="https://github.com/user-attachments/assets/7609949e-608d-4a00-80f9-ff13cfc3500a" alt="Closing Startup Security Utility" width="2100" height="1576" loading="lazy"></li>
+      <svg class="fig" viewBox="0 0 560 300" role="img" aria-label="Startup Security Utility with No Security and Allow booting from external media selected">
+        <rect class="win" x="1" y="1" width="558" height="298" rx="12"/>
+        <circle cx="22" cy="20" r="6" fill="#ff5f57"/><circle cx="42" cy="20" r="6" fill="#febc2e"/><circle cx="62" cy="20" r="6" fill="#28c840"/>
+        <text x="280" y="25" text-anchor="middle" font-size="13" font-weight="600">Startup Security Utility</text>
+        <line class="line" x1="1" y1="40" x2="559" y2="40"/>
+        <text x="24" y="70" font-size="14" font-weight="600">Secure Boot</text>
+        <circle cx="34" cy="94" r="7" fill="none" stroke="var(--muted)"/><text x="50" y="99" font-size="13" class="muted">Full Security</text>
+        <circle cx="34" cy="120" r="7" fill="none" stroke="var(--muted)"/><text x="50" y="125" font-size="13" class="muted">Medium Security</text>
+        <circle cx="34" cy="146" r="7" class="acc"/><circle cx="34" cy="146" r="3" style="fill:#fff"/><text x="50" y="151" font-size="13" font-weight="600">No Security</text><text x="140" y="151" font-size="12" class="muted">(Ohne Sicherheit)</text>
+        <line class="line" x1="24" y1="172" x2="536" y2="172"/>
+        <text x="24" y="200" font-size="14" font-weight="600">Allowed Boot Media</text>
+        <circle cx="34" cy="224" r="7" fill="none" stroke="var(--muted)"/><text x="50" y="229" font-size="13" class="muted">Disallow booting from external or removable media</text>
+        <circle cx="34" cy="250" r="7" class="acc"/><circle cx="34" cy="250" r="3" style="fill:#fff"/><text x="50" y="255" font-size="13" font-weight="600">Allow booting from external or removable media</text>
+        <text x="50" y="276" font-size="12" class="muted">(Starten von externen oder Wechselmedien erlauben)</text>
+      </svg></li>
+    <li>Close this window.</li>
   </ol>
 
   <h2>Part 3 – Disable SIP</h2>
   <ol class="steps" style="counter-reset: step 17;">
-    <li>Go to <strong>Utilities</strong> <span class="de">(Dienstprogramme)</span> &rsaquo; <strong>Terminal</strong>.
-      <img src="https://github.com/user-attachments/assets/3016daca-f94d-41df-9380-04411a10320a" alt="Opening Terminal from the Utilities menu" width="2100" height="1576" loading="lazy"></li>
+    <li>Go to <strong>Utilities</strong> <span class="de">(Dienstprogramme)</span> &rsaquo; <strong>Terminal</strong>.</li>
     <li>Type the following and press Enter:
       <pre><code>csrutil disable &amp;&amp; csrutil authenticated-root disable</code></pre>
-      <img src="https://github.com/user-attachments/assets/82ff1341-ea15-478b-ba9a-008cf7b9094b" alt="Terminal after running csrutil disable" width="5712" height="4284" loading="lazy"></li>
+      <svg class="fig" viewBox="0 0 560 150" role="img" aria-label="Terminal showing csrutil disable succeeded">
+        <rect class="term" x="1" y="1" width="558" height="148" rx="10"/>
+        <circle cx="20" cy="18" r="6" fill="#ff5f57"/><circle cx="40" cy="18" r="6" fill="#febc2e"/><circle cx="60" cy="18" r="6" fill="#28c840"/>
+        <g class="mono" font-size="12">
+          <text x="16" y="52" class="term-t" style="fill:#e6e6e6">-bash-3.2# csrutil disable &amp;&amp; csrutil authenticated-root disable</text>
+          <text x="16" y="76" style="fill:#e6e6e6">Successfully disabled System Integrity Protection.</text>
+          <text x="16" y="96" style="fill:#e6e6e6">Successfully disabled authenticated root.</text>
+          <text x="16" y="116" style="fill:#e6e6e6">Restart the machine for the changes to take effect.</text>
+          <text x="16" y="138" style="fill:#e6e6e6">-bash-3.2# ▍</text>
+        </g>
+      </svg></li>
   </ol>
 
   <h2>Part 4 – Boot OpenCore and the installer</h2>
   <ol class="steps" style="counter-reset: step 19;">
-    <li>Click the Apple logo &rsaquo; <strong>Restart</strong>.</li>
+    <li>Click the Apple menu &rsaquo; <strong>Restart</strong>.</li>
     <li>Hold the <kbd>⌥ Option</kbd> key.</li>
     <li>Choose <strong>EFI Boot</strong>.
-      <img src="https://github.com/user-attachments/assets/1ad19aed-6b1e-4174-87c5-13db0dc02f40" alt="Startup Manager with EFI Boot" width="2100" height="1576" loading="lazy"></li>
-    <li>Press <kbd>Space</kbd>.</li>
+      <svg class="fig" viewBox="0 0 560 160" role="img" aria-label="Startup Manager with EFI Boot selected">
+        <rect class="term" x="1" y="1" width="558" height="158" rx="10"/>
+        <g transform="translate(150,30)">
+          <rect x="0" y="0" width="80" height="64" rx="10" fill="#8e8e93"/>
+          <rect x="10" y="44" width="60" height="6" rx="3" fill="#636366"/>
+          <text x="40" y="92" text-anchor="middle" font-size="13" style="fill:#e6e6e6">Macintosh HD</text>
+        </g>
+        <g transform="translate(330,30)">
+          <rect x="-8" y="-8" width="96" height="112" rx="12" fill="none" stroke="var(--accent)" stroke-width="3"/>
+          <rect x="0" y="0" width="80" height="64" rx="10" fill="#f2b632"/>
+          <rect x="10" y="44" width="60" height="6" rx="3" fill="#c48d1a"/>
+          <text x="40" y="92" text-anchor="middle" font-size="13" font-weight="600" style="fill:#fff">EFI Boot</text>
+        </g>
+      </svg></li>
+    <li>Press <kbd>Space</kbd> to show the hidden entries.</li>
     <li>Using the arrow keys, select <strong>Reset NVRAM</strong> and press <kbd>Enter</kbd>.</li>
     <li>The system will now restart.</li>
     <li>Select <strong>Install macOS</strong> with the arrow keys and press <kbd>Enter</kbd>.
-      <img src="https://github.com/user-attachments/assets/dded1c8d-f7c4-4d5d-947f-4025535ff5d3" alt="OpenCore picker with Install macOS selected" width="2100" height="1576" loading="lazy"></li>
+      <svg class="fig" viewBox="0 0 560 160" role="img" aria-label="OpenCore picker with Install macOS selected">
+        <rect class="term" x="1" y="1" width="558" height="158" rx="10"/>
+        <g font-size="13" style="fill:#e6e6e6">
+          <g transform="translate(70,30)">
+            <rect x="0" y="0" width="70" height="56" rx="10" fill="#8e8e93"/>
+            <text x="35" y="82" text-anchor="middle" style="fill:#e6e6e6">Macintosh HD</text>
+          </g>
+          <g transform="translate(245,30)">
+            <rect x="-8" y="-8" width="86" height="104" rx="12" fill="none" stroke="var(--accent)" stroke-width="3"/>
+            <rect x="0" y="0" width="70" height="56" rx="10" fill="#f2b632"/>
+            <text x="35" y="82" text-anchor="middle" font-weight="600" style="fill:#fff">Install macOS</text>
+          </g>
+          <g transform="translate(420,30)">
+            <rect x="0" y="0" width="70" height="56" rx="10" fill="#5e5ce6"/>
+            <text x="35" y="82" text-anchor="middle" style="fill:#e6e6e6">Reset NVRAM</text>
+          </g>
+        </g>
+      </svg></li>
   </ol>
 
   <h2>Kernel panic or stall?</h2>
   <p>If you see a kernel panic or a stall at the Apple logo, please report the kernel panic or stall here: <a href="https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/issues">github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/issues</a> – or in the affected repository if you are using a fork instead. If you have already erased your drive, I recommend downgrading after reporting the kernel panic.</p>
 
-  <footer>
-    Previously published in the now-archived repository
-    <a href="https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2-Instructions-for-T2-Macs">OpenCore-Legacy-Patcher-T2-Instructions-for-T2-Macs</a> (MIT License).
-  </footer>
+  <footer>Illustrations are simplified drawings; labels on your Mac may differ slightly depending on the macOS version and language.</footer>
 </main>
 </body>
 </html>
