@@ -21,7 +21,7 @@
         "build": "25G83",
         "version": "26.6.2",
         "date": "2026-08-18",
-        "sha1sum": "2911261b65a5ebfdcd48bb49311b4ce45d2f9b63",
+        "sha1sum": "dddf860a66da872ee819598fe66f7278e86d0fcb",
         "name": "MetallibSupportPkg 26.6.2 build 25G83",
         "seen": "2026-08-18",
         "url": "https://github.com/hackdoc/metal/releases/download/26.6.2-25G83/MetallibSupportPkg-26.6.2-25G83.pkg"
@@ -30,7 +30,7 @@
         "build": "25G76",
         "version": "26.6.1",
         "date": "2026-08-06",
-        "sha1sum": "2911261b65a5ebfdcd48bb49311b4ce45d2f9b63",
+        "sha1sum": "cf47e58738504c913b2d79cda9c0c0ffbce45182",
         "name": "MetallibSupportPkg 26.6.1 build 25G76",
         "seen": "2026-08-08",
         "url": "https://github.com/pyquick/MetallibSupportPkg/releases/download/26.6.1-25G76/MetallibSupportPkg-26.6.1-25G76.pkg"
