@@ -9,7 +9,7 @@ next: false
 
 # Announcements
 
-All anbouncements about OpenCore Legacy Patcher T2, mirrored automatically from
+All announcements about OpenCore Legacy Patcher T2, mirrored automatically from
 [GitHub Discussions](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/discussions):
 pinned ones first, then the newest. You can comment on each of them on GitHub.
 
