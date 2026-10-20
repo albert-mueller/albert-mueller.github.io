@@ -15,6 +15,7 @@
       "dev": "vitepress dev",
       "build": "vitepress build",
       "preview": "vitepress preview",
+      "announcements": "node ./scripts/fetch-announcements.mjs",
       "fix-lint": "run-script-os",
       "fix-lint:default": "(echo Attempting to fix lint... && markdownlint -c .markdownlint.json -p .markdownlintignore '**/*.md' -f && echo Fixed successfully, please commit.) || (echo Fix failed! && exit 1)",
       "fix-lint:win32": "(echo Attempting to fix lint... && markdownlint -c .markdownlint.json -p .markdownlintignore **/*.md -f && echo Fixed successfully, please commit.) || (echo Fix failed! && exit 1)",
