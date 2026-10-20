@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// Mirrors announcements from the patcher's GitHub Discussions into the
-// website:
-//   - every pinned discussion, whatever its category (e.g. the T2 research
-//     thread in "Ideas"), shown first in pin order
-//   - every discussion in the "Announcements" category, newest first
+// Mirrors the patcher's GitHub Discussions into the website:
+//   - pinned discussions first, in pin order
+//   - then every other open discussion of every category, newest first
 // Closed discussions are left out, so closing one removes it from the site.
+// Set ANNOUNCEMENTS_CATEGORY (e.g. "announcements") to limit the list to
+// one category again.
 //
 // Writes:
 //   .vitepress/announcements.json  - read at build time to generate
@@ -27,7 +27,7 @@ const OUT_JSON = path.join(ROOT, '.vitepress', 'announcements.json')
 const OUT_FEED = path.join(ROOT, 'public', 'announcements.xml')
 
 const REPO = process.env.ANNOUNCEMENTS_REPO || 'albert-mueller/OpenCore-Legacy-Patcher-T2'
-const CATEGORY = process.env.ANNOUNCEMENTS_CATEGORY || 'announcements'
+const CATEGORY = process.env.ANNOUNCEMENTS_CATEGORY || ''
 const LIMIT = Number(process.env.ANNOUNCEMENTS_LIMIT || 100)
 const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN
 
@@ -65,9 +65,9 @@ fragment AnnouncementFields on Discussion {
 }`
 
 const DISCUSSIONS_QUERY = `
-query ($owner: String!, $name: String!, $category: ID!, $first: Int!, $after: String) {
+query ($owner: String!, $name: String!, $category: ID, $first: Int!, $after: String) {
   repository(owner: $owner, name: $name) {
-    discussions(first: $first, after: $after, categoryId: $category,
+    discussions(first: $first, after: $after, categoryId: $category, states: [OPEN],
                 orderBy: { field: CREATED_AT, direction: DESC }) {
       pageInfo { hasNextPage endCursor }
       nodes { ...AnnouncementFields }
@@ -115,12 +115,16 @@ function excerpt(text, max = 220) {
 }
 
 async function fetchAnnouncements() {
-  const categoryData = await graphql(CATEGORIES_QUERY, { owner: OWNER, name: NAME })
-  const categories = categoryData.repository?.discussionCategories?.nodes ?? []
-  const category = categories.find((c) => c.slug === CATEGORY || c.name.toLowerCase() === CATEGORY.toLowerCase())
-  if (!category) {
-    const available = categories.map((c) => c.slug).join(', ') || 'none visible'
-    throw new Error(`Discussion category "${CATEGORY}" not found in ${REPO} (available: ${available})`)
+  let categoryId = null
+  if (CATEGORY) {
+    const categoryData = await graphql(CATEGORIES_QUERY, { owner: OWNER, name: NAME })
+    const categories = categoryData.repository?.discussionCategories?.nodes ?? []
+    const category = categories.find((c) => c.slug === CATEGORY || c.name.toLowerCase() === CATEGORY.toLowerCase())
+    if (!category) {
+      const available = categories.map((c) => c.slug).join(', ') || 'none visible'
+      throw new Error(`Discussion category "${CATEGORY}" not found in ${REPO} (available: ${available})`)
+    }
+    categoryId = category.id
   }
 
   const nodes = []
@@ -129,7 +133,7 @@ async function fetchAnnouncements() {
     const data = await graphql(DISCUSSIONS_QUERY, {
       owner: OWNER,
       name: NAME,
-      category: category.id,
+      category: categoryId,
       first: Math.min(50, LIMIT - nodes.length),
       after,
     })
@@ -203,7 +207,7 @@ function buildFeed(announcements) {
     '  <channel>',
     `    <title>${escapeXml(`${SITE_TITLE} – Announcements`)}</title>`,
     `    <link>${escapeXml(LIST_URL)}</link>`,
-    `    <description>${escapeXml(`Announcements about ${SITE_TITLE}, mirrored from GitHub Discussions.`)}</description>`,
+    `    <description>${escapeXml(`Open discussions about ${SITE_TITLE}, mirrored from GitHub Discussions.`)}</description>`,
     '    <language>en</language>',
     `    <atom:link href="${escapeXml(FEED_URL)}" rel="self" type="application/rss+xml"/>`,
     newest ? `    <lastBuildDate>${new Date(newest).toUTCString()}</lastBuildDate>` : null,
@@ -217,7 +221,7 @@ function buildFeed(announcements) {
 function write(announcements) {
   fs.mkdirSync(path.dirname(OUT_JSON), { recursive: true })
   fs.mkdirSync(path.dirname(OUT_FEED), { recursive: true })
-  fs.writeFileSync(OUT_JSON, `${JSON.stringify({ source: `${REPO} (${CATEGORY})`, announcements }, null, 2)}\n`)
+  fs.writeFileSync(OUT_JSON, `${JSON.stringify({ source: `${REPO} (${CATEGORY || 'all categories'})`, announcements }, null, 2)}\n`)
   fs.writeFileSync(OUT_FEED, buildFeed(announcements))
 }
 
