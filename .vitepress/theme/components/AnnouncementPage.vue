@@ -37,6 +37,19 @@ const commentsLabel = computed(() => {
         </p>
         <!-- bodyHTML is GitHub's own sanitised rendering of the discussion -->
         <div class="announcement-body" v-html="a.bodyHTML" />
+        <section v-if="a.commentList?.length" class="announcement-comment-list">
+            <h2>Comments</h2>
+            <div v-for="c in a.commentList" :key="c.url" class="announcement-comment">
+                <p class="announcement-comment-meta">
+                    <a v-if="c.author" :href="c.author.url" target="_blank" rel="noreferrer">@{{ c.author.login }}</a>
+                    <span v-else>ghost</span>
+                    · <a :href="c.url" target="_blank" rel="noreferrer"><time :datetime="c.createdAt">{{ formatDate(c.createdAt) }}</time></a>
+                    <template v-if="c.lastEditedAt"> · edited</template>
+                </p>
+                <!-- GitHub's own sanitised rendering of the comment -->
+                <div class="announcement-comment-body" v-html="c.bodyHTML" />
+            </div>
+        </section>
         <div class="announcement-actions">
             <a class="announcement-button" :href="a.url" target="_blank" rel="noreferrer">
                 {{ isIssue ? 'Discuss this issue on GitHub' : 'Discuss this announcement on GitHub' }}

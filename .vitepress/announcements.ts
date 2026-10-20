@@ -4,12 +4,21 @@
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
+export interface Comment {
+    url: string
+    createdAt: string
+    lastEditedAt: string | null
+    author: { login: string, url: string } | null
+    bodyHTML: string
+}
+
 export interface Announcement {
     number: number
     pinned: boolean
     category: string | null
     // Only set for issues
     labels?: { name: string, color: string }[]
+    commentList?: Comment[]
     title: string
     url: string
     createdAt: string

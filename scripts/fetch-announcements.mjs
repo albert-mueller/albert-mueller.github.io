@@ -90,8 +90,19 @@ query ($owner: String!, $name: String!) {
 }
 ${DISCUSSION_FIELDS}`
 
+const ISSUE_COMMENT_FIELDS = `
+fragment IssueCommentFields on IssueComment {
+  url
+  createdAt
+  lastEditedAt
+  isMinimized
+  bodyHTML
+  author { login url }
+}`
+
 const ISSUE_FIELDS = `
 fragment IssueFields on Issue {
+  id
   number
   title
   url
@@ -103,8 +114,26 @@ fragment IssueFields on Issue {
   bodyText
   author { login url }
   labels(first: 10) { nodes { name color } }
-  comments { totalCount }
-}`
+  comments(first: 100) {
+    totalCount
+    pageInfo { hasNextPage endCursor }
+    nodes { ...IssueCommentFields }
+  }
+}
+${ISSUE_COMMENT_FIELDS}`
+
+const MORE_COMMENTS_QUERY = `
+query ($id: ID!, $after: String) {
+  node(id: $id) {
+    ... on Issue {
+      comments(first: 100, after: $after) {
+        pageInfo { hasNextPage endCursor }
+        nodes { ...IssueCommentFields }
+      }
+    }
+  }
+}
+${ISSUE_COMMENT_FIELDS}`
 
 const ISSUES_QUERY = `
 query ($owner: String!, $name: String!, $first: Int!, $after: String) {
@@ -216,7 +245,8 @@ async function fetchIssues() {
     const data = await graphql(ISSUES_QUERY, {
       owner: OWNER,
       name: NAME,
-      first: Math.min(50, LIMIT - nodes.length),
+      // Smaller pages, since every issue brings up to 100 comments along.
+      first: Math.min(20, LIMIT - nodes.length),
       after,
     })
     const page = data.repository.issues
@@ -228,9 +258,21 @@ async function fetchIssues() {
   const pinned = pinnedData.repository.pinnedIssues.nodes.map((n) => n.issue)
   const pinnedNumbers = new Set(pinned.map((i) => i.number))
 
-  return [...pinned, ...nodes.filter((i) => !pinnedNumbers.has(i.number))]
+  const open = [...pinned, ...nodes.filter((i) => !pinnedNumbers.has(i.number))]
     .filter((i) => !i.closed)
-    .map((i) => ({
+
+  // Fetch the remaining comments of issues with more than 100 of them.
+  for (const issue of open) {
+    let { hasNextPage, endCursor } = issue.comments.pageInfo
+    while (hasNextPage) {
+      const data = await graphql(MORE_COMMENTS_QUERY, { id: issue.id, after: endCursor })
+      const page = data.node.comments
+      issue.comments.nodes.push(...page.nodes)
+      ;({ hasNextPage, endCursor } = page.pageInfo)
+    }
+  }
+
+  return open.map((i) => ({
       number: i.number,
       pinned: pinnedNumbers.has(i.number),
       category: null,
@@ -244,6 +286,16 @@ async function fetchIssues() {
       comments: i.comments.totalCount,
       excerpt: excerpt(i.bodyText),
       bodyHTML: i.bodyHTML,
+      // Comments hidden on GitHub (spam, off-topic, ...) stay hidden here.
+      commentList: i.comments.nodes
+        .filter((c) => !c.isMinimized)
+        .map((c) => ({
+          url: c.url,
+          createdAt: c.createdAt,
+          lastEditedAt: c.lastEditedAt,
+          author: c.author ? { login: c.author.login, url: c.author.url } : null,
+          bodyHTML: c.bodyHTML,
+        })),
     }))
 }
 

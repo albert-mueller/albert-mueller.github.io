@@ -4,7 +4,7 @@
 import { loadAnnouncements, type Announcement } from '../announcements'
 
 // The lists only need the summary, not the full HTML body.
-export type AnnouncementSummary = Omit<Announcement, 'bodyHTML'>
+export type AnnouncementSummary = Omit<Announcement, 'bodyHTML' | 'commentList'>
 
 declare const data: AnnouncementSummary[]
 export { data }

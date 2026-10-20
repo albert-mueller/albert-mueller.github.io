@@ -7,6 +7,7 @@ export { data }
 
 export default {
     load(): AnnouncementSummary[] {
-        return loadIssues().map(({ bodyHTML, ...summary }) => summary)
+        // The lists don't need the bodies or comments, only the issue pages do.
+        return loadIssues().map(({ bodyHTML, commentList, ...summary }) => summary)
     },
 }

@@ -117,6 +117,27 @@ a.announcement-card:hover {
     max-width: 100%;
 }
 
+.announcement-comment-list {
+    margin-top: 40px;
+}
+
+.announcement-comment {
+    margin-top: 16px;
+    padding: 4px 20px;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.announcement-comment-meta {
+    font-size: 14px;
+    color: var(--vp-c-text-2);
+}
+
+.announcement-comment-body img {
+    max-width: 100%;
+}
+
 .announcement-actions {
     display: flex;
     flex-wrap: wrap;
