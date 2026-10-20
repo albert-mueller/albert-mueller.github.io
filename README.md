@@ -11,6 +11,9 @@ hero:
     - theme: brand
       text: Getting Started →
       link: /START
+    - theme: alt
+      text: Announcements
+      link: /announcements/
 
 features:
   - title: Near-native OTA updates
@@ -25,3 +28,5 @@ features:
     details: "Whether it's getting started or learning the specifics, you can always find answers with our amazing community of tinkerers, developers, and dreamers."
 footer: Copyright © Dortania 2020-2025 · T2 fork © 2026 Albert Müller and OCLP-T2 contributors
 ---
+
+<HomeAnnouncements />

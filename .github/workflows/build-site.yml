@@ -5,6 +5,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+  # Pick up new and edited announcements from the patcher's GitHub
+  # Discussions (Announcements category) and refresh the RSS feed.
+  schedule:
+    - cron: "23 * * * *"
+  # Lets the patcher repo trigger an immediate rebuild when an announcement
+  # is posted (needs a token with access to this repo stored over there).
+  repository_dispatch:
+    types:
+      - announcements-updated
 
 # Least privilege: only the deploy job gets Pages/OIDC write access.
 permissions:
@@ -39,6 +48,13 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile --ignore-scripts
+
+      # Writes .vitepress/announcements.json and public/announcements.xml.
+      # The patcher repo is public, so the default read-only token is enough.
+      - name: Fetch announcements from GitHub Discussions
+        run: node scripts/fetch-announcements.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Build with VitePress
         run: yarn run build
