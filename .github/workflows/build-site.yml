@@ -59,6 +59,7 @@ jobs:
         run: node scripts/fetch-announcements.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.ANNOUNCEMENTS_TOKEN || github.token }}
+          ANNOUNCEMENTS_CATEGORY: announcements
 
       - name: Build with VitePress
         run: yarn run build
