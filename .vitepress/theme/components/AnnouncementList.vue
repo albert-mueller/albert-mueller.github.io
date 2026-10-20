@@ -20,7 +20,11 @@ const items = computed(() => (props.limit ? data.slice(0, props.limit) : data))
             class="announcement-card"
             :href="withBase(`/announcements/${a.number}.html`)"
         >
-            <time class="announcement-card-date" :datetime="a.createdAt">{{ formatDate(a.createdAt) }}</time>
+            <span class="announcement-card-date">
+                <span v-if="a.pinned" class="announcement-badge">Pinned</span>
+                <time :datetime="a.createdAt">{{ formatDate(a.createdAt) }}</time>
+                <template v-if="a.category && a.category !== 'Announcements'"> · {{ a.category }}</template>
+            </span>
             <span class="announcement-card-title">{{ a.title }}</span>
             <span v-if="a.excerpt" class="announcement-card-excerpt">{{ a.excerpt }}</span>
         </a>

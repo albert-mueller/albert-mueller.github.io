@@ -1,6 +1,10 @@
 #!/usr/bin/env node
-// Mirrors the "Announcements" category of the patcher's GitHub Discussions
-// into the website.
+// Mirrors announcements from the patcher's GitHub Discussions into the
+// website:
+//   - every pinned discussion, whatever its category (e.g. the T2 research
+//     thread in "Ideas"), shown first in pin order
+//   - every discussion in the "Announcements" category, newest first
+// Closed discussions are left out, so closing one removes it from the site.
 //
 // Writes:
 //   .vitepress/announcements.json  - read at build time to generate
@@ -44,27 +48,43 @@ query ($owner: String!, $name: String!) {
   }
 }`
 
+const DISCUSSION_FIELDS = `
+fragment AnnouncementFields on Discussion {
+  number
+  title
+  url
+  closed
+  createdAt
+  updatedAt
+  lastEditedAt
+  bodyHTML
+  bodyText
+  author { login url }
+  category { name slug }
+  comments { totalCount }
+}`
+
 const DISCUSSIONS_QUERY = `
 query ($owner: String!, $name: String!, $category: ID!, $first: Int!, $after: String) {
   repository(owner: $owner, name: $name) {
     discussions(first: $first, after: $after, categoryId: $category,
                 orderBy: { field: CREATED_AT, direction: DESC }) {
       pageInfo { hasNextPage endCursor }
-      nodes {
-        number
-        title
-        url
-        createdAt
-        updatedAt
-        lastEditedAt
-        bodyHTML
-        bodyText
-        author { login url }
-        comments { totalCount }
-      }
+      nodes { ...AnnouncementFields }
     }
   }
-}`
+}
+${DISCUSSION_FIELDS}`
+
+const PINNED_QUERY = `
+query ($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    pinnedDiscussions(first: 25) {
+      nodes { discussion { ...AnnouncementFields } }
+    }
+  }
+}
+${DISCUSSION_FIELDS}`
 
 async function graphql(query, variables) {
   const res = await fetch('https://api.github.com/graphql', {
@@ -118,8 +138,17 @@ async function fetchAnnouncements() {
     after = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null
   } while (after && nodes.length < LIMIT)
 
-  return nodes.map((d) => ({
+  const pinnedData = await graphql(PINNED_QUERY, { owner: OWNER, name: NAME })
+  const pinned = pinnedData.repository.pinnedDiscussions.nodes.map((n) => n.discussion)
+  const pinnedNumbers = new Set(pinned.map((d) => d.number))
+
+  const merged = [...pinned, ...nodes.filter((d) => !pinnedNumbers.has(d.number))]
+    .filter((d) => !d.closed)
+
+  return merged.map((d) => ({
     number: d.number,
+    pinned: pinnedNumbers.has(d.number),
+    category: d.category?.name ?? null,
     title: d.title.trim(),
     url: d.url,
     createdAt: d.createdAt,

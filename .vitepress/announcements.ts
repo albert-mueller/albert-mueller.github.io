@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url'
 
 export interface Announcement {
     number: number
+    pinned: boolean
+    category: string | null
     title: string
     url: string
     createdAt: string

@@ -21,6 +21,7 @@ const commentsLabel = computed(() => {
         </p>
         <h1>{{ a.title }}</h1>
         <p class="announcement-meta">
+            <span v-if="a.pinned" class="announcement-badge">Pinned</span>
             <time :datetime="a.createdAt">{{ formatDate(a.createdAt) }}</time>
             <template v-if="a.author">
                 · by <a :href="a.author.url" target="_blank" rel="noreferrer">@{{ a.author.login }}</a>
