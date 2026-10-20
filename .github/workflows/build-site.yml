@@ -30,6 +30,8 @@ jobs:
     if: github.repository_owner == 'albert-mueller'
     permissions:
       contents: read
+      # Needed so the job token may read (public) GitHub Discussions at all.
+      discussions: read
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -50,11 +52,13 @@ jobs:
         run: yarn install --frozen-lockfile --ignore-scripts
 
       # Writes .vitepress/announcements.json and public/announcements.xml.
-      # The patcher repo is public, so the default read-only token is enough.
+      # Uses the ANNOUNCEMENTS_TOKEN secret if set (fine-grained PAT with
+      # read-only Discussions access to OpenCore-Legacy-Patcher-T2),
+      # otherwise the job's own token.
       - name: Fetch announcements from GitHub Discussions
         run: node scripts/fetch-announcements.mjs
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.ANNOUNCEMENTS_TOKEN || github.token }}
 
       - name: Build with VitePress
         run: yarn run build
