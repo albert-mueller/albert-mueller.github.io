@@ -134,6 +134,16 @@ a.announcement-card:hover {
     color: var(--vp-c-text-2);
 }
 
+.announcement-replies {
+    margin: 8px 0 16px;
+    padding-left: 16px;
+    border-left: 2px solid var(--vp-c-divider);
+}
+
+.announcement-reply + .announcement-reply {
+    border-top: 1px solid var(--vp-c-divider);
+}
+
 .announcement-comment-body img {
     max-width: 100%;
 }

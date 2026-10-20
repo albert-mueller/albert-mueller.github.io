@@ -10,6 +10,9 @@ export interface Comment {
     lastEditedAt: string | null
     author: { login: string, url: string } | null
     bodyHTML: string
+    // Discussions only: marked as the answer (Q&A) and threaded replies
+    isAnswer?: boolean
+    replies?: Comment[]
 }
 
 export interface Announcement {
@@ -18,6 +21,7 @@ export interface Announcement {
     category: string | null
     // Only set for issues
     labels?: { name: string, color: string }[]
+    // All comments (issues and discussions)
     commentList?: Comment[]
     title: string
     url: string

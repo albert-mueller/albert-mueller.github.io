@@ -54,6 +54,7 @@ query ($owner: String!, $name: String!) {
 
 const DISCUSSION_FIELDS = `
 fragment AnnouncementFields on Discussion {
+  id
   number
   title
   url
@@ -67,6 +68,51 @@ fragment AnnouncementFields on Discussion {
   category { name slug }
   comments { totalCount }
 }`
+
+// Comments of a discussion, each with its replies (threaded).
+const DISCUSSION_COMMENT_FIELDS = `
+fragment DiscussionReplyFields on DiscussionComment {
+  url
+  createdAt
+  lastEditedAt
+  isMinimized
+  bodyHTML
+  author { login url }
+}`
+
+const DISCUSSION_COMMENTS_QUERY = `
+query ($id: ID!, $after: String) {
+  node(id: $id) {
+    ... on Discussion {
+      comments(first: 50, after: $after) {
+        pageInfo { hasNextPage endCursor }
+        nodes {
+          id
+          isAnswer
+          ...DiscussionReplyFields
+          replies(first: 50) {
+            pageInfo { hasNextPage endCursor }
+            nodes { ...DiscussionReplyFields }
+          }
+        }
+      }
+    }
+  }
+}
+${DISCUSSION_COMMENT_FIELDS}`
+
+const MORE_REPLIES_QUERY = `
+query ($id: ID!, $after: String) {
+  node(id: $id) {
+    ... on DiscussionComment {
+      replies(first: 50, after: $after) {
+        pageInfo { hasNextPage endCursor }
+        nodes { ...DiscussionReplyFields }
+      }
+    }
+  }
+}
+${DISCUSSION_COMMENT_FIELDS}`
 
 const DISCUSSIONS_QUERY = `
 query ($owner: String!, $name: String!, $category: ID, $first: Int!, $after: String) {
@@ -220,7 +266,11 @@ async function fetchAnnouncements() {
   const merged = [...pinned, ...nodes.filter((d) => !pinnedNumbers.has(d.number))]
     .filter((d) => !d.closed)
 
+  const commentLists = new Map()
+  for (const d of merged) commentLists.set(d.number, await fetchDiscussionComments(d.id))
+
   return merged.map((d) => ({
+    commentList: commentLists.get(d.number),
     number: d.number,
     pinned: pinnedNumbers.has(d.number),
     category: d.category?.name ?? null,
@@ -236,6 +286,45 @@ async function fetchAnnouncements() {
     // Already sanitised by GitHub, same HTML github.com renders.
     bodyHTML: d.bodyHTML,
   }))
+}
+
+const mapComment = (c) => ({
+  url: c.url,
+  createdAt: c.createdAt,
+  lastEditedAt: c.lastEditedAt,
+  author: c.author ? { login: c.author.login, url: c.author.url } : null,
+  bodyHTML: c.bodyHTML,
+})
+
+// All comments of one discussion with all their replies. Comments hidden on
+// GitHub (spam, off-topic, ...) stay hidden here.
+async function fetchDiscussionComments(id) {
+  const comments = []
+  let after = null
+  do {
+    const data = await graphql(DISCUSSION_COMMENTS_QUERY, { id, after })
+    const page = data.node.comments
+    comments.push(...page.nodes)
+    after = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null
+  } while (after)
+
+  for (const comment of comments) {
+    let { hasNextPage, endCursor } = comment.replies.pageInfo
+    while (hasNextPage) {
+      const data = await graphql(MORE_REPLIES_QUERY, { id: comment.id, after: endCursor })
+      const page = data.node.replies
+      comment.replies.nodes.push(...page.nodes)
+      ;({ hasNextPage, endCursor } = page.pageInfo)
+    }
+  }
+
+  return comments
+    .filter((c) => !c.isMinimized)
+    .map((c) => ({
+      ...mapComment(c),
+      isAnswer: c.isAnswer,
+      replies: c.replies.nodes.filter((r) => !r.isMinimized).map(mapComment),
+    }))
 }
 
 async function fetchIssues() {

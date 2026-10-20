@@ -41,6 +41,7 @@ const commentsLabel = computed(() => {
             <h2>Comments</h2>
             <div v-for="c in a.commentList" :key="c.url" class="announcement-comment">
                 <p class="announcement-comment-meta">
+                    <span v-if="c.isAnswer" class="announcement-badge">Answer</span>
                     <a v-if="c.author" :href="c.author.url" target="_blank" rel="noreferrer">@{{ c.author.login }}</a>
                     <span v-else>ghost</span>
                     · <a :href="c.url" target="_blank" rel="noreferrer"><time :datetime="c.createdAt">{{ formatDate(c.createdAt) }}</time></a>
@@ -48,6 +49,18 @@ const commentsLabel = computed(() => {
                 </p>
                 <!-- GitHub's own sanitised rendering of the comment -->
                 <div class="announcement-comment-body" v-html="c.bodyHTML" />
+                <!-- Threaded replies (discussions only) -->
+                <div v-if="c.replies?.length" class="announcement-replies">
+                    <div v-for="r in c.replies" :key="r.url" class="announcement-reply">
+                        <p class="announcement-comment-meta">
+                            <a v-if="r.author" :href="r.author.url" target="_blank" rel="noreferrer">@{{ r.author.login }}</a>
+                            <span v-else>ghost</span>
+                            · <a :href="r.url" target="_blank" rel="noreferrer"><time :datetime="r.createdAt">{{ formatDate(r.createdAt) }}</time></a>
+                            <template v-if="r.lastEditedAt"> · edited</template>
+                        </p>
+                        <div class="announcement-comment-body" v-html="r.bodyHTML" />
+                    </div>
+                </div>
             </div>
         </section>
         <div class="announcement-actions">

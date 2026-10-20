@@ -11,6 +11,7 @@ export { data }
 
 export default {
     load(): AnnouncementSummary[] {
-        return loadAnnouncements().map(({ bodyHTML, ...summary }) => summary)
+        // The lists don't need the bodies or comments, only the pages do.
+        return loadAnnouncements().map(({ bodyHTML, commentList, ...summary }) => summary)
     },
 }
