@@ -9,6 +9,7 @@ const titles: Record<string, string> = {
     "BUILD": "Building and installing OpenCore",
     "BOOT": "Booting OpenCore and macOS",
     "POST-INSTALL": "Post-Installation",
+    "TAHOE-DROP": "macOS Tahoe",
     "SEQUOIA-DROP": "macOS Sequoia",
     "SONOMA-DROP": "macOS Sonoma",
     "VENTURA-DROP": "macOS Ventura",
@@ -125,7 +126,7 @@ export default defineConfig({
         sidebar: [
             group('Introduction', ['START', 'MODELS', 'FAQ']),
             group('How to install', ['INSTALLER', 'BUILD', 'BOOT', 'POST-INSTALL']),
-            group('macOS Support', ['SEQUOIA-DROP', 'SONOMA-DROP', 'VENTURA-DROP', 'MONTEREY-DROP']),
+            group('macOS Support', ['TAHOE-DROP', 'SEQUOIA-DROP', 'SONOMA-DROP', 'VENTURA-DROP', 'MONTEREY-DROP']),
             group('Application', ['UPDATE', 'UNINSTALL', 'PROCESS']),
             group('Troubleshooting', ['TROUBLESHOOT-APP', 'TROUBLESHOOT-MISC', 'TROUBLESHOOT-NONMETAL', 'TROUBLESHOOT-HARDWARE', 'DEBUG']),
             group('Misc', ['TIMEMACHINE', 'ICNS', 'WINDOWS', 'UNIVERSALCONTROL']),
