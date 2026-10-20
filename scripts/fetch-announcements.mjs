@@ -6,12 +6,16 @@
 // Set ANNOUNCEMENTS_CATEGORY (e.g. "announcements") to limit the list to
 // one category again.
 //
+// Open issues are mirrored the same way (pinned first, then newest).
+//
 // Writes:
 //   .vitepress/announcements.json  - read at build time to generate
 //                                    /announcements/ and one page per post
 //   public/announcements.xml       - RSS 2.0 feed of the same posts
+//   .vitepress/issues.json         - same for /issues/
+//   public/issues.xml              - RSS 2.0 feed of the open issues
 //
-// Both files are build artifacts (git-ignored). The CI workflow runs this
+// All four files are build artifacts (git-ignored). The CI workflow runs this
 // script before `vitepress build`. Locally:
 //   GITHUB_TOKEN=$(gh auth token) yarn announcements
 //
@@ -25,6 +29,8 @@ import { fileURLToPath } from 'node:url'
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const OUT_JSON = path.join(ROOT, '.vitepress', 'announcements.json')
 const OUT_FEED = path.join(ROOT, 'public', 'announcements.xml')
+const OUT_ISSUES_JSON = path.join(ROOT, '.vitepress', 'issues.json')
+const OUT_ISSUES_FEED = path.join(ROOT, 'public', 'issues.xml')
 
 const REPO = process.env.ANNOUNCEMENTS_REPO || 'albert-mueller/OpenCore-Legacy-Patcher-T2'
 const CATEGORY = process.env.ANNOUNCEMENTS_CATEGORY || ''
@@ -33,8 +39,6 @@ const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN
 
 const SITE_URL = 'https://albert-mueller.github.io/'
 const SITE_TITLE = 'OpenCore Legacy Patcher T2'
-const FEED_URL = `${SITE_URL}announcements.xml`
-const LIST_URL = `${SITE_URL}announcements/`
 
 const [OWNER, NAME] = REPO.split('/')
 
@@ -85,6 +89,44 @@ query ($owner: String!, $name: String!) {
   }
 }
 ${DISCUSSION_FIELDS}`
+
+const ISSUE_FIELDS = `
+fragment IssueFields on Issue {
+  number
+  title
+  url
+  closed
+  createdAt
+  updatedAt
+  lastEditedAt
+  bodyHTML
+  bodyText
+  author { login url }
+  labels(first: 10) { nodes { name color } }
+  comments { totalCount }
+}`
+
+const ISSUES_QUERY = `
+query ($owner: String!, $name: String!, $first: Int!, $after: String) {
+  repository(owner: $owner, name: $name) {
+    issues(first: $first, after: $after, states: [OPEN],
+           orderBy: { field: CREATED_AT, direction: DESC }) {
+      pageInfo { hasNextPage endCursor }
+      nodes { ...IssueFields }
+    }
+  }
+}
+${ISSUE_FIELDS}`
+
+const PINNED_ISSUES_QUERY = `
+query ($owner: String!, $name: String!) {
+  repository(owner: $owner, name: $name) {
+    pinnedIssues(first: 3) {
+      nodes { issue { ...IssueFields } }
+    }
+  }
+}
+${ISSUE_FIELDS}`
 
 async function graphql(query, variables) {
   const res = await fetch('https://api.github.com/graphql', {
@@ -167,6 +209,66 @@ async function fetchAnnouncements() {
   }))
 }
 
+async function fetchIssues() {
+  const nodes = []
+  let after = null
+  do {
+    const data = await graphql(ISSUES_QUERY, {
+      owner: OWNER,
+      name: NAME,
+      first: Math.min(50, LIMIT - nodes.length),
+      after,
+    })
+    const page = data.repository.issues
+    nodes.push(...page.nodes)
+    after = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null
+  } while (after && nodes.length < LIMIT)
+
+  const pinnedData = await graphql(PINNED_ISSUES_QUERY, { owner: OWNER, name: NAME })
+  const pinned = pinnedData.repository.pinnedIssues.nodes.map((n) => n.issue)
+  const pinnedNumbers = new Set(pinned.map((i) => i.number))
+
+  return [...pinned, ...nodes.filter((i) => !pinnedNumbers.has(i.number))]
+    .filter((i) => !i.closed)
+    .map((i) => ({
+      number: i.number,
+      pinned: pinnedNumbers.has(i.number),
+      category: null,
+      labels: i.labels.nodes.map((l) => ({ name: l.name, color: l.color })),
+      title: i.title.trim(),
+      url: i.url,
+      createdAt: i.createdAt,
+      updatedAt: i.updatedAt,
+      lastEditedAt: i.lastEditedAt,
+      author: i.author ? { login: i.author.login, url: i.author.url } : null,
+      comments: i.comments.totalCount,
+      excerpt: excerpt(i.bodyText),
+      bodyHTML: i.bodyHTML,
+    }))
+}
+
+// What the two mirrored lists look like on the site and in their feeds.
+const KINDS = {
+  announcements: {
+    json: OUT_JSON,
+    feed: OUT_FEED,
+    path: 'announcements/',
+    feedFile: 'announcements.xml',
+    title: `${SITE_TITLE} – Announcements`,
+    description: `Open discussions about ${SITE_TITLE}, mirrored from GitHub Discussions.`,
+    discuss: 'Discuss this announcement on GitHub',
+  },
+  issues: {
+    json: OUT_ISSUES_JSON,
+    feed: OUT_ISSUES_FEED,
+    path: 'issues/',
+    feedFile: 'issues.xml',
+    title: `${SITE_TITLE} – Issues`,
+    description: `Open issues of ${SITE_TITLE}, mirrored from GitHub.`,
+    discuss: 'Discuss this issue on GitHub',
+  },
+}
+
 const escapeXml = (s) => String(s)
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
@@ -176,7 +278,7 @@ const escapeXml = (s) => String(s)
 
 const cdata = (s) => `<![CDATA[${String(s).replace(/]]>/g, ']]]]><![CDATA[>')}]]>`
 
-function buildFeed(announcements) {
+function buildFeed(announcements, kind) {
   // Use the newest activity rather than "now" so the feed only changes when
   // an announcement actually changes.
   const newest = announcements
@@ -185,8 +287,8 @@ function buildFeed(announcements) {
     .at(-1)
 
   const items = announcements.map((a) => {
-    const link = `${SITE_URL}announcements/${a.number}.html`
-    const content = `${a.bodyHTML}\n<p><a href="${escapeXml(a.url)}">Discuss this announcement on GitHub</a></p>`
+    const link = `${SITE_URL}${kind.path}${a.number}.html`
+    const content = `${a.bodyHTML}\n<p><a href="${escapeXml(a.url)}">${kind.discuss}</a></p>`
     return [
       '    <item>',
       `      <title>${escapeXml(a.title)}</title>`,
@@ -205,11 +307,11 @@ function buildFeed(announcements) {
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">',
     '  <channel>',
-    `    <title>${escapeXml(`${SITE_TITLE} – Announcements`)}</title>`,
-    `    <link>${escapeXml(LIST_URL)}</link>`,
-    `    <description>${escapeXml(`Open discussions about ${SITE_TITLE}, mirrored from GitHub Discussions.`)}</description>`,
+    `    <title>${escapeXml(kind.title)}</title>`,
+    `    <link>${escapeXml(`${SITE_URL}${kind.path}`)}</link>`,
+    `    <description>${escapeXml(kind.description)}</description>`,
     '    <language>en</language>',
-    `    <atom:link href="${escapeXml(FEED_URL)}" rel="self" type="application/rss+xml"/>`,
+    `    <atom:link href="${escapeXml(`${SITE_URL}${kind.feedFile}`)}" rel="self" type="application/rss+xml"/>`,
     newest ? `    <lastBuildDate>${new Date(newest).toUTCString()}</lastBuildDate>` : null,
     ...items,
     '  </channel>',
@@ -218,37 +320,45 @@ function buildFeed(announcements) {
   ].filter((line) => line !== null).join('\n')
 }
 
-function write(announcements) {
-  fs.mkdirSync(path.dirname(OUT_JSON), { recursive: true })
-  fs.mkdirSync(path.dirname(OUT_FEED), { recursive: true })
-  fs.writeFileSync(OUT_JSON, `${JSON.stringify({ source: `${REPO} (${CATEGORY || 'all categories'})`, announcements }, null, 2)}\n`)
-  fs.writeFileSync(OUT_FEED, buildFeed(announcements))
+function write(kindName, items) {
+  const kind = KINDS[kindName]
+  fs.mkdirSync(path.dirname(kind.json), { recursive: true })
+  fs.mkdirSync(path.dirname(kind.feed), { recursive: true })
+  const source = kindName === 'issues' ? `${REPO} (issues)` : `${REPO} (${CATEGORY || 'all categories'})`
+  fs.writeFileSync(kind.json, `${JSON.stringify({ source, [kindName]: items }, null, 2)}\n`)
+  fs.writeFileSync(kind.feed, buildFeed(items, kind))
 }
 
-function readExisting() {
+function readExisting(kindName) {
   try {
-    return JSON.parse(fs.readFileSync(OUT_JSON, 'utf8')).announcements ?? []
+    return JSON.parse(fs.readFileSync(KINDS[kindName].json, 'utf8'))[kindName] ?? []
   } catch {
     return []
   }
 }
 
+function writeExisting() {
+  for (const kindName of Object.keys(KINDS)) write(kindName, readExisting(kindName))
+}
+
 async function main() {
   if (!TOKEN) {
-    console.warn('GITHUB_TOKEN is not set - skipping the download of announcements.')
+    console.warn('GITHUB_TOKEN is not set - skipping the download of announcements and issues.')
     if (process.env.CI) process.exit(1)
-    write(readExisting())
+    writeExisting()
     return
   }
   const announcements = await fetchAnnouncements()
-  write(announcements)
-  console.log(`Wrote ${announcements.length} announcement(s) from ${REPO} to ${path.relative(ROOT, OUT_JSON)} and ${path.relative(ROOT, OUT_FEED)}`)
+  const issues = await fetchIssues()
+  write('announcements', announcements)
+  write('issues', issues)
+  console.log(`Wrote ${announcements.length} announcement(s) and ${issues.length} issue(s) from ${REPO}`)
 }
 
 main().catch((err) => {
-  console.error(`::error::Could not fetch announcements: ${err.message}`)
+  console.error(`::error::Could not fetch announcements/issues: ${err.message}`)
   // In CI, fail instead of deploying a site that silently lost its
   // announcements; the previously deployed site stays online.
   if (process.env.CI) process.exit(1)
-  write(readExisting())
+  writeExisting()
 })
