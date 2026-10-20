@@ -1,5 +1,9 @@
 # macOS Tahoe
 
+<img width="1064" height="370" alt="macOS Tahoe" src="./images/macos-tahoe.png" />
+
+*Here we are, the last for intel Macs*
+
 macOS 26 Tahoe is the last major macOS release that Apple ships for Intel Macs. It drops a large number of Intel Macs, most of them with a T2 security chip, which makes it the main focus of OpenCore Legacy Patcher T2.
 
 Support for macOS Tahoe in OpenCore Legacy Patcher T2 is currently in **alpha**. Expect bugs, and please report them on [GitHub Discussions](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/discussions).
