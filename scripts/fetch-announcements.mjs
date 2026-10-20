@@ -34,10 +34,13 @@ const LIST_URL = `${SITE_URL}announcements/`
 
 const [OWNER, NAME] = REPO.split('/')
 
-const CATEGORY_QUERY = `
-query ($owner: String!, $name: String!, $slug: String!) {
+// Note: repository.discussionCategory(slug:) can't be resolved with a GitHub
+// Actions token ("Could not resolve to a DiscussionCategory"), so list the
+// categories and pick the right one by slug instead.
+const CATEGORIES_QUERY = `
+query ($owner: String!, $name: String!) {
   repository(owner: $owner, name: $name) {
-    discussionCategory(slug: $slug) { id name }
+    discussionCategories(first: 100) { nodes { id name slug } }
   }
 }`
 
@@ -92,10 +95,12 @@ function excerpt(text, max = 220) {
 }
 
 async function fetchAnnouncements() {
-  const categoryData = await graphql(CATEGORY_QUERY, { owner: OWNER, name: NAME, slug: CATEGORY })
-  const category = categoryData.repository?.discussionCategory
+  const categoryData = await graphql(CATEGORIES_QUERY, { owner: OWNER, name: NAME })
+  const categories = categoryData.repository?.discussionCategories?.nodes ?? []
+  const category = categories.find((c) => c.slug === CATEGORY || c.name.toLowerCase() === CATEGORY.toLowerCase())
   if (!category) {
-    throw new Error(`Discussion category "${CATEGORY}" not found in ${REPO}`)
+    const available = categories.map((c) => c.slug).join(', ') || 'none visible'
+    throw new Error(`Discussion category "${CATEGORY}" not found in ${REPO} (available: ${available})`)
   }
 
   const nodes = []
