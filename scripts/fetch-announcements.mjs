@@ -33,7 +33,7 @@ const OUT_ISSUES_JSON = path.join(ROOT, '.vitepress', 'issues.json')
 const OUT_ISSUES_FEED = path.join(ROOT, 'public', 'issues.xml')
 
 const REPO = process.env.ANNOUNCEMENTS_REPO || 'albert-mueller/OpenCore-Legacy-Patcher-T2'
-const CATEGORY = process.env.ANNOUNCEMENTS_CATEGORY || ''
+const CATEGORY = process.env.ANNOUNCEMENTS_CATEGORY || 'announcements'
 const LIMIT = Number(process.env.ANNOUNCEMENTS_LIMIT || 100)
 const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN
 
