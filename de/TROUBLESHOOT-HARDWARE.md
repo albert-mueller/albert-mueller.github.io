@@ -2,24 +2,24 @@
 
 #### Allgemein
 
-* [Keine Helligkeitssteuerung](None#keine-helligkeitssteuerung)
-* [Keine WLAN-Verbindung unter Monterey mit älteren Karten](None#keine-wlan-verbindung-unter-monterey-mit-alteren-karten)
-* [Keine Grafikbeschleunigung](None#keine-grafikbeschleunigung)
-* [Keine DisplayPort-Ausgabe auf Mac Pros mit NVIDIA Kepler](None#keine-displayport-ausgabe-auf-mac-pros-mit-nvidia-kepler)
-* [Zweite CPU auf MacPro3,1/Xserve2,1 nicht sichtbar](None#zweite-cpu-auf-macpro3-1-xserve2-1-nicht-sichtbar)
-* [Keine Beschleunigung nach dem Wechsel auf eine Metal-GPU im Mac Pro](None#keine-beschleunigung-nach-dem-wechsel-auf-eine-metal-gpu-im-mac-pro)
-* [Tastatur, Maus und Trackpad funktionieren im Installer oder nach einem Update nicht](None#tastatur-maus-und-trackpad-funktionieren-im-installer-oder-nach-einem-update-nicht)
+* [Keine Helligkeitssteuerung](#keine-helligkeitssteuerung)
+* [Keine WLAN-Verbindung unter Monterey mit älteren Karten](#keine-wlan-verbindung-unter-monterey-mit-alteren-karten)
+* [Keine Grafikbeschleunigung](#keine-grafikbeschleunigung)
+* [Keine DisplayPort-Ausgabe auf Mac Pros mit NVIDIA Kepler](#keine-displayport-ausgabe-auf-mac-pros-mit-nvidia-kepler)
+* [Zweite CPU auf MacPro3,1/Xserve2,1 nicht sichtbar](#zweite-cpu-auf-macpro3-1-xserve2-1-nicht-sichtbar)
+* [Keine Beschleunigung nach dem Wechsel auf eine Metal-GPU im Mac Pro](#keine-beschleunigung-nach-dem-wechsel-auf-eine-metal-gpu-im-mac-pro)
+* [Tastatur, Maus und Trackpad funktionieren im Installer oder nach einem Update nicht](#tastatur-maus-und-trackpad-funktionieren-im-installer-oder-nach-einem-update-nicht)
 * [Keine T1-Funktionen nach der Installation von Sonoma oder neuer](#keine-t1-funktionen-nach-der-installation-von-sonoma-oder-neuer)
 
 #### Nicht-Metal
 
-* [Tastaturbeleuchtung funktioniert nicht](None#tastaturbeleuchtung-funktioniert-nicht)
-* [Stark verzerrte Darstellung nach dem Ruhezustand auf ATI/AMD von macOS 11.3 bis Monterey](None#stark-verzerrte-darstellung-nach-dem-ruhezustand-auf-ati-amd-terascale-1-von-macos-11-3-bis-monterey)
-* [GPU-Umschaltung auf MacBook Pros 2011 mit 15" und 17" funktioniert nicht](None#gpu-umschaltung-auf-macbook-pros-2011-mit-15-und-17-funktioniert-nicht)
-* [Fehlerhafte Farben auf ATI-TeraScale-2-GPUs (HD5000/HD6000)](None#fehlerhafte-farben-auf-ati-terascale-2-gpus-hd5000-hd6000))
-* [Anmeldung auf MacBook Pros 2011 mit 15" und 17" nicht möglich](None#anmeldung-auf-macbook-pros-2011-mit-15-und-17-nicht-moglich)
-* [Schwarze Kästen auf HD3000-iGPUs](None#schwarze-kasten-auf-hd3000-igpus)
-* [Bluetooth-Geräte lassen sich nicht koppeln](None#bluetooth-gerate-lassen-sich-nicht-koppeln)
+* [Tastaturbeleuchtung funktioniert nicht](#tastaturbeleuchtung-funktioniert-nicht)
+* [Stark verzerrte Darstellung nach dem Ruhezustand auf ATI/AMD von macOS 11.3 bis Monterey](#stark-verzerrte-darstellung-nach-dem-ruhezustand-auf-ati-amd-terascale-1-von-macos-11-3-bis-monterey)
+* [GPU-Umschaltung auf MacBook Pros 2011 mit 15" und 17" funktioniert nicht](#gpu-umschaltung-auf-macbook-pros-2011-mit-15-und-17-funktioniert-nicht)
+* [Fehlerhafte Farben auf ATI-TeraScale-2-GPUs (HD5000/HD6000)](#fehlerhafte-farben-auf-ati-terascale-2-gpus-hd5000-hd6000)
+* [Anmeldung auf MacBook Pros 2011 mit 15" und 17" nicht möglich](#anmeldung-auf-macbook-pros-2011-mit-15-und-17-nicht-moglich)
+* [Schwarze Kästen auf HD3000-iGPUs](#schwarze-kasten-auf-hd3000-igpus)
+* [Bluetooth-Geräte lassen sich nicht koppeln](#bluetooth-gerate-lassen-sich-nicht-koppeln)
 
 Falls du nicht weißt, was als Nicht-Metal-GPU gilt, sieh dir die Übersicht in der [FAQ](FAQ.md#was-bedeutet-metal-und-nicht-metal) an.
 
@@ -43,7 +43,7 @@ In macOS werden GPU-Treiber oft mit jeder großen Version aus dem System entfern
 
 Weitere Informationen findest du unter [Post-Install-Volume-Patches anwenden](POST-INSTALL.md#post-install-volume-patches-anwenden).
 
-Wenn du nach der Installation des Betriebssystems in einem Mac Pro die originale GPU gegen eine Metal-GPU getauscht hast, findest du eine Anleitung unter [Keine Beschleunigung nach dem Wechsel auf eine Metal-GPU im Mac Pro](None#keine-beschleunigung-nach-dem-wechsel-auf-eine-metal-gpu-im-mac-pro).
+Wenn du nach der Installation des Betriebssystems in einem Mac Pro die originale GPU gegen eine Metal-GPU getauscht hast, findest du eine Anleitung unter [Keine Beschleunigung nach dem Wechsel auf eine Metal-GPU im Mac Pro](#keine-beschleunigung-nach-dem-wechsel-auf-eine-metal-gpu-im-mac-pro).
 
 In der folgenden Liste siehst du, welche GPUs in welchen macOS-Versionen gepatcht werden müssen.
 

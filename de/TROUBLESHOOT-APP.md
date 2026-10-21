@@ -1,10 +1,10 @@
 # Probleme mit der App
 
-* [OpenCore Legacy Patcher T2 startet nicht](None#opencore-legacy-patcher-t2-startet-nicht)
-* [Fehler „You don't have permission to save...“ beim Erstellen des USB-Installers](None#fehler-„you-don-t-have-permission-to-save-beim-erstellen-des-usb-installers)
-* [Internes Laufwerk fehlt beim Erstellen von OpenCore](None#internes-laufwerk-fehlt-beim-erstellen-von-opencore)
-* [„Unable to resolve dependencies, error code 71“ beim Root-Patching](None#„unable-to-resolve-dependencies-error-code-71-beim-root-patching)
-* [Fehler „System version mismatch“ beim Root-Patching](None#fehler-„system-version-mismatch-beim-root-patching)
+* [OpenCore Legacy Patcher T2 startet nicht](#opencore-legacy-patcher-t2-startet-nicht)
+* [Fehler „You don't have permission to save...“ beim Erstellen des USB-Installers](#fehler-„you-don-t-have-permission-to-save-beim-erstellen-des-usb-installers)
+* [Internes Laufwerk fehlt beim Erstellen von OpenCore](#internes-laufwerk-fehlt-beim-erstellen-von-opencore)
+* [„Unable to resolve dependencies, error code 71“ beim Root-Patching](#„unable-to-resolve-dependencies-error-code-71-beim-root-patching)
+* [Fehler „System version mismatch“ beim Root-Patching](#fehler-„system-version-mismatch-beim-root-patching)
 
 
 ## OpenCore Legacy Patcher T2 startet nicht

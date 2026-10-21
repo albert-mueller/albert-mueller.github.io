@@ -2,14 +2,14 @@
 
 Diese Seite richtet sich an Nutzer, die allgemein Probleme mit macOS Big Sur und neuer sowie den Legacy-Grafikbeschleunigungs-Patches haben. Falls du nicht weißt, was als Nicht-Metal-GPU gilt, sieh dir die Übersicht in der [FAQ](FAQ.md#was-bedeutet-metal-und-nicht-metal) an.
 
-* [Firefox und Thunderbird funktionieren nicht (HD 3000)](None#firefox-und-thunderbird-funktionieren-nicht-hd-3000))
-* [Fehlerhafte Hintergrund-Unschärfe](None#fehlerhafte-hintergrund-unscharfe)
-* [Ältere Nicht-Metal-Apps herunterladen](None#altere-nicht-metal-apps-herunterladen)
-* [Zoom startet nicht](None#zoom-startet-nicht)
-* [Apps können keine Sonderberechtigungen erteilt werden (z. B. Kamerazugriff für Zoom)](None#apps-konnen-keine-sonderberechtigungen-erteilt-werden-z-b-kamerazugriff-fur-zoom))
-* [Probleme mit den Apps Fotos und Karten](None#probleme-mit-den-apps-fotos-und-karten)
-* [„Fertig“ lässt sich beim Bearbeiten eines Widgets in der Seitenleiste nicht drücken](None#„fertig-lasst-sich-beim-bearbeiten-eines-widgets-in-der-seitenleiste-nicht-drucken)
-* [Safari-Erweiterungen lassen sich nicht erlauben](None#safari-erweiterungen-lassen-sich-nicht-erlauben)
+* [Firefox und Thunderbird funktionieren nicht (HD 3000)](#firefox-und-thunderbird-funktionieren-nicht-hd-3000)
+* [Fehlerhafte Hintergrund-Unschärfe](#fehlerhafte-hintergrund-unscharfe)
+* [Ältere Nicht-Metal-Apps herunterladen](#altere-nicht-metal-apps-herunterladen)
+* [Zoom startet nicht](#zoom-startet-nicht)
+* [Apps können keine Sonderberechtigungen erteilt werden (z. B. Kamerazugriff für Zoom)](#apps-konnen-keine-sonderberechtigungen-erteilt-werden-z-b-kamerazugriff-fur-zoom)
+* [Probleme mit den Apps Fotos und Karten](#probleme-mit-den-apps-fotos-und-karten)
+* [„Fertig“ lässt sich beim Bearbeiten eines Widgets in der Seitenleiste nicht drücken](#„fertig-lasst-sich-beim-bearbeiten-eines-widgets-in-der-seitenleiste-nicht-drucken)
+* [Safari-Erweiterungen lassen sich nicht erlauben](#safari-erweiterungen-lassen-sich-nicht-erlauben)
 
 
 ## Firefox und Thunderbird funktionieren nicht (HD 3000)

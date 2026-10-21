@@ -2,11 +2,11 @@
 
 ![](../images/macos-monterey.png)
 
-Mit OpenCore Legacy Patcher v0.1.7 und neuer haben wir eine Beta-Unterstützung für macOS Monterey implementiert. Beachte bitte, dass Apple mit diesem Release viel Hardware fallen gelassen und zudem viele unserer bisherigen Patch-Sets unbrauchbar gemacht hat. Diese Seite informiert über aktuelle Probleme und wird aktualisiert, sobald neue Patch-Sets entwickelt und in den Patcher aufgenommen werden.
+Mit OpenCore Legacy Patcher v0.1.7 und neuer haben wir eine Beta-Unterstützung für macOS Monterey eingeführt. Beachte bitte, dass Apple mit dieser Version viel Hardware fallen gelassen und viele unserer bisherigen Patch-Sets unbrauchbar gemacht hat. Diese Seite informiert über aktuelle Probleme und wird aktualisiert, sobald neue Patch-Sets entwickelt und in unseren Patcher aufgenommen werden.
 
-## Neu fallen gelassene Hardware
+## Neu nicht mehr unterstützte Hardware
 
-Mit Monterey setzt Apple seinen recht rücksichtslosen Kurs fort, Intel-Hardware fallen zu lassen. Mit diesem Release wurden folgende Modelle entfernt und damit in OpenCore Legacy Patcher T2 aufgenommen:
+Mit Monterey setzt Apple seinen recht rücksichtslosen Kurs fort, Intel-Hardware fallen zu lassen. Mit dieser Version wurden folgende Modelle entfernt und daher in OpenCore Legacy Patcher T2 aufgenommen:
 
 * iMac14,4
 * iMac15,1
@@ -37,13 +37,13 @@ Alle diese Modelle werden jetzt von OpenCore Legacy Patcher T2 unterstützt.
 
 ## Aktuelle Probleme unter Monterey
 
-### Startproblem beim MacBookPro11,3 ohne Kepler-Beschleunigung
+### Bootproblem beim MacBookPro11,3 ohne Kepler-Beschleunigung
 
-Da das Display über die NVIDIA-Kepler-Karte angebunden ist, macOS aber auf der Intel-iGPU gerendert wird, haben Nutzer Probleme beim Booten ohne angewendete Post-Install-Patches ([weitere Informationen hier](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522)). Derzeit besteht die einzige Lösung darin, die Patches im abgesicherten Modus zu installieren, indem du `Shift+Enter` gedrückt hältst, wenn du macOS im OCLP-Bootpicker auswählst.
+Da der Bildschirm über die NVIDIA-Kepler-Karte angesteuert und macOS auf der Intel-iGPU gerendert wird, hatten Nutzer Probleme beim Booten ohne installierte Post-Install-Patches ([weitere Infos hier](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522)). Derzeit besteht die einzige Lösung darin, die Patches im sicheren Modus zu installieren, indem du `Shift+Enter` gedrückt hältst, während du macOS im OCLP-Bootpicker auswählst.
 
 ## Früher nicht funktionierende Hardware
 
-::: details Problem mit der 5K-Displayausgabe beim iMac15,1 (behoben in 0.3.2 und neuer)
+::: details Problem mit der 5K-Bildschirmausgabe beim iMac15,1 (behoben ab 0.3.2)
 
 * Dokumentation:
   * [5K iMac and UEFI: Fixing the dreaded output limitation](https://khronokernel.github.io/macos/2021/12/08/5K-UEFI.html)
@@ -52,14 +52,14 @@ Da das Display über die NVIDIA-Kepler-Karte angebunden ist, macOS aber auf der 
 
 :::
 
-::: details Problem mit macOS 12.0 Beta 4 auf Geräten von 2012 bis Anfang 2013 (behoben in 0.2.5 und neuer)
+::: details Problem mit macOS 12.0 Beta 4 auf Geräten von 2012 bis Anfang 2013 (behoben ab 0.2.5)
 
-Unter macOS 12.0 Beta 4 hatten viele Ivy-Bridge-Macs Bluetooth-Probleme im Zusammenhang mit ihrem BCM20702-Chipsatz. Die genaue Ursache ist derzeit unbekannt, vermutlich handelt es sich aber um einen Fehler auf Apples Seite. Bis zur Behebung empfehlen wir ein Downgrade auf macOS 12.0 Beta 3:
+Unter macOS 12.0 Beta 4 hatten viele Ivy-Bridge-Macs Bluetooth-Probleme mit ihrem BCM20702-Chipsatz. Die genaue Ursache ist noch unbekannt, vermutlich handelt es sich aber um einen Fehler auf Apples Seite. Bis zur Behebung empfehlen wir ein Downgrade auf macOS 12.0 Beta 3:
 
 * [12.0 Beta 3 (21A5284e) InstallAssistant (direkt)](https://swcdn.apple.com/content/downloads/02/08/071-63739-A_G5RYVW5JHT/dfz5gp3s0jm9vl7m30oewq141zkpv8edr8/InstallAssistant.pkg)
 * [12.0 Beta 3 (21A5284e) InstallAssistant (archive.org)](https://archive.org/details/12.0-21a5284e-beta-3)
 
-Eine vorübergehende Lösung ist, die Prozesse BlueTool und bluetoothd bei jedem Start neu zu starten. Beachte, dass das nicht bei allen Nutzern funktioniert:
+Als vorübergehende Lösung kannst du bei jedem Start die Prozesse BlueTool und bluetoothd neu starten; das funktioniert aber möglicherweise nicht bei allen Nutzern:
 
 ```sh
 sudo killall -9 BlueTool bluetoothd
@@ -67,29 +67,29 @@ sudo killall -9 BlueTool bluetoothd
 
 :::
 
-::: details WLAN-Unterstützung entfernt (behoben in 0.2.5 und neuer)
+::: details WLAN-Unterstützung entfernt (behoben ab 0.2.5)
 
 * Die WLAN-Chipsätze Broadcom BCM94328, BCM94322 und Atheros werden nicht mehr unterstützt
 
-Folgende Modelle haben in macOS Monterey wegen ihres älteren WLAN-Chipsatzes die WLAN-Unterstützung verloren:
+Folgende Modelle haben unter macOS Monterey wegen ihres älteren WLAN-Chipsatzes die WLAN-Unterstützung verloren:
 
 * iMac12,x und älter
 * Macmini3,1 und älter
 * MacBook5,x und älter
 * MacBookAir2,1 und älter
 * MacBookPro7,1 und älter
-  * MacBookPro6,x ist ausgenommen
+  * Ausgenommen MacBookPro6,x
 * MacPro5,1 und älter
 
 Hinweis: BCM943224, BCM94331, BCM94360 und BCM943602 werden von OpenCore Legacy Patcher T2 weiterhin vollständig unterstützt.
 
 :::
 
-::: details Bluetooth-Unterstützung entfernt (behoben in 0.2.5 und neuer)
+::: details Bluetooth-Unterstützung entfernt (behoben ab 0.2.5)
 
 * Die Bluetooth-Chipsätze BRCM2046 und BRCM2070 werden nicht mehr unterstützt
 
-Folgende Modelle haben in macOS Monterey wegen ihres älteren Bluetooth-Chipsatzes die Bluetooth-Unterstützung verloren:
+Folgende Modelle haben unter macOS Monterey wegen ihres älteren Bluetooth-Chipsatzes die Bluetooth-Unterstützung verloren:
 
 * iMac12,x und älter
 * Macmini5,1 und älter
@@ -98,11 +98,11 @@ Folgende Modelle haben in macOS Monterey wegen ihres älteren Bluetooth-Chipsatz
 * MacBookPro8,1 und älter
 * MacPro5,1 und älter
 
-Hinweis: Native BRCM20702 und BRCM20703 werden von OpenCore Legacy Patcher T2 weiterhin vollständig unterstützt.
+Hinweis: Die nativen Chipsätze BRCM20702 und BRCM20703 werden von OpenCore Legacy Patcher T2 weiterhin vollständig unterstützt.
 
 ::: details Entfernte Firmwares
 
-Folgende Firmwares hat macOS Monterey entfernt (früher in IOBluetoothUSBDFU.kext enthalten):
+Diese Firmwares hat macOS Monterey entfernt (sie befanden sich früher in IOBluetoothUSBDFU.kext):
 
 * 2046_820F.dfu
 * 2046_8210.dfu
@@ -123,11 +123,11 @@ Folgende Firmwares hat macOS Monterey entfernt (früher in IOBluetoothUSBDFU.kex
 
 :::
 
-::: details iGPU-Beschleunigung bei Ivy Bridge (behoben in 0.1.7 und neuer)
+::: details Beschleunigung der Ivy-Bridge-iGPU (behoben ab 0.1.7)
 
 * Intel-HD4000-iGPUs werden nicht mehr unterstützt
 
-Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleunigung zu erhalten. OpenCore Legacy Patcher T2 kann die Unterstützung wiederherstellen, wegen des Root-Patchings kann SIP jedoch nicht mehr aktiviert werden:
+Diese Geräte benötigen standardmäßig Root-Volume-Patches, um unter Monterey Grafikbeschleunigung zu erhalten. OpenCore Legacy Patcher T2 kann die Unterstützung wiederherstellen, wegen des Root-Patchings kann SIP dann aber nicht mehr aktiviert werden:
 
 * Macmini6,x
 * MacBookAir5,x
@@ -136,11 +136,11 @@ Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleuni
 
 :::
 
-::: details dGPU-Beschleunigung bei NVIDIA Kepler (behoben in 0.2.5 und neuer)
+::: details Beschleunigung der NVIDIA-Kepler-dGPU (behoben ab 0.2.5)
 
 * NVIDIA-Kepler-dGPUs werden nicht mehr unterstützt
 
-Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleunigung zu erhalten. OpenCore Legacy Patcher T2 kann die Unterstützung wiederherstellen, wegen des Root-Patchings kann SIP jedoch nicht mehr aktiviert werden:
+Diese Geräte benötigen standardmäßig Root-Volume-Patches, um unter Monterey Grafikbeschleunigung zu erhalten. OpenCore Legacy Patcher T2 kann die Unterstützung wiederherstellen, wegen des Root-Patchings kann SIP dann aber nicht mehr aktiviert werden:
 
 * MacBookPro9,1
 * MacBookPro10,1
@@ -150,9 +150,9 @@ Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleuni
 
 :::
 
-::: details Non-Metal-Beschleunigung (behoben in 0.2.5 und neuer)
+::: details Beschleunigung für Nicht-Metal-GPUs (behoben ab 0.2.5)
 
-* Für Non-Metal-GPUs gibt es keine funktionierenden Beschleunigungs-Patches mehr:
+* Für Nicht-Metal-GPUs gibt es keine funktionierenden Beschleunigungs-Patches mehr:
   * Intel-iGPUs Ironlake und Sandy Bridge
   * NVIDIA-GPUs Tesla und Fermi
   * AMD-GPUs TeraScale 1 und 2
@@ -165,6 +165,6 @@ Folgende Geräte erhalten unter Monterey überhaupt keine Grafikbeschleunigung, 
 * MacBookAir4,x und älter
 * MacBookPro8,x und älter
 
-Hinweis: iMac10,1 bis iMac12,x können mit Metal-GPUs aufgerüstet werden, [weitere Informationen hier](https://forums.macrumors.com/threads/2011-imac-graphics-card-upgrade.1596614/).
+Hinweis: iMac10,1 bis iMac12,x lassen sich mit Metal-GPUs aufrüsten, [weitere Infos hier](https://forums.macrumors.com/threads/2011-imac-graphics-card-upgrade.1596614/).
 
 :::

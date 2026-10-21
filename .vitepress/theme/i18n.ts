@@ -1,69 +1,58 @@
-// UI strings of the custom components (announcement lists and pages) per
-// locale. The keys match the `locales` in .vitepress/config.mts: "root" is
-// English, "de" is German. Mirrored GitHub content itself is not translated.
+// UI strings for the announcement/discussion/issue components, per locale.
+// The posts themselves come from GitHub and are not translated.
 import { computed } from 'vue'
 import { useData } from 'vitepress'
 
 const strings = {
-    root: {
-        prefix: '',
-        dateLocale: 'en-US',
-        empty: {
-            announcements: 'There are no announcements yet.',
-            discussions: 'There are no open discussions.',
-            issues: 'There are no open issues.',
-        },
-        back: {
-            announcements: '← All announcements',
-            discussions: '← All discussions',
-            issues: '← All issues',
-        },
+    en: {
+        allAnnouncements: 'All announcements',
+        allDiscussions: 'All discussions',
+        allIssues: 'All issues',
         pinned: 'Pinned',
-        answer: 'Answer',
         by: 'by',
         edited: 'edited',
         comments: 'Comments',
-        commentCount: (n: number) => (n === 0 ? 'No comments yet' : n === 1 ? '1 comment' : `${n} comments`),
-        onGitHub: {
-            announcements: 'Discuss this announcement on GitHub',
-            discussions: 'Join this discussion on GitHub',
-            issues: 'Discuss this issue on GitHub',
-        },
+        answer: 'Answer',
+        discussIssue: 'Discuss this issue on GitHub',
+        joinDiscussion: 'Join this discussion on GitHub',
+        discussAnnouncement: 'Discuss this announcement on GitHub',
+        noComments: 'No comments yet',
+        oneComment: '1 comment',
+        nComments: (n: number) => `${n} comments`,
+        noIssues: 'There are no open issues.',
+        noDiscussions: 'There are no open discussions.',
+        noAnnouncements: 'There are no announcements yet.',
         latestAnnouncements: 'Latest announcements',
-        allAnnouncements: 'All announcements →',
     },
     de: {
-        prefix: '/de',
-        dateLocale: 'de-DE',
-        empty: {
-            announcements: 'Es gibt noch keine Ankündigungen.',
-            discussions: 'Es gibt keine offenen Diskussionen.',
-            issues: 'Es gibt keine offenen Issues.',
-        },
-        back: {
-            announcements: '← Alle Ankündigungen',
-            discussions: '← Alle Diskussionen',
-            issues: '← Alle Issues',
-        },
+        allAnnouncements: 'Alle Ankündigungen',
+        allDiscussions: 'Alle Diskussionen',
+        allIssues: 'Alle Issues',
         pinned: 'Angeheftet',
-        answer: 'Antwort',
         by: 'von',
         edited: 'bearbeitet',
         comments: 'Kommentare',
-        commentCount: (n: number) => (n === 0 ? 'Noch keine Kommentare' : n === 1 ? '1 Kommentar' : `${n} Kommentare`),
-        onGitHub: {
-            announcements: 'Diese Ankündigung auf GitHub diskutieren',
-            discussions: 'An dieser Diskussion auf GitHub teilnehmen',
-            issues: 'Dieses Issue auf GitHub diskutieren',
-        },
+        answer: 'Antwort',
+        discussIssue: 'Dieses Issue auf GitHub diskutieren',
+        joinDiscussion: 'An dieser Diskussion auf GitHub teilnehmen',
+        discussAnnouncement: 'Diese Ankündigung auf GitHub diskutieren',
+        noComments: 'Noch keine Kommentare',
+        oneComment: '1 Kommentar',
+        nComments: (n: number) => `${n} Kommentare`,
+        noIssues: 'Es gibt keine offenen Issues.',
+        noDiscussions: 'Es gibt keine offenen Diskussionen.',
+        noAnnouncements: 'Es gibt noch keine Ankündigungen.',
         latestAnnouncements: 'Neueste Ankündigungen',
-        allAnnouncements: 'Alle Ankündigungen →',
     },
 }
 
-export type Kind = 'announcements' | 'discussions' | 'issues'
-
-export function useStrings() {
-    const { localeIndex } = useData()
-    return computed(() => strings[localeIndex.value as keyof typeof strings] ?? strings.root)
+export function useI18n() {
+    const { lang, localeIndex } = useData()
+    const isDe = computed(() => localeIndex.value === 'de')
+    return {
+        lang,
+        t: computed(() => (isDe.value ? strings.de : strings.en)),
+        // Path prefix of the current locale ('' for English at the root).
+        prefix: computed(() => (isDe.value ? '/de' : '')),
+    }
 }

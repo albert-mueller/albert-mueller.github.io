@@ -1,6 +1,6 @@
-Diese Seite wurde verschoben.
+Diese Seite ist umgezogen.
 
-- [Fehlerbehebung: Anwendung](./TROUBLESHOOT-APP.md)
-- [Fehlerbehebung: Booten, Installer und Sonstiges](./TROUBLESHOOT-MISC.md)
-- [Fehlerbehebung: Non-Metal](./TROUBLESHOOT-NONMETAL.md)
-- [Fehlerbehebung: Hardware](./TROUBLESHOOT-HARDWARE.md)
+- [Probleme mit der App](./TROUBLESHOOT-APP.md)
+- [Probleme beim Booten, mit dem Installer und Sonstiges](./TROUBLESHOOT-MISC.md)
+- [Probleme mit Nicht-Metal-GPUs](./TROUBLESHOOT-NONMETAL.md)
+- [Hardware-Probleme](./TROUBLESHOOT-HARDWARE.md)

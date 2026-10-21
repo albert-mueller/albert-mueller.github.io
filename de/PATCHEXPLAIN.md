@@ -1,16 +1,16 @@
-# Erklärung der Patches in OpenCore Legacy Patcher T2
+# Die Patches in OpenCore Legacy Patcher T2 erklärt
 
-In unserem Patcher kommen zahlreiche Patches zum Einsatz, um ein stabiles System sicherzustellen. Hier gehen wir durch, welche Patches verwendet werden und warum wir sie empfehlen oder sogar voraussetzen.
+Unser Patcher verwendet zahlreiche Patches, um ein stabiles System zu gewährleisten. Hier gehen wir durch, welche Patches verwendet werden und warum wir sie empfehlen oder sogar voraussetzen.
 
-* [OpenCore-Einstellungen](None#opencore-einstellungen)
-* [Eingeschleuste Kexts](None#eingeschleuste-kexts)
-* [Patches auf dem Laufwerk](None#patches-auf-dem-laufwerk)
+* [OpenCore-Einstellungen](#opencore-einstellungen)
+* [Eingeschleuste Kexts](#eingeschleuste-kexts)
+* [Patches auf dem Laufwerk](#patches-auf-dem-laufwerk)
 
 ## OpenCore-Einstellungen
 
-Im Folgenden ein Überblick über die Hauptlogik, mit der OpenCore Legacy Patcher T2 native Unterstützung in macOS erreicht. Die Konfiguration von OpenCore ist in [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg) dokumentiert sowie in einer von uns bereitgestellten Online-Version:
+Im Folgenden findest du einen Überblick über die wichtigste Logik, mit der OpenCore Legacy Patcher T2 native Unterstützung in macOS erreicht. Die Konfiguration von OpenCore ist in [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg) sowie in einer von uns bereitgestellten Online-Version dokumentiert:
 
-* [OpenCorePkg-Online-Dokumentation](https://dortania.github.io/docs/latest/Configuration.html)
+* [Online-Dokumentation von OpenCorePkg](https://dortania.github.io/docs/latest/Configuration.html)
 
 ::: details Erklärung der Konfiguration
 
@@ -18,26 +18,26 @@ Im Folgenden ein Überblick über die Hauptlogik, mit der OpenCore Legacy Patche
 
 * SSDT-CPBG
   * Grund: Behebt eine Kernel Panic auf Arrandale-Macs in frühen Big-Sur-Builds
-  * Logik: Deaktiviert das Dummy-Gerät CPBG in ACPI
+  * Logik: Deaktiviert das Dummy-Gerät CPBG im ACPI
   * Modelle: MacBookPro6,x und iMac11,x
 * SSDT-PCI
-  * Grund: Patcht die Audio-Unterstützung unter Windows für Sandy und Ivy Bridge
+  * Grund: Patcht die Windows-Audiounterstützung für Sandy und Ivy Bridge
   * Logik: Entfernt die 32-Bit-Zuweisungsbeschränkung von PCI0
   * Modelle: Alle Sandy- und Ivy-Bridge-Macs außer MacPro6,1
 * SSDT-DGPU
-  * Grund: Ermöglicht das softwarebasierte Deaktivieren der dGPU per deMUX bei MacBook Pros von 2011
+  * Grund: Ermöglicht ein softwarebasiertes deMUX, das die dGPUs in MacBook Pros von 2011 deaktiviert
   * Logik: Sendet per ACPI eine Abschaltanforderung an die dGPU
   * Modelle: MacBookPro8,2 und MacBookPro8,3 mit defekter dGPU
 
 ### ACPI -> Patch
 
-* `EHCx`- und `XHC1`-Patches
-  * Grund: Erforderlich für korrekten USB-Betrieb
-  * Logik: Verhindert, dass USB-Maps neuerer Modelle geladen werden und die USB-Anschlüsse unbrauchbar machen
-  * Modelle: Für alle Modelle erforderlich, wenn SMBIOS-Spoofing mit Moderate oder Advanced verwendet wird
-* Patch `BUF0` zu `BUF1`
+* Patches für `EHCx` und `XHC1`
+  * Grund: Für korrekten USB-Betrieb erforderlich
+  * Logik: Verhindert, dass sich USB-Maps neuerer Modelle anbinden und die USB-Anschlüsse unbrauchbar machen
+  * Modelle: Alle Modelle beim Spoofing mit SMBIOS-Stufe „Moderate“ oder „Advanced“
+* Patch: `BUF0` zu `BUF1`
   * Grund: Gehört zu SSDT-PCI
-* Patch `_INI` zu `XINI`
+* Patch: `_INI` zu `XINI`
   * Grund: Gehört zu SSDT-DGPU
 
 ### Booter -> Patch
@@ -50,9 +50,9 @@ Im Folgenden ein Überblick über die Hauptlogik, mit der OpenCore Legacy Patche
 ### Booter -> Quirks
 
 * ForceBooterSignature
-  * Grund: Erforderlich für die Unterstützung des Ruhezustands
+  * Grund: Erforderlich für die Unterstützung des Ruhezustands (Hibernation)
   * Logik: Lässt boot.efi glauben, OpenCore sei Apples Firmware
-  * Modelle: Für alle Modelle erforderlich
+  * Modelle: Alle Modelle
 
 ### DeviceProperties -> Add
 
@@ -62,34 +62,34 @@ Im Folgenden ein Überblick über die Hauptlogik, mit der OpenCore Legacy Patche
   * Logik: Setzt AppleBackLight-Eigenschaften
   * Modelle: iMac11,x und iMac12,x mit aufgerüsteten NVIDIA-Metal-GPUs
 * `PciRoot(0x0)/Pci(0x2,0x0)`
-  * Grund: Deaktiviert die interne GPU, um Ruhezustandsprobleme auf aufgerüsteten iMacs zu beheben
+  * Grund: Deaktiviert die interne GPU, um Probleme mit dem Ruhezustand auf aufgerüsteten iMacs zu beheben
   * Logik: Lässt macOS glauben, die iGPU sei ein generisches PCI-Gerät
   * Modelle: iMac12,x mit aufgerüsteten Metal-GPUs
 
 ### Kernel -> Patch
 
-* SMC-Patch
+* Patch: SMC
   * Grund: Erforderlich, um SMC-Firmware-Updates zu verhindern
-  * Logik: Entfernt `smc-version` per Patch aus AppleSMC.kext; für die volle Funktion wird SMC-Spoof.kext benötigt
-  * Modelle: Für alle Modelle mit SMBIOS-Spoofing erforderlich
-* IOHIDFamily-Patch
-  * Grund: Erforderlich für die Unterstützung von HID-Peripherie in macOS auf älterer Hardware
-  * Logik: Lässt IOHIDFamily glauben, es werde immer in die Wiederherstellung gebootet
+  * Logik: Entfernt `smc-version` in AppleSMC.kext per Patch; für die volle Funktion ist SMC-Spoof.kext nötig
+  * Modelle: Alle Modelle beim SMBIOS-Spoofing
+* Patch: IOHIDFamily
+  * Grund: Erforderlich für die Unterstützung von HID-Peripheriegeräten in macOS auf älterer Hardware
+  * Logik: Lässt IOHIDFamily glauben, es werde immer die Recovery gebootet
   * Modelle: Penryn-CPUs (Core-2-Serie)
-* Patch „Force FileVault on Broken Seal“
-  * Grund: Ermöglicht FileVault auf Macs mit Root-Patches
+* Patch: FileVault bei gebrochenem Siegel erzwingen
+  * Grund: Erlaubt FileVault auf root-gepatchten Macs
   * Logik: Zwingt APFS.kext, bei der FileVault-Unterstützung immer „true“ zurückzugeben
   * Modelle: Alle Modelle, die Root-Patches benötigen
-* Patch „Disable Library Validation Enforcement“
-  * Grund: Non-Metal-Root-Volume-Patches bestehen die Library-Validation-Prüfungen nicht
+* Patch: Durchsetzung der Library Validation deaktivieren
+  * Grund: Nicht-Metal-Root-Volume-Patches bestehen die Library-Validation-Prüfungen nicht
   * Logik: Zwingt die Library-Validation-Funktion, immer „nicht erforderlich“ zurückzugeben
-  * Modelle: Non-Metal-GPUs
-* SurPlus-Patch
-  * Grund: macOS 11.3–12.0.1 setzt für einen stabilen Start RDRAND-Unterstützung in der CPU voraus
-  * Logik: Zwingt den RDRAND-Code, einen festgelegten Wert zurückzugeben
+  * Modelle: Nicht-Metal-GPUs
+* Patch: SurPlus
+  * Grund: macOS 11.3–12.0.1 setzt für einen stabilen Start RDRAND-Unterstützung der CPU voraus
+  * Logik: Zwingt den RDRAND-Code, einen vorgegebenen Wert zurückzugeben
   * Modelle: Alle Macs vor Ivy Bridge
-* Patch zum Umleiten von `kern.hv_vmm_present`
-  * Grund: Ermöglicht Installation und Updates von macOS auf nicht unterstützter Hardware
+* Patch: `kern.hv_vmm_present` umleiten
+  * Grund: Ermöglicht die Installation und Aktualisierung von macOS auf nicht unterstützter Hardware
   * Logik: Lässt den Userspace das System als virtuelle Maschine sehen
   * Modelle: Alle Modelle mit VMM-Spoofing
 
@@ -98,58 +98,58 @@ Im Folgenden ein Überblick über die Hauptlogik, mit der OpenCore Legacy Patche
 
 * ThirdPartyDrives
   * Grund: Erforderlich, um Probleme beim Aufwachen aus dem Ruhezustand mit Laufwerken von Drittanbietern zu vermeiden
-  * Logik: Patcht AppleAHCIPort.kext, um die Unterstützung zu aktivieren
+  * Logik: Patcht AppleAHCIPort.kext für die Unterstützung
   * Modelle: Alle Modelle mit Standard-SATA-Anschlüssen
 * PanicNoKextDump
-  * Grund: Verhindert den Kext-Dump bei Kernel Panics und erleichtert das Kernel-Debugging
+  * Grund: Verhindert Kext-Dumps bei Kernel Panics und erleichtert das Kernel-Debugging
   * Logik: Patcht den Kernel, damit er keine unnötigen Informationen ausgibt
-  * Modelle: Wird nur gesetzt, wenn der Benutzer Verbose Boot aktiviert hat
+  * Modelle: Nur gesetzt, wenn der Nutzer Verbose Boot aktiviert hat
 
 ### Misc -> Security
 
 * SecureBootModel
-  * Grund: Erforderlich, um native Betriebssystem-Updates beim Spoofing auf ein T2-Modell zu ermöglichen
-  * Logik: Setzt die Secure-Enclave-Kennung des T2
-  * Modelle: Für alle Modelle erforderlich, die mit Minimal oder höher ein T2-Modell vortäuschen
+  * Grund: Erforderlich für native Betriebssystem-Updates beim Spoofing von T2-Modellen
+  * Logik: Setzt den Secure-Enclave-Identifier des T2
+  * Modelle: Alle Modelle, die mit Stufe „Minimal“ oder höher ein T2-Modell spoofen
 
 ### NVRAM -> Add
 
 * `-v keepsyms=1 debug=0x100`
   * Grund: Zeigt Debug-Informationen des macOS-Kernels und der Kexts an und verhindert Neustarts bei einer Panic
-  * Logik: Fügt Argumente zum NVRAM hinzu
-  * Modelle: Wird nur gesetzt, wenn der Benutzer Verbose Boot aktiviert hat
+  * Logik: Fügt Boot-Argumente zum NVRAM hinzu
+  * Modelle: Nur gesetzt, wenn der Nutzer Verbose Boot aktiviert hat
 * `-liludbgall`
-  * Grund: Aktiviert das Debug-Logging von Lilu und seinen Plugins
-  * Logik: Fügt Argumente zum NVRAM hinzu
-  * Modelle: Wird nur gesetzt, wenn der Benutzer Kext DEBUG aktiviert hat
+  * Grund: Aktiviert das Debug-Logging von Lilu und Plugins
+  * Logik: Fügt Boot-Argumente zum NVRAM hinzu
+  * Modelle: Nur gesetzt, wenn der Nutzer Kext DEBUG aktiviert hat
 * `msgbuf=1048576`
   * Grund: Setzt die Größe des Nachrichtenpuffers auf 1 MB, damit Boot-Logs erhalten bleiben
-  * Logik: Fügt Argumente zum NVRAM hinzu
-  * Modelle: Wird nur gesetzt, wenn der Benutzer Kext DEBUG aktiviert hat
+  * Logik: Fügt Boot-Argumente zum NVRAM hinzu
+  * Modelle: Nur gesetzt, wenn der Nutzer Kext DEBUG aktiviert hat
 * `agdpmod=pikera`
-  * Grund: Behebt die GPU-Umschaltung beim MacBookPro9,x
-  * Logik: Fügt Argumente zum NVRAM hinzu
+  * Grund: Behebt die GPU-Umschaltung auf MacBookPro9,x
+  * Logik: Fügt Boot-Argumente zum NVRAM hinzu
   * Modelle: MacBookPro9,x
 * `shikigva=80 unfairgva=1`
 * `shikigva=128 unfairgva=1 -wegtree`
   * Grund: Behebt die DRM-Unterstützung auf Modellen mit aufgerüsteten AMD-Metal-GPUs
-  * Logik: Fügt Argumente zum NVRAM hinzu
+  * Logik: Fügt Boot-Argumente zum NVRAM hinzu
   * Modelle: Modelle mit aufgerüsteten AMD-Metal-GPUs
 * `-revasset`
   * Grund: Aktiviert Inhaltscaching bei VMM-Spoofing
-  * Logik: Fügt Argumente zum NVRAM hinzu
+  * Logik: Fügt Boot-Argumente zum NVRAM hinzu
   * Modelle: Alle Modelle mit VMM-Spoofing
 * `amfi=0x80`
   * Grund: Deaktiviert Apple Mobile File Integrity, um Root-Patches zu ermöglichen
-  * Logik: Fügt Argumente zum NVRAM hinzu
+  * Logik: Fügt Boot-Argumente zum NVRAM hinzu
   * Modelle: Alle Modelle, die unsignierte Root-Patches benötigen
 
 ### UEFI -> ProtocolOverrides
 
 * GopPassThrough
   * Grund: Sorgt für korrekte Bildausgabe auf Geräten mit UGA-Firmware, aber GOP-GPU
-  * Logik: Stellt GOP-Protokollinstanzen auf Basis der UGA-Protokollinstanzen bereit
-  * Modelle: MacPro3,1, iMac7,1–8,1
+  * Logik: Stellt GOP-Protokollinstanzen zusätzlich zu den UGA-Protokollinstanzen bereit
+  * Modelle: MacPro3,1, iMac7,1-8,1
 
 :::
 
@@ -163,18 +163,18 @@ Im Folgenden wird erklärt, welche Kexts OpenCore Legacy Patcher T2 beim Start i
 
 * Lilu
   * Grund: Patch-Engine für andere Kexts
-  * Modelle: Für alle Modelle erforderlich
+  * Modelle: Alle Modelle
 * WhateverGreen
-  * Grund: Patcht GPU-Frameworks und -Kexts, um korrekte Unterstützung sicherzustellen
-  * Modelle: Für alle Modelle erforderlich, die Spoofing verwenden oder eine nicht originale GPU haben
+  * Grund: Patcht GPU-Frameworks und -Kexts für korrekte Unterstützung
+  * Modelle: Alle Modelle mit Spoofing oder nicht originaler GPU
 * CPUFriend
   * Grund: Patcht IOx86PlatformPlugin, um frühere CPU-Profile wiederherzustellen
-  * Modelle: Alle Modelle mit Spoofing der Stufe Minimal oder höher
+  * Modelle: Alle Modelle mit Spoofing der Stufe „Minimal“ oder höher
 * AirportBrcmFixup
-  * Grund: Patcht IO80211 und verwandte Komponenten, um die Netzwerkunterstützung für nicht unterstützte Karten herzustellen und Fehler bei nativen Karten zu beheben (z. B. zufällig verschlechterte Netzwerkleistung)
+  * Grund: Patcht IO80211 und Co., um die Netzwerkunterstützung für nicht unterstützte Karten herzustellen und Fehler bei nativen Karten zu beheben (z. B. zufällig verschlechterte Netzwerkleistung)
   * Modelle: BCM943224, BCM94331, BCM94360 und BCM943602
 * BlueToolFixup
-  * Grund: Patcht BlueTool, um Bluetooth unter Monterey zu aktivieren
+  * Grund: Patcht BlueTool, um Bluetooth unter Monterey zu ermöglichen
   * Modelle: Alle Modelle mit WLAN-Karten vor BCM94360 oder Chipsätzen von Drittanbietern
 * Bluetooth-Spoof
   * Grund: Schleust zusätzliche Daten in bestimmte Bluetooth-Chipsätze ein, damit das System sie erkennt
@@ -189,38 +189,38 @@ Im Folgenden wird erklärt, welche Kexts OpenCore Legacy Patcher T2 beim Start i
   * Grund: Deaktiviert Speicherfehlermeldungen beim MacPro7,1
   * Modelle: Mac Pros und Xserves
 * CryptexFixup
-  * Grund: Installiert ein Cryptex ohne AVX2.0 auf CPUs ohne AVX2.0
+  * Grund: Installiert das Nicht-AVX2.0-Cryptex auf CPUs ohne AVX2.0
   * Modelle: Alle CPUs bis einschließlich Ivy Bridge
 * AutoPkgInstaller
   * Grund: Ermöglicht automatisches Root-Patching
 * NVMeFix
   * Grund: Behebt die Unterstützung für NVMe-Laufwerke von Drittanbietern
 * RSRHelper
-  * Grund: Behebt die Unterstützung für Rapid Security Responses auf Installationen mit Root-Patches
+  * Grund: Behebt die Unterstützung für „Schnelle Sicherheitsmaßnahmen“ auf root-gepatchten Installationen
 * 
 
 ### Ethernet
 
 * nForceEthernet
-  * Grund: Schleust den alten NVIDIA-Ethernet-Kext ein, um das Netzwerk ab Catalina wiederherzustellen
-  * Modelle: Erforderlich für NVIDIA-Ethernet von 2010 und älter
+  * Grund: Schleust den alten NVIDIA-Ethernet-Kext ein, um das Netzwerk unter Catalina und neuer herzustellen
+  * Modelle: NVIDIA-Ethernet von 2010 und älter
 * MarvelYukonEthernet
-  * Grund: Schleust den alten Marvell-Ethernet-Kext ein, um das Netzwerk ab Catalina wiederherzustellen
-  * Modelle: Erforderlich für Marvell-Ethernet von 2008 und älter
+  * Grund: Schleust den alten Marvell-Ethernet-Kext ein, um das Netzwerk unter Catalina und neuer herzustellen
+  * Modelle: Marvell-Ethernet von 2008 und älter
 * CatalinaBCM5701Ethernet
-  * Grund: Schleust den alten Broadcom-Ethernet-Kext ein, um das Netzwerk unter Big Sur wiederherzustellen
-  * Logik: Entfernt kollidierende Symbole per Patch, damit es nicht mit dem vorhandenen BCM5701Ethernet in Konflikt gerät
-  * Modelle: Erforderlich für Broadcom-Ethernet von 2011 und älter
+  * Grund: Schleust den alten Broadcom-Ethernet-Kext ein, um das Netzwerk unter Big Sur herzustellen
+  * Logik: Entfernt kollidierende Symbole per Patch, damit es keinen Konflikt mit dem vorhandenen BCM5701Ethernet gibt
+  * Modelle: Broadcom-Ethernet von 2011 und älter
 * Intel82574L
-  * Grund: Stellt die Ethernet-Unterstützung auf Mac Pros wieder her
-  * Modelle: MacPro3,1–5,1
+  * Grund: Stellt die Ethernet-Unterstützung auf Mac Pros her
+  * Modelle: MacPro3,1 - 5,1
 * CatalinaIntelI210Ethernet
   * Grund: Behebt die Unterstützung für Intel-i210/i225-Netzwerkkarten auf Macs vor Ivy Bridge
 * AppleIntel8254XEthernet
-  * Grund: Stellt die Ethernet-Unterstützung auf Mac Pros wieder her
-  * Modelle: MacPro3,1–5,1
+  * Grund: Stellt die Ethernet-Unterstützung auf Mac Pros her
+  * Modelle: MacPro3,1 - 5,1
 
-### FireWire
+### Firewire 
 
 * IOFireWireFamily
   * Grund: Ermöglicht das Booten über FireWire
@@ -233,7 +233,7 @@ Im Folgenden wird erklärt, welche Kexts OpenCore Legacy Patcher T2 beim Start i
 
 * USBMap
   * Grund: Schleust alte USB-Map-Profile ein, um USB zu reparieren
-  * Modelle: Für alle Modelle mit Spoofing der Stufe Moderate oder höher sowie für Modelle vor 2012 erforderlich
+  * Modelle: Alle Modelle mit Spoofing der Stufe „Moderate“ oder höher sowie Modelle vor 2012
 
 ### SSE
 
@@ -241,10 +241,10 @@ Im Folgenden wird erklärt, welche Kexts OpenCore Legacy Patcher T2 beim Start i
   * Grund: Übersetzt SSE4.2-Befehle in kompatiblen Code für SSE4.1-CPUs; erforderlich für AMD-Metal-Treiber
   * Modelle: MacPro3,1
 * telemetrap
-  * Grund: Stellt sicher, dass telemetry.plugin nicht ausgeführt wird; erforderlich für SSE4.1-CPUs
+  * Grund: Sorgt dafür, dass telemetry.plugin nicht läuft; erforderlich für SSE4.1-CPUs
   * Modelle: Penryn-CPUs
 
-### WLAN
+### Wifi
 
 * IO80211ElCap
   * Grund: Schleust die WLAN-Treiber aus El Capitan erneut ein
@@ -253,67 +253,67 @@ Im Folgenden wird erklärt, welche Kexts OpenCore Legacy Patcher T2 beim Start i
   * Grund: Schleust die WLAN-Treiber aus El Capitan erneut ein
   * Modelle: Chipsätze BCM94328, BCM94322 und Atheros
 
-### Sonstiges
+### Misc
 
 * AppleBackLightFixup
   * Grund: Patcht AppleBacklight für iMacs mit aufgerüsteten NVIDIA-Metal-GPUs
   * Modelle: iMac11,x, iMac12,x mit aufgerüsteten NVIDIA-Metal-GPUs
 * AppleIntelPIIXATA
-  * Grund: Behebt die IDE-Unterstützung beim MacPro3,1
+  * Grund: Behebt die IDE-Unterstützung auf dem MacPro3,1
   * Modelle: MacPro3,1
 * AppleIntelMCEDisabler
-  * Grund: Behebt die Dual-Socket-Unterstützung ab Catalina
+  * Grund: Behebt die Dual-Socket-Unterstützung unter Catalina und neuer
   * Modelle: Mac Pros und Xserves
 * SMC-Spoof
-  * Grund: Täuscht die SMC-Version 9.9999 vor
-  * Modelle: Für alle Modelle mit Spoofing der Stufe Minimal oder höher erforderlich
+  * Grund: Gibt die SMC-Version als 9.9999 aus
+  * Modelle: Alle Modelle mit Spoofing der Stufe „Minimal“ oder höher
 * AppleRAIDCard
-  * Fügt Unterstützung für AppleRaidCard bei Xserves hinzu
+  * Fügt Unterstützung für AppleRAIDCard in Xserves hinzu
 * AMDGPUWakeHandler
-  * Grund: Fügt softwarebasiertes Demux für MacBook Pros 15"/17" von 2011 hinzu
+  * Grund: Fügt ein softwarebasiertes Demux für MacBook Pros 2011 mit 15"/17" hinzu
 * AppleIntelCPUPowerManagement und AppleIntelCPUPowerManagementClient
-  * Grund: Stellt die CPU-Energieverwaltung für Ivy Bridge und älter wieder her
+  * Grund: Stellt das CPU-Energiemanagement für Ivy Bridge und älter wieder her
 * AppleUSBTopCase
   * Grund: Stellt die Unterstützung für USB-Tastaturen unter macOS Ventura wieder her
 * AppleUSBMultitouch und AppleUSBTrackpad
   * Grund: Stellt die Unterstützung für USB-Trackpads unter macOS Ventura wieder her
 * ASPP-Override
-  * Grund: Sorgt dafür, dass ACPI_SMC_PlatformPlugin Vorrang vor X86PlatformPlugin erhält, und deaktiviert die Drosselung durch die Firmware
+  * Grund: Lässt ACPI_SMC_PlatformPlugin gegenüber X86PlatformPlugin den Vorrang erhalten und deaktiviert die Drosselung durch die Firmware
 * BacklightInjector
   * Grund: Behebt die Helligkeitssteuerung in iMacs mit aufgerüsteten GPUs
 * BigSurSDXC
   * Grund: Stellt die SDXC-Unterstützung auf Macs vor Ivy Bridge wieder her
 * Bluetooth-spoof
-  * Grund: Täuscht ältere Bluetooth-Chipsätze vor, damit sie ab Monterey funktionieren
+  * Grund: Täuscht älteres Bluetooth vor, damit es unter Monterey und neuer funktioniert
 * Innie
   * Grund: Lässt alle PCIe-Laufwerke als intern erscheinen
   * Modelle: MacPro3,1 und neuer sowie Xserve3,1 und neuer
 * KDKlessWorkaround
-  * Grund: Hilft bei macOS-Updates auf Systemen, die ohne KDK gepatcht wurden
+  * Grund: Hilft bei macOS-Updates auf ohne KDK gepatchten Systemen
 * LegacyUSBVieoSupport
   * Grund: Behebt die Unterstützung älterer USB-iSight-Kameras
 * MonteAHCIPort
-  * Grund: Behebt die Unterstützung der Original-SSD im MacBookAir6,x
+  * Grund: Behebt die Unterstützung der originalen SSD im MacBookAir6,x
 * NoAVXFSCompressionTypeZlib
-  * Grund: Verhindert den AVXFSCompressionTypeZlib-Absturz auf Systemen vor AVX1.0 ab 12.4
-* SimpleMSR
+  * Grund: Verhindert den Absturz von AVXFSCompressionTypeZlib auf Systemen ohne AVX1.0 ab 12.4
+* SimpleMSR 
   * Grund: Deaktiviert BD PROCHOT, um die Drosselung durch die Firmware auf MacBooks ab Nehalem zu verhindern
 * LegacyKeyboardInjector
-  * Grund: Behebt die Funktionstasten beim MacBook5,2
+  * Grund: Behebt die Funktionstasten auf dem MacBook5,2
 
 
 :::
 
 ## Patches auf dem Laufwerk
 
-Leider sind bestimmte Patches direkt auf dem Laufwerk nötig, um den vollen Funktionsumfang zu erreichen. Im Folgenden eine Übersicht der unterstützten Patches.
+Leider sind bestimmte Patches auf dem Laufwerk nötig, um den vollen Funktionsumfang zu erreichen. Im Folgenden findest du eine Aufschlüsselung der unterstützten Patches.
 
 ::: details Audio-Patches (11.0+)
 
 ### Extensions
 
 * AppleHDA
-  * Grund: Fügt AppleHDA aus El Capitan wieder hinzu, um Audio zu ermöglichen
+  * Grund: Fügt AppleHDA aus El Capitan wieder hinzu, um Audiounterstützung herzustellen
   * Modelle: iMac7,1 und iMac8,1
 
 :::
@@ -332,7 +332,7 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 
 :::
 
-::: details Patches für Grafikbeschleunigung mit NVIDIA Kepler (12.0+)
+::: details Patches für die Grafikbeschleunigung von NVIDIA Kepler (12.0+)
 
 ### Extensions
 
@@ -349,21 +349,21 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 ### Frameworks
 
 * OpenCL (libCLVMNVPTXPlugin.dylib, NVPTX.dylib)
-  * Grund: Fügt die Hardwarebeschleunigung für Kepler wieder hinzu
-* Metal
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von Metal auf 13.2.1 nötig
+  * Grund: Stellt die Hardwarebeschleunigung für Kepler wieder her
+* Metal 
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von Metal auf 13.2.1 nötig
 
 ### PrivateFrameworks
 
 * MTLCompiler
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von MTLCompiler auf 13.2.1 nötig
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von MTLCompiler auf 13.2.1 nötig
 * GPUCompiler
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von GPUCompiler auf 13.2.1 nötig
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von GPUCompiler auf 13.2.1 nötig
 
 :::
 
 
-::: details Patches für Grafikbeschleunigung mit Intel Ivy Bridge (12.0+)
+::: details Patches für die Grafikbeschleunigung von Intel Ivy Bridge (12.0+)
 
 ### Extensions
 
@@ -380,49 +380,49 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 * AppleGVA/AppleGVACore
   * Grund: Aktiviert die DRM-Unterstützung
 * MTLCompiler
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von MTLCompiler auf 13.2.1 nötig
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von MTLCompiler auf 13.2.1 nötig
 * GPUCompiler
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von GPUCompiler auf 13.2.1 nötig
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von GPUCompiler auf 13.2.1 nötig
 
 ### Frameworks
 
 * OpenCL (libCLVMIGILPlugin.dylib)
-  * Grund: Fügt die Hardwarebeschleunigung für Ivy Bridge wieder hinzu
+  * Grund: Stellt die Hardwarebeschleunigung für Ivy Bridge wieder her
 * WebKit (com.apple.WebProcess.sb)
-  * Grund: Fügt die Safari-Darstellung für Ivy Bridge wieder hinzu
-* Metal
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von Metal auf 13.2.1 nötig
+  * Grund: Stellt das Safari-Rendering für Ivy Bridge wieder her
+* Metal 
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von Metal auf 13.2.1 nötig
 :::
 
-::: details Patches für Grafikbeschleunigung mit Intel Haswell (13.0+)
+::: details Patches für die Grafikbeschleunigung von Intel Haswell (13.0+)
 
-### Extensions
+### Extensions 
 
 * AppleIntelFramebufferAzul.kext
 * AppleIntelHD5000Graphics.kext
 * AppleIntelHD5000GraphicsGLDriver.bundle
 * AppleIntelHD5000GraphicsMTLDriver.bundle
-* AppleIntelHD5000GraphicsVADriver.bundle
+* AppleIntelHD5000GraphicsVADriver.bundle 
 * AppleIntelHSWVA.bundle
 * AppleIntelGraphicsShared.bundle
 
-### Frameworks
+### Frameworks 
 
-* Metal
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von Metal auf 13.2.1 nötig
+* Metal 
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von Metal auf 13.2.1 nötig
 
 ### PrivateFrameworks
 
 * MTLCompiler
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von MTLCompiler auf 13.2.1 nötig
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von MTLCompiler auf 13.2.1 nötig
 * GPUCompiler
-  * Grund: GPUs auf Basis von 3802 funktionieren seit 13.3 nicht mehr, daher ist ein Downgrade von GPUCompiler auf 13.2.1 nötig
+  * Grund: 3802-basierte GPUs funktionieren ab 13.3 nicht mehr, daher ist ein Downgrade von GPUCompiler auf 13.2.1 nötig
 
 :::
 
-::: details Patches für Grafikbeschleunigung mit Intel Broadwell (13.0+)
+::: details Patches für die Grafikbeschleunigung von Intel Broadwell (13.0+)
 
-### Extensions
+### Extensions 
 
 * AppleIntelBDWGraphics.kext
 * AppleIntelBDWGraphicsFramebuffer.kext
@@ -436,9 +436,9 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 
 :::
 
-::: details Patches für Grafikbeschleunigung mit Intel Skylake (13.0+)
+::: details Patches für die Grafikbeschleunigung von Intel Skylake (13.0+)
 
-### Extensions
+### Extensions 
 
 * AppleIntelSKLGraphics.kext
 * AppleIntelSKLGraphicsFramebuffer.kext
@@ -451,7 +451,7 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 
 :::
 
-::: details Patches für Grafikbeschleunigung mit älteren AMD-Vega-GPUs (13.0+)
+::: details Patches für die Grafikbeschleunigung von AMD Legacy Vega (13.0+)
 
 ### Extensions
 
@@ -464,7 +464,7 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 
 :::
 
-::: details Patches für Grafikbeschleunigung mit älteren AMD-Polaris-GPUs (13.0+)
+::: details Patches für die Grafikbeschleunigung von AMD Legacy Polaris (13.0+)
 
 ### Extensions
 
@@ -477,7 +477,7 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 
 :::
 
-::: details Patches für Grafikbeschleunigung mit älteren AMD-GCN-GPUs
+::: details Patches für die Grafikbeschleunigung von AMD Legacy GCN
 
 ### Extensions
 
@@ -500,19 +500,19 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 
 
 
-::: details Patches für Non-Metal-Grafikbeschleunigung (11.0+)
+::: details Patches für die Nicht-Metal-Grafikbeschleunigung (11.0+)
 
 ### Allgemeine Patches
 
 * IOSurface.kext
-  * Grund: Behebt die sofortige Abmeldung nach dem Anmelden
+  * Grund: Behebt das sofortige Abmelden nach der Anmeldung
   * Logik: Downgrade auf IOSurface aus Catalina
-  * Hinweis: Für AMD und Intel kommt ein zusätzlicher `addMemoryRegion/removeMemoryRegion`-Patch hinzu, der den ersten bedingten Sprung in einen unbedingten Sprung ändert
+  * Hinweis: Bei AMD und Intel kommt ein zusätzlicher Patch für `addMemoryRegion/removeMemoryRegion` hinzu, der den ersten bedingten Sprung in einen unbedingten Sprung ändert
     * An Offset `0xdb52` und `0xdbc6` die folgenden Bytes durch `0xeb` ersetzen
 
-### Entfernte Beschleunigungs-Binärdateien
+### Entfernte Beschleunigungs-Binaries
 
-* NVIDIA-Binärdateien
+* NVIDIA-Binaries
   * GeForceGA.bundle
   * GeForceTesla.kext
     * IOFree-Panic überspringen – ab Mojave
@@ -526,7 +526,7 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
     * 0x1ea59a - 0x1ea5b3: nop
     * VSLGestalt durch IOLockLock oder ein anderes bekanntes Symbol gleicher Länge ersetzen.
 
-* Binärdateien der NVIDIA-Webtreiber
+* Binaries der NVIDIA-Web-Treiber 
   * GeForceWeb.kext
   * NVDAGF100HalWeb.kext
   * NVDAGK100HalWeb.kext
@@ -537,9 +537,9 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
   * GeForceTeslaWeb.kext
   * NVDANV50HalTeslaWeb.kext
   * NVDAResmanTeslaWeb.kext
-    * Grund: Ermöglicht Non-Metal-Beschleunigung für NVIDIA-GPUs mit Maxwell und Pascal
+    * Grund: Ermöglicht Nicht-Metal-Beschleunigung für NVIDIA-Maxwell- und -Pascal-GPUs
 
-* AMD/ATI-Binärdateien
+* AMD/ATI-Binaries
   * AMD2400Controller.kext
   * AMD2600Controller.kext
   * AMD3800Controller.kext
@@ -561,7 +561,7 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
   * ATIRadeonX2000GLDriver.bundle
   * ATIRadeonX2000VADriver.bundle
 
-* Binärdateien für Intel der 5. Generation
+* Binaries für Intel der 5. Generation
   * AppleIntelFramebufferAzul.kext
   * AppleIntelFramebufferCapri.kext
   * AppleIntelHDGraphics.kext
@@ -570,20 +570,20 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
   * AppleIntelHDGraphicsGLDriver.bundle
   * AppleIntelHDGraphicsVADriver.bundle
 
-* Binärdateien für Intel der 6. Generation
+* Binaries für Intel der 6. Generation
   * AppleIntelHD3000Graphics.kext
   * AppleIntelHD3000GraphicsGA.plugin
   * AppleIntelHD3000GraphicsGLDriver.bundle
   * AppleIntelHD3000GraphicsVADriver.bundle
   * AppleIntelSNBGraphicsFB.kext
     * Board-ID-Patch
-      * Ersetzt die ursprüngliche Board-ID durch ein aktualisiertes Modell
+      * Originale Board-ID durch die des aktualisierten Modells ersetzen
   * AppleIntelSNBVA.bundle
 
 ### Frameworks
 
 * CoreDisplay.framework
-  * Logik: Aus Mojave übernommen, stark modifiziert/mit Shims versehen
+  * Logik: Aus Mojave übernommen, stark modifiziert bzw. mit Shims versehen
 * IOSurface.framework
 * OpenGL.framework
   * Logik: Aus Mojave übernommen
@@ -593,6 +593,6 @@ Gilt für die WLAN-Karten BCM94328, BCM94322 und Atheros
 * GPUSupport.framework
   * Logik: Aus Mojave übernommen
 * SkyLight.framework
-  * Logik: Aus Mojave übernommen, stark modifiziert/mit Shims versehen
+  * Logik: Aus Mojave übernommen, stark modifiziert bzw. mit Shims versehen
 
 :::

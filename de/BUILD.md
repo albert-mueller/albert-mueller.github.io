@@ -1,23 +1,23 @@
 # OpenCore erstellen und installieren
 
-Jetzt, wo wir einen macOS-Installer haben, erstellen wir unsere OpenCore-Konfiguration!
+Jetzt, da wir einen macOS-Installer haben, erstellen wir unsere OpenCore-Konfiguration!
 
 Falls du OpenCore Patcher noch nicht heruntergeladen hast, hol das jetzt nach:
 
-* [OpenCore Legacy Patcher T2 Releases](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/releases)
+* [Releases von OpenCore Legacy Patcher T2](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/releases)
 
-Starte als Nächstes die `OpenCore-Patcher-T2.app`.
+Starte anschließend die `OpenCore-Patcher-T2.app`.
 
-Hier wählen wir `OpenCore` und klicken auf `Install OpenCore`:
+Wähle hier `OpenCore` und klicke auf `Install OpenCore`:
 
 
 <div align="left">
-             <img src="../images/OCLP-GUI-Main-Menu.png" alt="OCLP-GUI Hauptmenü" width="700" />
+             <img src="../images/OCLP-GUI-Main-Menu.png" alt="OCLP-Hauptmenü" width="700" />
 </div>
 
-::: warning Warnung
+::: warning Achtung
 OpenCore-Konfigurationen sind hardwarespezifisch.
-Wenn du OpenCore für ein anderes Modell erstellst als das, auf dem du gerade arbeitest, musst du unbedingt das richtige Modell in den Einstellungen auswählen.
+Wenn du OpenCore für ein anderes Modell erstellst als das, auf dem du gerade arbeitest, musst du unbedingt das richtige Modell in den Einstellungen (Settings) auswählen.
 :::
 
 
@@ -26,9 +26,9 @@ Wenn du OpenCore für ein anderes Modell erstellst als das, auf dem du gerade ar
 | <img src="../images/OCLP-GUI-Build-Start.png" alt="Erstellung starten" width="600" /> | <img src="../images/OCLP-GUI-Build-Finished.png" alt="Erstellung abgeschlossen" width="600" /> |
 
 
-Sobald die Erstellung abgeschlossen ist, wählst du das Laufwerk aus, auf dem installiert werden soll:
+Sobald die Erstellung abgeschlossen ist, wählst du das Laufwerk aus, auf das installiert werden soll:
 
-* Wenn du einen macOS-USB-Stick manuell erstellt hast und er nicht aufgelistet wird, stelle sicher, dass er entweder als GUID/GPT formatiert ist oder eine FAT32-Partition für OpenCore besitzt.
+* Falls du einen macOS-USB-Stick manuell erstellt hast und er nicht aufgelistet wird, stelle sicher, dass er entweder als GUID/GPT formatiert ist oder eine FAT32-Partition für OpenCore besitzt.
 
 
 | Laufwerk auswählen | Partition auswählen |

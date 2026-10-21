@@ -1,10 +1,10 @@
-# Debuggen mit OpenCore
+# Mit OpenCore debuggen
 
-Wenn du auf einen seltsamen Fehler gestoßen bist und nicht sicher bist, ob es sich um einen Bedienfehler oder ein Problem im Patcher handelt, empfehlen wir, auf dem [OpenCore Patcher Paradise Discord-Server](https://discord.gg/rqdPgH8xSN) um Hilfe zu bitten.
+Wenn du auf einen merkwürdigen Fehler gestoßen bist und nicht sicher bist, ob es ein Bedienfehler ist oder am Patcher liegt, empfehlen wir dir, auf dem [OpenCore Patcher Paradise Discord-Server](https://discord.gg/rqdPgH8xSN) um Hilfe zu bitten.
 
 ## Selbst debuggen
 
-Am einfachsten debuggst du selbst über die Patcher-Einstellungen. Dort gibt es viele verschiedene Einstellungen, die drei wichtigsten Optionen sind jedoch:
+Am einfachsten debuggst du selbst über die Patcher-Einstellungen. Dort gibt es viele verschiedene Optionen, die drei wichtigsten sind jedoch:
 
 * „Enable Verbose Mode“
 * „Enable OpenCore DEBUG“
@@ -15,17 +15,17 @@ Am einfachsten debuggst du selbst über die Patcher-Einstellungen. Dort gibt es 
 </div>
 
 
-Wenn du diese drei Optionen aktiviert hast, erstelle OpenCore neu und installiere es auf dein Laufwerk. Dadurch erhältst du deutlich mehr Debug-Informationen, und Logs werden auf die EFI-Partition geschrieben.
+Nachdem du diese drei Optionen aktiviert hast, erstelle OpenCore neu und installiere es auf dein Laufwerk. Dadurch erhältst du deutlich mehr Debug-Informationen, und es werden Logs auf die EFI-Partition geschrieben.
 
 ## OpenCore-Logs vom Laufwerk holen
 
-Mit aktiviertem „Enable OpenCore DEBUG“ wird bei jedem Start eine .txt-Datei auf der EFI-Partition erzeugt. Um diese Logs zu holen, [lade MountEFI herunter und starte es](https://github.com/corpnewt/MountEFI):
+Mit „Enable OpenCore DEBUG“ wird bei jedem Bootvorgang eine .txt-Datei auf der EFI-Partition erzeugt. Um an diese Logs zu kommen, [lade MountEFI herunter und starte es](https://github.com/corpnewt/MountEFI):
 
 <div align="left">
              <img src="../images/mountefi.png" alt="EFI einhängen" width="600" />
 </div>
 
-Sobald du die EFI-Partition des Laufwerks eingehängt hast, auf dem macOS installiert ist, solltest du dort die Logs finden:
+Sobald du die EFI-Partition des Laufwerks mit macOS eingehängt hast, solltest du einige aufschlussreiche Logs sehen:
 
 <div align="left">
              <img src="../images/logs-efi.png" alt="EFI einhängen" width="800" />
@@ -33,17 +33,17 @@ Sobald du die EFI-Partition des Laufwerks eingehängt hast, auf dem macOS instal
 
 ## Kernel-Logs aus macOS holen
 
-Mit aktiviertem „Enable Kext DEBUG“ werden bei jedem Start deutlich detailliertere Logs im Betriebssystem gespeichert. Um sie zu erhalten, führe einfach den folgenden Befehl aus:
+Mit „Enable Kext DEBUG“ werden bei jedem Bootvorgang deutlich ausführlichere Logs im System gespeichert. Um diese Logs zu erhalten, führe einfach den folgenden Befehl aus:
 
 ```sh
 sudo dmesg > ~/Desktop/DMESG.txt
 ```
 
-Danach liegt das Log auf deinem Schreibtisch.
+Danach liegt ein Log auf deinem Schreibtisch.
 
 ## Ein Issue bei uns melden
 
-Jetzt, wo du aussagekräftige Logs hast, kannst du [ein Issue bei uns erstellen](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/issues). Denk daran, folgende Informationen anzugeben:
+Jetzt, da du aussagekräftige Logs hast, kannst du [ein Issue bei uns melden](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/issues). Denk bitte daran, folgende Informationen anzugeben:
 
 * Modell, für das du patchst (z. B. MacBookPro10,1)
 * Ziel-Betriebssystem (z. B. macOS 11.2.3)
@@ -52,4 +52,4 @@ Jetzt, wo du aussagekräftige Logs hast, kannst du [ein Issue bei uns erstellen]
 * Upload deines OpenCore-Logs (falls zutreffend)
 * Upload deines Kernel-Logs (falls zutreffend)
 
-Bitte suche außerdem vorher, ob das Problem bereits gemeldet wurde. So vermeiden wir doppelte Issues.
+Bitte suche außerdem, ob das Problem schon einmal gemeldet wurde. So vermeiden wir doppelte Issues.

@@ -1,6 +1,6 @@
 import { loadDiscussions } from '../../.vitepress/announcements'
 
-// German version (same data, German UI). One page per open discussion: /de/discussions/<discussion number>.html
+// German locale: one page per open discussion at /de/discussions/<discussion number>.html
 export default {
     paths() {
         return loadDiscussions().map((discussion) => ({

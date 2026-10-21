@@ -1,6 +1,6 @@
 import { loadIssues } from '../../.vitepress/announcements'
 
-// German version (same data, German UI). One page per open issue: /de/issues/<issue number>.html
+// German locale: one page per open issue at /de/issues/<issue number>.html
 export default {
     paths() {
         return loadIssues().map((issue) => ({
