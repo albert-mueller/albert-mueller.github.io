@@ -5,8 +5,8 @@ on:
     branches:
       - main
   workflow_dispatch:
-  # Pick up new and edited announcements from the patcher's GitHub
-  # Discussions (Announcements category) and refresh the RSS feed.
+  # Pick up new and edited announcements and discussions from the patcher's
+  # GitHub Discussions and refresh the RSS feeds.
   schedule:
     - cron: "23 * * * *"
   # Lets the patcher repo trigger an immediate rebuild when an announcement
@@ -51,7 +51,9 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile --ignore-scripts
 
-      # Writes .vitepress/announcements.json and public/announcements.xml.
+      # Writes .vitepress/{announcements,discussions,issues}.json and the
+      # matching RSS feeds in public/. Announcements = Announcements category,
+      # maintainers only; everything else goes to /discussions/.
       # Uses the ANNOUNCEMENTS_TOKEN secret if set (fine-grained PAT with
       # read-only Discussions access to OpenCore-Legacy-Patcher-T2),
       # otherwise the job's own token.

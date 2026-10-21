@@ -1,4 +1,5 @@
-// Shared loader for the announcements written by scripts/fetch-announcements.mjs.
+// Shared loader for the announcements, discussions and issues written by
+// scripts/fetch-announcements.mjs.
 // Used by the config (sidebar), the dynamic route announcements/[number]
 // and the data loader for the announcement lists.
 import fs from 'node:fs'
@@ -38,6 +39,8 @@ export const ANNOUNCEMENTS_FILE = fileURLToPath(new URL('./announcements.json', 
 
 export const ISSUES_FILE = fileURLToPath(new URL('./issues.json', import.meta.url))
 
+export const DISCUSSIONS_FILE = fileURLToPath(new URL('./discussions.json', import.meta.url))
+
 // Returns [] when the file has not been generated (e.g. local build without
 // a token), so the rest of the site still builds.
 function load(file: string, key: string): Announcement[] {
@@ -50,6 +53,9 @@ function load(file: string, key: string): Announcement[] {
 }
 
 export const loadAnnouncements = () => load(ANNOUNCEMENTS_FILE, 'announcements')
+
+// All other open discussions (not announcements), same shape.
+export const loadDiscussions = () => load(DISCUSSIONS_FILE, 'discussions')
 
 // Open issues, same shape (plus labels).
 export const loadIssues = () => load(ISSUES_FILE, 'issues')

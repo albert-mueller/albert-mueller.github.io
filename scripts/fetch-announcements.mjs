@@ -1,21 +1,25 @@
 #!/usr/bin/env node
-// Mirrors the patcher's GitHub Discussions into the website:
-//   - pinned discussions first, in pin order
-//   - then every other open discussion of every category, newest first
-// Closed discussions are left out, so closing one removes it from the site.
-// Set ANNOUNCEMENTS_CATEGORY (e.g. "announcements") to limit the list to
-// one category again.
+// Mirrors the patcher's GitHub Discussions and issues into the website.
+// Every list: pinned items first (in pin order), then the newest. Closed
+// discussions/issues are left out, so closing one removes it from the site.
 //
-// Open issues are mirrored the same way (pinned first, then newest).
+//   /announcements/  STRICTLY announcements: open discussions in the
+//                    ANNOUNCEMENTS_CATEGORY (default "announcements") that were
+//                    written by a maintainer (owner, member or collaborator).
+//   /discussions/    every other open discussion (all other categories, plus
+//                    posts by non-maintainers that ended up in Announcements)
+//   /issues/         open issues
 //
 // Writes:
 //   .vitepress/announcements.json  - read at build time to generate
 //                                    /announcements/ and one page per post
 //   public/announcements.xml       - RSS 2.0 feed of the same posts
+//   .vitepress/discussions.json    - same for /discussions/
+//   public/discussions.xml         - RSS 2.0 feed of the other discussions
 //   .vitepress/issues.json         - same for /issues/
 //   public/issues.xml              - RSS 2.0 feed of the open issues
 //
-// All four files are build artifacts (git-ignored). The CI workflow runs this
+// All six files are build artifacts (git-ignored). The CI workflow runs this
 // script before `vitepress build`. Locally:
 //   GITHUB_TOKEN=$(gh auth token) yarn announcements
 //
@@ -29,12 +33,18 @@ import { fileURLToPath } from 'node:url'
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const OUT_JSON = path.join(ROOT, '.vitepress', 'announcements.json')
 const OUT_FEED = path.join(ROOT, 'public', 'announcements.xml')
+const OUT_DISCUSSIONS_JSON = path.join(ROOT, '.vitepress', 'discussions.json')
+const OUT_DISCUSSIONS_FEED = path.join(ROOT, 'public', 'discussions.xml')
 const OUT_ISSUES_JSON = path.join(ROOT, '.vitepress', 'issues.json')
 const OUT_ISSUES_FEED = path.join(ROOT, 'public', 'issues.xml')
 
 const REPO = process.env.ANNOUNCEMENTS_REPO || 'albert-mueller/OpenCore-Legacy-Patcher-T2'
 const CATEGORY = process.env.ANNOUNCEMENTS_CATEGORY || 'announcements'
 const LIMIT = Number(process.env.ANNOUNCEMENTS_LIMIT || 100)
+// Discussions of all categories are fetched in one go and split afterwards.
+const DISCUSSIONS_LIMIT = Number(process.env.DISCUSSIONS_LIMIT || 300)
+// Only posts by these GitHub author associations count as announcements.
+const MAINTAINER_ROLES = new Set(['OWNER', 'MEMBER', 'COLLABORATOR'])
 const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN
 
 const SITE_URL = 'https://albert-mueller.github.io/'
@@ -65,6 +75,7 @@ fragment AnnouncementFields on Discussion {
   bodyHTML
   bodyText
   author { login url }
+  authorAssociation
   category { name slug }
   comments { totalCount }
 }`
@@ -231,17 +242,16 @@ function excerpt(text, max = 220) {
   return `${(space > max * 0.6 ? cut.slice(0, space) : cut).replace(/[\s.,;:!?-]+$/, '')}…`
 }
 
-async function fetchAnnouncements() {
-  let categoryId = null
-  if (CATEGORY) {
-    const categoryData = await graphql(CATEGORIES_QUERY, { owner: OWNER, name: NAME })
-    const categories = categoryData.repository?.discussionCategories?.nodes ?? []
-    const category = categories.find((c) => c.slug === CATEGORY || c.name.toLowerCase() === CATEGORY.toLowerCase())
-    if (!category) {
-      const available = categories.map((c) => c.slug).join(', ') || 'none visible'
-      throw new Error(`Discussion category "${CATEGORY}" not found in ${REPO} (available: ${available})`)
-    }
-    categoryId = category.id
+// All open discussions (pinned first), split into strict announcements and
+// everything else.
+async function fetchDiscussions() {
+  const categoryData = await graphql(CATEGORIES_QUERY, { owner: OWNER, name: NAME })
+  const categories = categoryData.repository?.discussionCategories?.nodes ?? []
+  const announcementCategory = categories.find(
+    (c) => c.slug === CATEGORY || c.name.toLowerCase() === CATEGORY.toLowerCase())
+  if (!announcementCategory) {
+    const available = categories.map((c) => c.slug).join(', ') || 'none visible'
+    throw new Error(`Discussion category "${CATEGORY}" not found in ${REPO} (available: ${available})`)
   }
 
   const nodes = []
@@ -250,14 +260,14 @@ async function fetchAnnouncements() {
     const data = await graphql(DISCUSSIONS_QUERY, {
       owner: OWNER,
       name: NAME,
-      category: categoryId,
-      first: Math.min(50, LIMIT - nodes.length),
+      category: null,
+      first: Math.min(50, DISCUSSIONS_LIMIT - nodes.length),
       after,
     })
     const page = data.repository.discussions
     nodes.push(...page.nodes)
     after = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null
-  } while (after && nodes.length < LIMIT)
+  } while (after && nodes.length < DISCUSSIONS_LIMIT)
 
   const pinnedData = await graphql(PINNED_QUERY, { owner: OWNER, name: NAME })
   const pinned = pinnedData.repository.pinnedDiscussions.nodes.map((n) => n.discussion)
@@ -266,11 +276,14 @@ async function fetchAnnouncements() {
   const merged = [...pinned, ...nodes.filter((d) => !pinnedNumbers.has(d.number))]
     .filter((d) => !d.closed)
 
-  const commentLists = new Map()
-  for (const d of merged) commentLists.set(d.number, await fetchDiscussionComments(d.id))
+  const isAnnouncement = (d) =>
+    d.category?.slug === announcementCategory.slug && MAINTAINER_ROLES.has(d.authorAssociation)
 
-  return merged.map((d) => ({
-    commentList: commentLists.get(d.number),
+  const announcements = merged.filter(isAnnouncement).slice(0, LIMIT)
+  const discussions = merged.filter((d) => !isAnnouncement(d))
+
+  const toItem = async (d) => ({
+    commentList: await fetchDiscussionComments(d.id),
     number: d.number,
     pinned: pinnedNumbers.has(d.number),
     category: d.category?.name ?? null,
@@ -285,7 +298,15 @@ async function fetchAnnouncements() {
     excerpt: excerpt(d.bodyText),
     // Already sanitised by GitHub, same HTML github.com renders.
     bodyHTML: d.bodyHTML,
-  }))
+  })
+
+  const mapAll = async (list) => {
+    const out = []
+    for (const d of list) out.push(await toItem(d))
+    return out
+  }
+
+  return { announcements: await mapAll(announcements), discussions: await mapAll(discussions) }
 }
 
 const mapComment = (c) => ({
@@ -388,7 +409,7 @@ async function fetchIssues() {
     }))
 }
 
-// What the two mirrored lists look like on the site and in their feeds.
+// What the three mirrored lists look like on the site and in their feeds.
 const KINDS = {
   announcements: {
     json: OUT_JSON,
@@ -396,8 +417,17 @@ const KINDS = {
     path: 'announcements/',
     feedFile: 'announcements.xml',
     title: `${SITE_TITLE} – Announcements`,
-    description: `Open discussions about ${SITE_TITLE}, mirrored from GitHub Discussions.`,
+    description: `Announcements from the maintainers of ${SITE_TITLE}, mirrored from GitHub Discussions.`,
     discuss: 'Discuss this announcement on GitHub',
+  },
+  discussions: {
+    json: OUT_DISCUSSIONS_JSON,
+    feed: OUT_DISCUSSIONS_FEED,
+    path: 'discussions/',
+    feedFile: 'discussions.xml',
+    title: `${SITE_TITLE} – Discussions`,
+    description: `Open community discussions about ${SITE_TITLE}, mirrored from GitHub Discussions.`,
+    discuss: 'Join this discussion on GitHub',
   },
   issues: {
     json: OUT_ISSUES_JSON,
@@ -465,7 +495,11 @@ function write(kindName, items) {
   const kind = KINDS[kindName]
   fs.mkdirSync(path.dirname(kind.json), { recursive: true })
   fs.mkdirSync(path.dirname(kind.feed), { recursive: true })
-  const source = kindName === 'issues' ? `${REPO} (issues)` : `${REPO} (${CATEGORY || 'all categories'})`
+  const source = {
+    issues: `${REPO} (issues)`,
+    announcements: `${REPO} (${CATEGORY}, maintainers only)`,
+    discussions: `${REPO} (all other discussions)`,
+  }[kindName]
   fs.writeFileSync(kind.json, `${JSON.stringify({ source, [kindName]: items }, null, 2)}\n`)
   fs.writeFileSync(kind.feed, buildFeed(items, kind))
 }
@@ -484,20 +518,22 @@ function writeExisting() {
 
 async function main() {
   if (!TOKEN) {
-    console.warn('GITHUB_TOKEN is not set - skipping the download of announcements and issues.')
+    console.warn('GITHUB_TOKEN is not set - skipping the download of announcements, discussions and issues.')
     if (process.env.CI) process.exit(1)
     writeExisting()
     return
   }
-  const announcements = await fetchAnnouncements()
+  const { announcements, discussions } = await fetchDiscussions()
   const issues = await fetchIssues()
   write('announcements', announcements)
+  write('discussions', discussions)
   write('issues', issues)
-  console.log(`Wrote ${announcements.length} announcement(s) and ${issues.length} issue(s) from ${REPO}`)
+  console.log(`Wrote ${announcements.length} announcement(s), ${discussions.length} discussion(s) `
+    + `and ${issues.length} issue(s) from ${REPO}`)
 }
 
 main().catch((err) => {
-  console.error(`::error::Could not fetch announcements/issues: ${err.message}`)
+  console.error(`::error::Could not fetch announcements/discussions/issues: ${err.message}`)
   // In CI, fail instead of deploying a site that silently lost its
   // announcements; the previously deployed site stays online.
   if (process.env.CI) process.exit(1)

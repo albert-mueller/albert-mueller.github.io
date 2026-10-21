@@ -3,13 +3,14 @@ import { computed } from 'vue'
 import { withBase } from 'vitepress'
 import { data as announcements } from '../announcements.data'
 import { data as issues } from '../issues.data'
+import { data as discussions } from '../discussions.data'
 import { formatDate } from '../formatDate'
 
-const props = defineProps<{ limit?: number, kind?: 'announcements' | 'issues' }>()
+const props = defineProps<{ limit?: number, kind?: 'announcements' | 'issues' | 'discussions' }>()
 
 const kind = computed(() => props.kind ?? 'announcements')
 const items = computed(() => {
-    const all = kind.value === 'issues' ? issues : announcements
+    const all = { announcements, issues, discussions }[kind.value]
     return props.limit ? all.slice(0, props.limit) : all
 })
 </script>
@@ -17,7 +18,8 @@ const items = computed(() => {
 <template>
     <div class="announcement-list">
         <p v-if="!items.length" class="announcement-empty">
-            {{ kind === 'issues' ? 'There are no open issues.' : 'There are no announcements yet.' }}
+            {{ { issues: 'There are no open issues.', discussions: 'There are no open discussions.' }[kind]
+                ?? 'There are no announcements yet.' }}
         </p>
         <a
             v-for="a in items"
@@ -28,7 +30,7 @@ const items = computed(() => {
             <span class="announcement-card-date">
                 <span v-if="a.pinned" class="announcement-badge">Pinned</span>
                 <time :datetime="a.createdAt">{{ formatDate(a.createdAt) }}</time>
-                <template v-if="a.category && a.category !== 'Announcements'"> · {{ a.category }}</template>
+                <template v-if="a.category && (kind === 'discussions' || a.category !== 'Announcements')"> · {{ a.category }}</template>
             </span>
             <span class="announcement-card-title">{{ a.title }}</span>
             <span v-if="a.labels?.length" class="announcement-labels">
