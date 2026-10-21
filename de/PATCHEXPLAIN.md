@@ -2,9 +2,9 @@
 
 In unserem Patcher kommen zahlreiche Patches zum Einsatz, um ein stabiles System sicherzustellen. Hier gehen wir durch, welche Patches verwendet werden und warum wir sie empfehlen oder sogar voraussetzen.
 
-* [OpenCore-Einstellungen](None#opencore-einstellungen)
-* [Eingeschleuste Kexts](None#eingeschleuste-kexts)
-* [Patches auf dem Laufwerk](None#patches-auf-dem-laufwerk)
+* [OpenCore-Einstellungen](#opencore-einstellungen)
+* [Eingeschleuste Kexts](#eingeschleuste-kexts)
+* [Patches auf dem Laufwerk](#patches-auf-dem-laufwerk)
 
 ## OpenCore-Einstellungen
 

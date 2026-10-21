@@ -2,25 +2,25 @@
 
 #### Booten
 
-* [Hängt bei `This version of Mac OS X is not supported on this platform` oder beim (🚫) Verboten-Symbol](None#hangt-bei-this-version-of-mac-os-x-is-not-supported-on-this-platform-oder-beim-🚫) Verboten-Symbol)
-* [macOS bootet nicht ohne den USB-Stick](None#macos-bootet-nicht-ohne-den-usb-stick)
-* [Endlosschleife beim Booten in die Recovery](None#endlosschleife-beim-booten-in-die-recovery)
-* [Hängt beim Booten nach dem Root-Patching](None#hangt-beim-booten-nach-dem-root-patching)
-* [Recovery über OpenCore Legacy Patcher T2 booten](None#recovery-uber-opencore-legacy-patcher-t2-booten)
-* [Schwarzer Bildschirm auf dem MacBookPro11,3 unter macOS Monterey](None#schwarzer-bildschirm-auf-dem-macbookpro11-3-unter-macos-monterey)
+* [Hängt bei `This version of Mac OS X is not supported on this platform` oder beim (🚫) Verboten-Symbol](#hangt-bei-this-version-of-mac-os-x-is-not-supported-on-this-platform-oder-beim-🚫-verboten-symbol)
+* [macOS bootet nicht ohne den USB-Stick](#macos-bootet-nicht-ohne-den-usb-stick)
+* [Endlosschleife beim Booten in die Recovery](#endlosschleife-beim-booten-in-die-recovery)
+* [Hängt beim Booten nach dem Root-Patching](#hangt-beim-booten-nach-dem-root-patching)
+* [Recovery über OpenCore Legacy Patcher T2 booten](#recovery-uber-opencore-legacy-patcher-t2-booten)
+* [Schwarzer Bildschirm auf dem MacBookPro11,3 unter macOS Monterey](#schwarzer-bildschirm-auf-dem-macbookpro11-3-unter-macos-monterey)
 
 #### Installer
 
-* [Hängt bei der Laufwerksauswahl mit ausgegrauten Schaltflächen im Installer](None#hangt-bei-der-laufwerksauswahl-mit-ausgegrauten-schaltflachen-im-installer)
-* [Installer schlägt mit „an error occurred preparing the software update“ fehl](None#installer-schlagt-mit-„an-error-occurred-preparing-the-software-update-fehl)
-* [Hängt bei „Weniger als eine Minute verbleibend …“](None#hangt-bei-„weniger-als-eine-minute-verbleibend)
-* [Hängt bei „Your Mac needs a firmware update“](None#hangt-bei-„your-mac-needs-a-firmware-update)
+* [Hängt bei der Laufwerksauswahl mit ausgegrauten Schaltflächen im Installer](#hangt-bei-der-laufwerksauswahl-mit-ausgegrauten-schaltflachen-im-installer)
+* [Installer schlägt mit „an error occurred preparing the software update“ fehl](#installer-schlagt-mit-„an-error-occurred-preparing-the-software-update-fehl)
+* [Hängt bei „Weniger als eine Minute verbleibend …“](#hangt-bei-„weniger-als-eine-minute-verbleibend)
+* [Hängt bei „Your Mac needs a firmware update“](#hangt-bei-„your-mac-needs-a-firmware-update)
 
 #### Sonstiges
 
-* [Neustart beim Wechsel in den Ruhezustand (`Sleep Wake Failure`)](None#neustart-beim-wechsel-in-den-ruhezustand-sleep-wake-failure))
-* [Fehler „Volume Hash Mismatch“ unter macOS Monterey](None#fehler-„volume-hash-mismatch-unter-macos-monterey)
-* [SIP lässt sich in recoveryOS nicht deaktivieren](None#sip-lasst-sich-in-recoveryos-nicht-deaktivieren)
+* [Neustart beim Wechsel in den Ruhezustand (`Sleep Wake Failure`)](#neustart-beim-wechsel-in-den-ruhezustand-sleep-wake-failure)
+* [Fehler „Volume Hash Mismatch“ unter macOS Monterey](#fehler-„volume-hash-mismatch-unter-macos-monterey)
+* [SIP lässt sich in recoveryOS nicht deaktivieren](#sip-lasst-sich-in-recoveryos-nicht-deaktivieren)
 
 
 ## Hängt bei `This version of Mac OS X is not supported on this platform` oder beim (🚫) Verboten-Symbol

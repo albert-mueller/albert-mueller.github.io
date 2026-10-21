@@ -19,9 +19,9 @@ Wenn du alle Anforderungen erfüllst, kannst du die universelle Steuerung in den
 | ![](../images/UC-enable-1.png) | ![Einstellungen der universellen Steuerung](../images/UC-enable-2.png) |
 
 
-Die meisten Mac-Modelle ab 2011 sollten ohne Weiteres funktionieren. Ältere Macs wie die MacBook Pros von 2008 bis 2011 benötigen jedoch eine neuere WLAN-/Bluetooth-Karte. Mehr dazu im [Abschnitt zu den Anforderungen.](None#anforderungen-fur-die-universelle-steuerung)
+Die meisten Mac-Modelle ab 2011 sollten ohne Weiteres funktionieren. Ältere Macs wie die MacBook Pros von 2008 bis 2011 benötigen jedoch eine neuere WLAN-/Bluetooth-Karte. Mehr dazu im [Abschnitt zu den Anforderungen.](#anforderungen-fur-die-universelle-steuerung)
 
-Einige Modelle, die Monterey nativ unterstützen, stehen auf einer Sperrliste – mehr dazu im [Abschnitt zu gesperrten Modellen](None#gesperrte-modelle).
+Einige Modelle, die Monterey nativ unterstützen, stehen auf einer Sperrliste – mehr dazu im [Abschnitt zu gesperrten Modellen](#gesperrte-modelle).
 
 ## Anforderungen für die universelle Steuerung
 
@@ -33,7 +33,7 @@ Technische Anforderungen:
 * iPadOS 15.4 oder neuer (falls zutreffend)
 * OpenCore Legacy Patcher 0.4.3 oder neuer
 
-In der [Modelltabelle](None#modelltabelle) unten siehst du, ob du Hardware aufrüsten musst und welche Hardware bei den betroffenen Macs genau ausgetauscht werden muss. Hilfe zum Austausch der WLAN-Karte in älteren Modellen von 2008 bis 2011 findest du bei Bedarf im Kanal `#hardware` auf dem [Discord-Server](https://discord.gg/rqdPgH8xSN).
+In der [Modelltabelle](#modelltabelle) unten siehst du, ob du Hardware aufrüsten musst und welche Hardware bei den betroffenen Macs genau ausgetauscht werden muss. Hilfe zum Austausch der WLAN-Karte in älteren Modellen von 2008 bis 2011 findest du bei Bedarf im Kanal `#hardware` auf dem [Discord-Server](https://discord.gg/rqdPgH8xSN).
 
 
 
@@ -76,7 +76,7 @@ Hinweis: Bei AirPort-Upgrades sind nur die besten bzw. neuesten Karten aufgefüh
 | MacBookAir5,2 | ^^ | ^^ | ^^ |
 | MacBookAir6,1 | Wi-Fi 5 + BT 4.0 | ^^ | ^^ |
 | MacBookAir6,2 | ^^ | ^^ | ^^ |
-| MacBookAir7,1 | ^^ | <span style="color:red"> NEIN </span> | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](None#gesperrte-modelle)|
+| MacBookAir7,1 | ^^ | <span style="color:red"> NEIN </span> | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](#gesperrte-modelle)|
 | MacBookAir7,2 | ^^ | ^^ | ^^ |
 
 
@@ -104,7 +104,7 @@ Hinweis: Bei AirPort-Upgrades sind nur die besten bzw. neuesten Karten aufgefüh
 | MacBookPro11,1 | Wi-Fi 5 + BT 4.0 | ^^ | ^^ |
 | MacBookPro11,2 | ^^ | ^^ | ^^ |
 | MacBookPro11,3 | ^^ | ^^ | ^^ |
-| MacBookPro11,4 | Wi-Fi 5 + BT 4.2 | <span style="color:red"> NEIN </span> | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](None#gesperrte-modelle) |
+| MacBookPro11,4 | Wi-Fi 5 + BT 4.2 | <span style="color:red"> NEIN </span> | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](#gesperrte-modelle) |
 | MacBookPro11,5 | ^^ | ^^ | ^^ |
 | MacBookPro12,1 | ^^ | ^^ | ^^ |
 :::
@@ -120,7 +120,7 @@ Hinweis: Bei AirPort-Upgrades sind nur die besten bzw. neuesten Karten aufgefüh
 | Macmini5,3 | ^^ | ^^ | ^^ |
 | Macmini6,1 | ^^ | ^^ | ^^ |
 | Macmini6,2 | ^^ | ^^ | ^^ |
-| Macmini7,1 | Wi-Fi 5 + BT 4.0 | <span style="color:red"> NEIN </span> | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](None#gesperrte-modelle) |
+| Macmini7,1 | Wi-Fi 5 + BT 4.0 | <span style="color:red"> NEIN </span> | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](#gesperrte-modelle) |
 
 :::
 
@@ -146,7 +146,7 @@ Hinweis: Bei AirPort-Upgrades sind nur die besten bzw. neuesten Karten aufgefüh
 | iMac14,3 | ^^ | ^^ | ^^ |
 | iMac14,4 | ^^ | ^^ | ^^ |
 | iMac15,1 | ^^ | ^^ | ^^ |
-| iMac16,1 | Wi-Fi 5 + BT 4.2 | <span style="color:red"> NEIN </span> | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](None#gesperrte-modelle) |
+| iMac16,1 | Wi-Fi 5 + BT 4.2 | <span style="color:red"> NEIN </span> | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](#gesperrte-modelle) |
 | iMac16,2 | ^^ | ^^ | ^^ |
 
 :::
@@ -158,7 +158,7 @@ Hinweis: Bei AirPort-Upgrades sind nur die besten bzw. neuesten Karten aufgefüh
 | MacPro3,1 | Wi-Fi 4 + BT 2.0 EDR | <span style="color:red"> NEIN </span> | Original-AirPort-Karte durch eine mPCIe-Adapterplatine und eine BCM943602CD-Karte ersetzen |
 | MacPro4,1 | Wi-Fi 4 + BT 2.1 EDR | ^^ | Original-AirPort-Karte durch eine mPCIe-Adapterplatine mit USB-Anschluss und eine BCM943602CD-Karte ersetzen |
 | MacPro5,1 | ^^ | ^^ | ^^ |
-| MacPro6,1 | Wi-Fi 5 + BT 4.0 | ^^ | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](None#gesperrte-modelle) |
+| MacPro6,1 | Wi-Fi 5 + BT 4.0 | ^^ | Die Hardware unterstützt UC. <br> [**Spoofing erforderlich.**](#gesperrte-modelle) |
 
 * Hinweis: Einige ältere Mac-Pro-Konfigurationen wurden in der Grundausstattung möglicherweise ohne WLAN-Karte ausgeliefert.
 
@@ -337,7 +337,7 @@ Jedes Modell nach den offiziell gesperrten Macs sollte unterstützt werden. Der 
 
 **Hinweis:** Sofern du OpenCore nicht auf einem anderen Gerät erstellst als dem Zielgerät, ändere das Modell in der Hauptansicht der Einstellungen **nicht**. Wichtig zu verstehen: OCLP richtet sich nach diesem Modell, unabhängig davon, welches Modell du per Spoofing vorgibst – dein Mac ist weiterhin das, was das native SMBIOS anzeigt.
 
-Erstelle und installiere OpenCore abschließend erneut und starte wieder ins Betriebssystem. Aktiviere die universelle Steuerung wie im [Abschnitt „Universelle Steuerung aktivieren“](None#universelle-steuerung-aktivieren) beschrieben.
+Erstelle und installiere OpenCore abschließend erneut und starte wieder ins Betriebssystem. Aktiviere die universelle Steuerung wie im [Abschnitt „Universelle Steuerung aktivieren“](#universelle-steuerung-aktivieren) beschrieben.
 
 
 

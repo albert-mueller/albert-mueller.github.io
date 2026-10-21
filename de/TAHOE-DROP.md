@@ -30,7 +30,7 @@ Die einzigen Intel-Macs, auf denen Tahoe noch nativ läuft, sind das MacBook Pro
 
 Auf Macs **ohne** T2-Chip kann OpenCore Legacy Patcher T2 macOS Tahoe installieren und Root-Patches anwenden, einige Herausforderungen bleiben jedoch bestehen. Informationen dazu findest du weiter unten auf dieser Seite.
 
-Auf **T2-Macs** funktioniert Tahoe noch nicht. Den aktuellen Stand findest du unten unter [T2-Sicherheitschip](None#t2-sicherheitschip) sowie unter [T2-Macs und macOS Tahoe](MODELS.md#t2-macs-und-macos-tahoe).
+Auf **T2-Macs** funktioniert Tahoe noch nicht. Den aktuellen Stand findest du unten unter [T2-Sicherheitschip](#t2-sicherheitschip) sowie unter [T2-Macs und macOS Tahoe](MODELS.md#t2-macs-und-macos-tahoe).
 
 ## Nicht funktionierende Funktionen
 
@@ -40,11 +40,11 @@ iPhone Mirroring benötigt den T2 zur Attestierung und Apple Intelligence eine N
 
 ## Probleme
 
-* [T2-Sicherheitschip](None#t2-sicherheitschip)
-* [Audiounterstützung](None#audiounterstutzung)
-* [Dual-Socket-CPUs bei Mac Pros und Xserve](None#dual-socket-cpus-bei-mac-pro-2008-und-xserve-2008)
-* [Unterstützung für USB 1.1 (OHCI/UHCI)](None#unterstutzung-fur-usb-1-1-ohci-uhci)
-* [Grafikunterstützung und Probleme](None#grafikunterstutzung-und-probleme)
+* [T2-Sicherheitschip](#t2-sicherheitschip)
+* [Audiounterstützung](#audiounterstutzung)
+* [Dual-Socket-CPUs bei Mac Pros und Xserve](#dual-socket-cpus-bei-mac-pro-2008-und-xserve-2008)
+* [Unterstützung für USB 1.1 (OHCI/UHCI)](#unterstutzung-fur-usb-1-1-ohci-uhci)
+* [Grafikunterstützung und Probleme](#grafikunterstutzung-und-probleme)
 
 
 ### T2-Sicherheitschip

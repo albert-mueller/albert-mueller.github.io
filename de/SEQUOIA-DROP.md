@@ -18,7 +18,7 @@ OpenCore Legacy Patcher 2.0.0 unterstützt Sequoia auf den unten aufgeführten M
 
 <img width="625" alt="" src="../images/OCLP-200-Initial-Support.png">
 
-Die T2-bezogene AppleKeyStore-Panic, die die kürzlich fallen gelassenen MacBookAir8,x-Modelle (und andere nicht unterstützte T2-Macs) am Booten über OpenCorePkg gehindert hat, wurde in OpenCore Legacy Patcher T2 behoben. Die T2-Unterstützung befindet sich aber noch im Alpha-Stadium: Die Installation wird noch nicht abgeschlossen. Den aktuellen Stand findest du unten unter [T2-Sicherheitschip](None#t2-sicherheitschip).
+Die T2-bezogene AppleKeyStore-Panic, die die kürzlich fallen gelassenen MacBookAir8,x-Modelle (und andere nicht unterstützte T2-Macs) am Booten über OpenCorePkg gehindert hat, wurde in OpenCore Legacy Patcher T2 behoben. Die T2-Unterstützung befindet sich aber noch im Alpha-Stadium: Die Installation wird noch nicht abgeschlossen. Den aktuellen Stand findest du unten unter [T2-Sicherheitschip](#t2-sicherheitschip).
 
 ## Nicht funktionierende Funktionen
 
@@ -28,10 +28,10 @@ iPhone Mirroring benötigt den T2 zur Attestierung und Apple Intelligence eine N
 
 ## Probleme
 
-* [Dual-Socket-CPUs bei Mac Pros und Xserve](None#dual-socket-cpus-bei-mac-pro-2008-und-xserve-2008)
-* [T2-Sicherheitschip](None#t2-sicherheitschip)
-* [Unterstützung für USB 1.1 (OHCI/UHCI)](None#unterstutzung-fur-usb-1-1-ohci-uhci)
-* [Grafikunterstützung und Probleme](None#grafikunterstutzung-und-probleme)
+* [Dual-Socket-CPUs bei Mac Pros und Xserve](#dual-socket-cpus-bei-mac-pro-2008-und-xserve-2008)
+* [T2-Sicherheitschip](#t2-sicherheitschip)
+* [Unterstützung für USB 1.1 (OHCI/UHCI)](#unterstutzung-fur-usb-1-1-ohci-uhci)
+* [Grafikunterstützung und Probleme](#grafikunterstutzung-und-probleme)
 
 
 ### Dual-Socket-CPUs bei Mac Pro 2008 und Xserve 2008

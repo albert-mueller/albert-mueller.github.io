@@ -1,9 +1,9 @@
 # Nach der Installation
 
-* [Ohne USB-Stick booten](None#ohne-usb-stick-booten)
-* [Nahtlos ohne Bootpicker booten](None#nahtlos-ohne-bootpicker-booten)
-* [SIP-Einstellungen](None#sip-einstellungen)
-* [Post-Install-Volume-Patches anwenden](None#post-install-volume-patches-anwenden)
+* [Ohne USB-Stick booten](#ohne-usb-stick-booten)
+* [Nahtlos ohne Bootpicker booten](#nahtlos-ohne-bootpicker-booten)
+* [SIP-Einstellungen](#sip-einstellungen)
+* [Post-Install-Volume-Patches anwenden](#post-install-volume-patches-anwenden)
 
 ## Ohne USB-Stick booten
 
@@ -101,7 +101,7 @@ In manchen Fällen muss OCLP Pakete aus dem Internet laden, etwa das KDK oder Me
 
 Sobald eine Internetverbindung besteht und die nötigen Pakete geladen werden können, musst du das Root-Patching manuell erneut ausführen, um die übrigen Patches zu installieren. Du kannst auch Ethernet nutzen; dann sollten alle Patches auf einmal installiert werden.
 
-[Die betroffenen Systeme und GPUs findest du unten.](None#pakete-die-eine-netzwerkverbindung-erfordern)
+[Die betroffenen Systeme und GPUs findest du unten.](#pakete-die-eine-netzwerkverbindung-erfordern)
 
 :::
 

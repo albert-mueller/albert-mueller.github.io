@@ -2,9 +2,9 @@
 
 Für alle, die ihr Setup persönlicher gestalten möchten, erlaubt OpenCore eigene Symbole und Bilder im Bootpicker.
 
-* [Eigene OpenCore-Symbole](None#eigene-opencore-symbole)
-* [Eigene Symbole für den Mac-Bootpicker](None#eigene-symbole-fur-den-mac-bootpicker)
-* [Aktualisierte Symbole installieren](None#aktualisierte-symbole-installieren)
+* [Eigene OpenCore-Symbole](#eigene-opencore-symbole)
+* [Eigene Symbole für den Mac-Bootpicker](#eigene-symbole-fur-den-mac-bootpicker)
+* [Aktualisierte Symbole installieren](#aktualisierte-symbole-installieren)
 
 # Eigene OpenCore-Symbole
 
@@ -46,7 +46,7 @@ Danach findest du dein erzeugtes Symbol im Ordner von `icnspack`:
 
 # Eigene Symbole für den Mac-Bootpicker
 
-Eigene Bootpicker-Symbole sind auf älteren Macs deutlich komplizierter. Auf Macs ab Ende 2013 funktioniert die Methode unter [Eigene OpenCore-Symbole](None#eigene-opencore-symbole) problemlos. Auf vielen Macs von 2012 und älter sind die so erzeugten Symbole jedoch nicht mit der Firmware kompatibel.
+Eigene Bootpicker-Symbole sind auf älteren Macs deutlich komplizierter. Auf Macs ab Ende 2013 funktioniert die Methode unter [Eigene OpenCore-Symbole](#eigene-opencore-symbole) problemlos. Auf vielen Macs von 2012 und älter sind die so erzeugten Symbole jedoch nicht mit der Firmware kompatibel.
 
 Um Symbole für ältere Macs zu erzeugen, brauchst du Folgendes:
 
@@ -83,8 +83,8 @@ Nachdem du sichergestellt hast, dass du OpenCore gefahrlos bearbeiten kannst, mu
 
 Wähle das Laufwerk aus, auf dem du OpenCore installiert hast, und hänge es ein.
 
-* [OpenCore-Symbole aktualisieren](None#opencore-symbole-aktualisieren)
-* [Mac-Bootpicker-Symbole aktualisieren](None#mac-bootpicker-symbole-aktualisieren)
+* [OpenCore-Symbole aktualisieren](#opencore-symbole-aktualisieren)
+* [Mac-Bootpicker-Symbole aktualisieren](#mac-bootpicker-symbole-aktualisieren)
 
 ### OpenCore-Symbole aktualisieren
 

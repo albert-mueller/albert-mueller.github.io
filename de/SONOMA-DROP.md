@@ -25,9 +25,9 @@ OpenCore Legacy Patcher 1.0.0 unterstützt Sonoma auf allen unten aufgeführten 
 ## Probleme
 
 * [Bluetooth](#bluetooth)
-* [T1-Sicherheitschip](None#t1-sicherheitschip)
-* [Unterstützung für USB 1.1 (OHCI/UHCI)](None#unterstutzung-fur-usb-1-1-ohci-uhci)
-* [Grafikunterstützung und Probleme](None#grafikunterstutzung-und-probleme)
+* [T1-Sicherheitschip](#t1-sicherheitschip)
+* [Unterstützung für USB 1.1 (OHCI/UHCI)](#unterstutzung-fur-usb-1-1-ohci-uhci)
+* [Grafikunterstützung und Probleme](#grafikunterstutzung-und-probleme)
 
 
 ### Bluetooth

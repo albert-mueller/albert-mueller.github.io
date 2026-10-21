@@ -32,9 +32,9 @@ OpenCore Legacy Patcher T2 unterstützt Ventura auf den unten aufgeführten Mode
 
 Für ältere Hardware siehe die folgenden Abschnitte:
 
-* [Aktuelle Probleme](None#aktuelle-probleme)
-  * [Unterstützung für AMD Polaris, Vega und Navi auf Mac Pros vor 2019 und iMacs vor 2012](None#unterstutzung-fur-amd-polaris-vega-und-navi-auf-mac-pros-vor-2019-und-imacs-vor-2012)
-  * [Unterstützung für USB 1.1 (OHCI/UHCI)](None#unterstutzung-fur-usb-1-1-ohci-uhci)
+* [Aktuelle Probleme](#aktuelle-probleme)
+  * [Unterstützung für AMD Polaris, Vega und Navi auf Mac Pros vor 2019 und iMacs vor 2012](#unterstutzung-fur-amd-polaris-vega-und-navi-auf-mac-pros-vor-2019-und-imacs-vor-2012)
+  * [Unterstützung für USB 1.1 (OHCI/UHCI)](#unterstutzung-fur-usb-1-1-ohci-uhci)
 
 Das Team gibt sein Bestes, die genannten Probleme zu untersuchen und zu beheben, kann aber keinen Zeitrahmen nennen.
 
