@@ -5,9 +5,11 @@ import { data as announcements } from '../announcements.data'
 import { data as issues } from '../issues.data'
 import { data as discussions } from '../discussions.data'
 import { formatDate } from '../formatDate'
+import { useStrings } from '../i18n'
 
 const props = defineProps<{ limit?: number, kind?: 'announcements' | 'issues' | 'discussions' }>()
 
+const t = useStrings()
 const kind = computed(() => props.kind ?? 'announcements')
 const items = computed(() => {
     const all = { announcements, issues, discussions }[kind.value]
@@ -18,18 +20,17 @@ const items = computed(() => {
 <template>
     <div class="announcement-list">
         <p v-if="!items.length" class="announcement-empty">
-            {{ { issues: 'There are no open issues.', discussions: 'There are no open discussions.' }[kind]
-                ?? 'There are no announcements yet.' }}
+            {{ t.empty[kind] }}
         </p>
         <a
             v-for="a in items"
             :key="a.number"
             class="announcement-card"
-            :href="withBase(`/${kind}/${a.number}.html`)"
+            :href="withBase(`${t.prefix}/${kind}/${a.number}.html`)"
         >
             <span class="announcement-card-date">
-                <span v-if="a.pinned" class="announcement-badge">Pinned</span>
-                <time :datetime="a.createdAt">{{ formatDate(a.createdAt) }}</time>
+                <span v-if="a.pinned" class="announcement-badge">{{ t.pinned }}</span>
+                <time :datetime="a.createdAt">{{ formatDate(a.createdAt, t.dateLocale) }}</time>
                 <template v-if="a.category && (kind === 'discussions' || a.category !== 'Announcements')"> · {{ a.category }}</template>
             </span>
             <span class="announcement-card-title">{{ a.title }}</span>
