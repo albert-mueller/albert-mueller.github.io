@@ -65,8 +65,9 @@ const titlesDe: Record<string, string> = {
     "PATCHEXPLAIN": "Erklärung der Patches in OpenCore Legacy Patcher T2"
 }
 
-// Guide pages that exist in every language (everything except the mirrored
-// announcements/discussions/issues, which stay English).
+// Guide pages that exist in every language. The mirrored announcements,
+// discussions and issues also have a German version (German UI, original text)
+// under de/announcements/, de/discussions/ and de/issues/.
 const TRANSLATED_PAGES = [...Object.keys(titles), 'TROUBLESHOOTING']
 
 // Public URL of the deployed site (GitHub Pages user site at the domain root).
@@ -84,7 +85,7 @@ const COPYRIGHT_DE = 'Copyright © Dortania 2020–2025 · T2-Fork © 2026 Alber
 const LANG_KEY = 'oclp-t2-lang'
 
 // Runs in <head> before the page renders: on a device whose preferred language
-// is German, open the German version of the current guide page, unless the
+// is German, open the German version of the current page, unless the
 // visitor has already picked a language with the language switcher.
 const LANG_REDIRECT = `(function () {
   try {
@@ -96,6 +97,7 @@ const LANG_REDIRECT = `(function () {
     var pages = ${JSON.stringify(TRANSLATED_PAGES)};
     var p = location.pathname, target = null;
     if (p === '/' || p === '/index.html') target = '/de/';
+    else if (/^\\/(announcements|discussions|issues)\\//.test(p)) target = '/de' + p;
     else {
       var m = p.match(/^\\/([A-Za-z0-9-]+?)(\\.html)?$/);
       if (m && pages.indexOf(m[1]) !== -1) target = '/de/' + m[1] + '.html';
@@ -168,7 +170,7 @@ export default defineConfig({
     // guide pages also link to each other via hreflang.
     transformPageData(pageData) {
         // Announcement pages get their title/description from the discussion.
-        if (/^(announcements|discussions|issues)\//.test(pageData.relativePath) && pageData.params?.title) {
+        if (/^(de\/)?(announcements|discussions|issues)\//.test(pageData.relativePath) && pageData.params?.title) {
             pageData.title = pageData.params.title
             pageData.description = pageData.params.excerpt
         }
@@ -186,7 +188,8 @@ export default defineConfig({
         )
         const basePath = isDe ? pageData.relativePath.slice(3) : pageData.relativePath
         const pageName = basePath.replace(/\.md$/, '')
-        if (pageName === 'index' || pageName === 'README' || TRANSLATED_PAGES.includes(pageName)) {
+        if (pageName === 'index' || pageName === 'README' || TRANSLATED_PAGES.includes(pageName)
+            || /^(announcements|discussions|issues)\//.test(pageName)) {
             const enUrl = pageUrl(basePath)
             const deUrl = pageUrl(`de/${basePath}`)
             pageData.frontmatter.head.push(
@@ -220,9 +223,9 @@ export default defineConfig({
             themeConfig: {
                 nav: [
                     { text: 'Anleitung', link: '/de/START' },
-                    { text: 'Ankündigungen', link: '/announcements/', activeMatch: '^/announcements/' },
-                    { text: 'Diskussionen', link: '/discussions/', activeMatch: '^/discussions/' },
-                    { text: 'Issues', link: '/issues/', activeMatch: '^/issues/' },
+                    { text: 'Ankündigungen', link: '/de/announcements/', activeMatch: '^/de/announcements/' },
+                    { text: 'Diskussionen', link: '/de/discussions/', activeMatch: '^/de/discussions/' },
+                    { text: 'Issues', link: '/de/issues/', activeMatch: '^/de/issues/' },
                 ],
                 socialLinks: [
                     { icon: 'github', link: 'https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/' },
@@ -252,6 +255,42 @@ export default defineConfig({
                     linkText: 'Zur Startseite',
                 },
                 sidebar: {
+                    '/de/announcements/': [
+                        {
+                            text: 'Ankündigungen',
+                            items: [
+                                { text: 'Alle Ankündigungen', link: '/de/announcements/' },
+                                ...announcements.slice(0, 20).map((a) => ({
+                                    text: a.title,
+                                    link: `/de/announcements/${a.number}`,
+                                })),
+                            ],
+                        },
+                    ],
+                    '/de/discussions/': [
+                        {
+                            text: 'Diskussionen',
+                            items: [
+                                { text: 'Alle Diskussionen', link: '/de/discussions/' },
+                                ...discussions.slice(0, 20).map((d) => ({
+                                    text: d.title,
+                                    link: `/de/discussions/${d.number}`,
+                                })),
+                            ],
+                        },
+                    ],
+                    '/de/issues/': [
+                        {
+                            text: 'Issues',
+                            items: [
+                                { text: 'Alle Issues', link: '/de/issues/' },
+                                ...issues.slice(0, 20).map((i) => ({
+                                    text: i.title,
+                                    link: `/de/issues/${i.number}`,
+                                })),
+                            ],
+                        },
+                    ],
                     '/de/': [
                         groupDe('Einführung', ['START', 'MODELS', 'FAQ']),
                         groupDe('Installation', ['INSTALLER', 'BUILD', 'BOOT', 'POST-INSTALL']),

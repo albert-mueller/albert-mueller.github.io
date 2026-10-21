@@ -1,8 +1,12 @@
-// Fixed locales and time zone so server-rendered and hydrated output match.
-const formatters: Record<string, Intl.DateTimeFormat> = {
-    'en-US': new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' }),
-    'de-DE': new Intl.DateTimeFormat('de-DE', { dateStyle: 'long', timeZone: 'UTC' }),
-}
+// Fixed time zone so server-rendered and hydrated output match. The locale
+// follows the page language (see i18n.ts), defaulting to English.
+const formatters = new Map<string, Intl.DateTimeFormat>()
 
-export const formatDate = (iso: string, lang = 'en-US') =>
-    (formatters[lang] ?? formatters['en-US']).format(new Date(iso))
+export const formatDate = (iso: string, locale = 'en-US') => {
+    let formatter = formatters.get(locale)
+    if (!formatter) {
+        formatter = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' })
+        formatters.set(locale, formatter)
+    }
+    return formatter.format(new Date(iso))
+}

@@ -13,7 +13,7 @@ hero:
       link: /de/START
     - theme: alt
       text: Ankündigungen
-      link: /announcements/
+      link: /de/announcements/
 
 features:
   - title: Nahezu native OTA-Updates
