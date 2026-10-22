@@ -234,6 +234,16 @@ async function graphql(query, variables) {
   return json.data
 }
 
+// GitHub renders uploaded images/videos as private-user-images.githubusercontent.com
+// URLs carrying a JWT that expires after 5 minutes, so on the built site they
+// break almost immediately. Swap them for the permanent
+// github.com/user-attachments/assets/<id> URL, which redirects to a freshly
+// signed one every time it is loaded.
+const PRIVATE_ATTACHMENT = /https:\/\/private-user-images\.githubusercontent\.com\/\d+\/\d+-([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\.[A-Za-z0-9]+\?jwt=[A-Za-z0-9._-]+/g
+
+const stableAttachments = (html) =>
+  (html || '').replace(PRIVATE_ATTACHMENT, 'https://github.com/user-attachments/assets/$1')
+
 function excerpt(text, max = 220) {
   const clean = (text || '').replace(/\s+/g, ' ').trim()
   if (clean.length <= max) return clean
@@ -297,7 +307,7 @@ async function fetchDiscussions() {
     comments: d.comments.totalCount,
     excerpt: excerpt(d.bodyText),
     // Already sanitised by GitHub, same HTML github.com renders.
-    bodyHTML: d.bodyHTML,
+    bodyHTML: stableAttachments(d.bodyHTML),
   })
 
   const mapAll = async (list) => {
@@ -314,7 +324,7 @@ const mapComment = (c) => ({
   createdAt: c.createdAt,
   lastEditedAt: c.lastEditedAt,
   author: c.author ? { login: c.author.login, url: c.author.url } : null,
-  bodyHTML: c.bodyHTML,
+  bodyHTML: stableAttachments(c.bodyHTML),
 })
 
 // All comments of one discussion with all their replies. Comments hidden on
@@ -395,7 +405,7 @@ async function fetchIssues() {
       author: i.author ? { login: i.author.login, url: i.author.url } : null,
       comments: i.comments.totalCount,
       excerpt: excerpt(i.bodyText),
-      bodyHTML: i.bodyHTML,
+      bodyHTML: stableAttachments(i.bodyHTML),
       // Comments hidden on GitHub (spam, off-topic, ...) stay hidden here.
       commentList: i.comments.nodes
         .filter((c) => !c.isMinimized)
@@ -404,7 +414,7 @@ async function fetchIssues() {
           createdAt: c.createdAt,
           lastEditedAt: c.lastEditedAt,
           author: c.author ? { login: c.author.login, url: c.author.url } : null,
-          bodyHTML: c.bodyHTML,
+          bodyHTML: stableAttachments(c.bodyHTML),
         })),
     }))
 }
