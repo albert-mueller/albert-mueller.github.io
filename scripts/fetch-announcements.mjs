@@ -486,6 +486,9 @@ function buildFeed(announcements, kind) {
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
+    // Makes browsers render the feed as a readable page instead of raw XML
+    // (public/feed.xsl). Feed readers ignore this line.
+    '<?xml-stylesheet type="text/xsl" href="/feed.xsl"?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">',
     '  <channel>',
     `    <title>${escapeXml(kind.title)}</title>`,
