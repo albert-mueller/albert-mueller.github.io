@@ -224,3 +224,74 @@ a.announcement-button:hover {
 .home-announcements-links a {
     color: var(--vp-c-brand-1);
 }
+
+/* Opt-in browser notifications (components/NotifyButton.vue) */
+.notify-box {
+    margin: 16px 0 24px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    background-color: var(--vp-c-bg-soft);
+}
+
+.vp-doc .notify-box p {
+    margin: 8px 0 0;
+    line-height: 1.6;
+}
+
+.vp-doc .notify-box p:first-child {
+    margin-top: 0;
+}
+
+.notify-box .notify-button + p,
+.notify-box p + .notify-button {
+    margin-top: 10px;
+}
+
+.notify-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border: 1px solid var(--vp-button-brand-border);
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--vp-button-brand-text);
+    background-color: var(--vp-button-brand-bg);
+    cursor: pointer;
+    transition: background-color 0.25s, border-color 0.25s;
+}
+
+.notify-button:hover {
+    border-color: var(--vp-button-brand-hover-border);
+    background-color: var(--vp-button-brand-hover-bg);
+}
+
+.notify-button-alt {
+    border-color: var(--vp-button-alt-border);
+    color: var(--vp-button-alt-text);
+    background-color: var(--vp-button-alt-bg);
+}
+
+.notify-button-alt:hover {
+    border-color: var(--vp-button-alt-hover-border);
+    background-color: var(--vp-button-alt-hover-bg);
+}
+
+.notify-button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.notify-state {
+    font-weight: 600;
+}
+
+.notify-hint {
+    font-size: 14px;
+    color: var(--vp-c-text-2);
+}
+
+.notify-error {
+    color: var(--vp-c-danger-1);
+}

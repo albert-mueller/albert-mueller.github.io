@@ -5,6 +5,8 @@ import mediumZoom from 'medium-zoom'
 import AnnouncementList from './components/AnnouncementList.vue'
 import AnnouncementPage from './components/AnnouncementPage.vue'
 import HomeAnnouncements from './components/HomeAnnouncements.vue'
+import NotifyButton from './components/NotifyButton.vue'
+import { startNotifyChecks } from './notify'
 import './custom.css'
 
 // Same key as the language redirect script in .vitepress/config.mts.
@@ -22,6 +24,7 @@ export default {
         app.component('AnnouncementList', AnnouncementList)
         app.component('AnnouncementPage', AnnouncementPage)
         app.component('HomeAnnouncements', HomeAnnouncements)
+        app.component('NotifyButton', NotifyButton)
     },
     setup() {
         const route = useRoute()
@@ -42,6 +45,9 @@ export default {
         onMounted(() => {
             initZoom()
             rememberLanguage()
+            // Opt-in browser notifications (see notify.ts): check for new
+            // announcements while the site is open.
+            startNotifyChecks(() => (route.path.startsWith('/de/') ? 'de' : 'en'))
         })
         watch(() => route.path, () => {
             nextTick(initZoom)

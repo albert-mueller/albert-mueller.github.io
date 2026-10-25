@@ -14,6 +14,7 @@
 //   .vitepress/announcements.json  - read at build time to generate
 //                                    /announcements/ and one page per post
 //   public/announcements.xml       - RSS 2.0 feed of the same posts
+//   public/notify.json             - newest announcements for browser notifications
 //   .vitepress/discussions.json    - same for /discussions/
 //   public/discussions.xml         - RSS 2.0 feed of the other discussions
 //   .vitepress/issues.json         - same for /issues/
@@ -33,6 +34,8 @@ import { fileURLToPath } from 'node:url'
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const OUT_JSON = path.join(ROOT, '.vitepress', 'announcements.json')
 const OUT_FEED = path.join(ROOT, 'public', 'announcements.xml')
+// Latest announcements for the notification service worker (public/notify-sw.js).
+const OUT_NOTIFY = path.join(ROOT, 'public', 'notify.json')
 const OUT_DISCUSSIONS_JSON = path.join(ROOT, '.vitepress', 'discussions.json')
 const OUT_DISCUSSIONS_FEED = path.join(ROOT, 'public', 'discussions.xml')
 const OUT_ISSUES_JSON = path.join(ROOT, '.vitepress', 'issues.json')
@@ -515,6 +518,14 @@ function write(kindName, items) {
   }[kindName]
   fs.writeFileSync(kind.json, `${JSON.stringify({ source, [kindName]: items }, null, 2)}\n`)
   fs.writeFileSync(kind.feed, buildFeed(items, kind))
+  if (kindName === 'announcements') {
+    // Newest first, by creation date (pins don't matter for notifications).
+    const latest = [...items]
+      .sort((x, y) => y.createdAt.localeCompare(x.createdAt))
+      .slice(0, 20)
+      .map((x) => ({ number: x.number, title: x.title, createdAt: x.createdAt }))
+    fs.writeFileSync(OUT_NOTIFY, `${JSON.stringify({ announcements: latest })}\n`)
+  }
 }
 
 function readExisting(kindName) {

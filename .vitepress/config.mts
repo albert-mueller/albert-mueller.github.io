@@ -152,6 +152,10 @@ export default defineConfig({
     head: [
         ['script', {}, LANG_REDIRECT],
         ['link', { rel: 'icon', href: '/favicon.ico?v=2' }],
+        // Lets the site be installed as an app (needed for background checks of
+        // the browser notifications, and for notifications at all on iOS).
+        ['link', { rel: 'manifest', href: '/manifest.webmanifest' }],
+        ['link', { rel: 'apple-touch-icon', href: '/icon-192.png' }],
         ['link', { rel: 'alternate', type: 'application/rss+xml', title: `${SITE_TITLE} – Announcements`, href: `${SITE_URL}announcements.xml` }],
         ['link', { rel: 'alternate', type: 'application/rss+xml', title: `${SITE_TITLE} – Discussions`, href: `${SITE_URL}discussions.xml` }],
         ['link', { rel: 'alternate', type: 'application/rss+xml', title: `${SITE_TITLE} – Issues`, href: `${SITE_URL}issues.xml` }],

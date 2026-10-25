@@ -17,6 +17,9 @@ Fragen, Ideen und alles andere aus der Community findest du unter [Diskussionen]
 
 Die Beiträge selbst werden so angezeigt, wie sie auf GitHub verfasst wurden (meist auf Englisch).
 
-Möchtest du benachrichtigt werden? Abonniere den <a href="/announcements.xml" target="_blank" rel="noreferrer">RSS-Feed</a>.
+Möchtest du benachrichtigt werden? Abonniere den <a href="/announcements.xml" target="_blank" rel="noreferrer">RSS-Feed</a>
+oder aktiviere Browser-Benachrichtigungen:
+
+<NotifyButton />
 
 <AnnouncementList />

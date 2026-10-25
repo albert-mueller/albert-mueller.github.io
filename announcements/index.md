@@ -15,6 +15,9 @@ automatically from the Announcements category of
 pinned ones first, then the newest. You can comment on each of them on GitHub.
 Questions, ideas and everything else from the community are under [Discussions](/discussions/).
 
-Want to be notified? Subscribe to the <a href="/announcements.xml" target="_blank" rel="noreferrer">RSS feed</a>.
+Want to be notified? Subscribe to the <a href="/announcements.xml" target="_blank" rel="noreferrer">RSS feed</a>
+or turn on browser notifications:
+
+<NotifyButton />
 
 <AnnouncementList />
