@@ -27,6 +27,8 @@ All of these models except the iMac (2019) have a T2 security chip.
 The only Intel Macs that still run Tahoe natively are the MacBook Pro (16-inch, 2019), MacBook Pro (13-inch, 2020, 4 Thunderbolt 3 ports), iMac (Retina 5K, 27-inch, 2020) and Mac Pro (2019).
 
 ## Current status
+OpenCore Legacy Patcher T2 supports Tahoe for the models below, however some challenges remain. You can find information about them further down this page
+<img width="625" alt="" src="./images/OCLPT2-Tahoe-Support.png">
 
 For Macs **without** a T2 chip, OpenCore Legacy Patcher T2 can install macOS Tahoe and apply root patches, however some challenges remain. You can find information about them further down this page.
 
