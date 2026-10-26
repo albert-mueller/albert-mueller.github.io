@@ -9,8 +9,10 @@ on:
   # GitHub Discussions and refresh the RSS feeds.
   schedule:
     - cron: "23 * * * *"
-  # Lets the patcher repo trigger an immediate rebuild when an announcement
-  # is posted (needs a token with access to this repo stored over there).
+  # Lets the patcher repo trigger an immediate rebuild whenever an issue,
+  # comment, discussion or announcement changes (see
+  # .github/workflows/trigger-site-rebuild.yml over there; needs its
+  # SITE_DISPATCH_TOKEN secret).
   repository_dispatch:
     types:
       - announcements-updated
