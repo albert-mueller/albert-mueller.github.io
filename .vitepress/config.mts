@@ -8,6 +8,7 @@ const titles: Record<string, string> = {
     "FAQ": "FAQ",
     "INSTALLER": "Creating macOS Installers",
     "BUILD": "Building and installing OpenCore",
+    "T2": "Instructions for T2 Macs",
     "BOOT": "Booting OpenCore and macOS",
     "POST-INSTALL": "Post-Installation",
     "TAHOE-DROP": "macOS Tahoe",
@@ -40,6 +41,7 @@ const titlesDe: Record<string, string> = {
     "FAQ": "FAQ",
     "INSTALLER": "macOS-Installer erstellen",
     "BUILD": "OpenCore erstellen und installieren",
+    "T2": "Anleitung für T2-Macs",
     "BOOT": "OpenCore und macOS booten",
     "POST-INSTALL": "Nach der Installation",
     "TAHOE-DROP": "macOS Tahoe",
@@ -314,7 +316,7 @@ export default defineConfig({
                     ],
                     '/de/': [
                         groupDe('Einführung', ['START', 'MODELS', 'FAQ']),
-                        groupDe('Installation', ['INSTALLER', 'BUILD', 'BOOT', 'POST-INSTALL']),
+                        groupDe('Installation', ['INSTALLER', 'BUILD', 'T2', 'BOOT', 'POST-INSTALL']),
                         groupDe('macOS-Unterstützung', ['TAHOE-DROP', 'SEQUOIA-DROP', 'SONOMA-DROP', 'VENTURA-DROP', 'MONTEREY-DROP']),
                         groupDe('Anwendung', ['UPDATE', 'UNINSTALL', 'PROCESS']),
                         groupDe('Fehlerbehebung', ['TROUBLESHOOT-APP', 'TROUBLESHOOT-MISC', 'TROUBLESHOOT-NONMETAL', 'TROUBLESHOOT-HARDWARE', 'DEBUG']),
@@ -412,7 +414,7 @@ export default defineConfig({
             ],
             '/': [
                 group('Introduction', ['START', 'MODELS', 'FAQ']),
-                group('How to install', ['INSTALLER', 'BUILD', 'BOOT', 'POST-INSTALL']),
+                group('How to install', ['INSTALLER', 'BUILD', 'T2', 'BOOT', 'POST-INSTALL']),
                 group('macOS Support', ['TAHOE-DROP', 'SEQUOIA-DROP', 'SONOMA-DROP', 'VENTURA-DROP', 'MONTEREY-DROP']),
                 group('Application', ['UPDATE', 'UNINSTALL', 'PROCESS']),
                 group('Troubleshooting', ['TROUBLESHOOT-APP', 'TROUBLESHOOT-MISC', 'TROUBLESHOOT-NONMETAL', 'TROUBLESHOOT-HARDWARE', 'DEBUG']),

@@ -37,4 +37,8 @@ Once it finishes building, you'll want to select the disk to install to:
 
 
 
+::: tip T2 Macs
+On a T2 Mac, Secure Boot and SIP have to be disabled before OpenCore can boot. Once you reach the *Reboot to apply* screen, follow the [Instructions for T2 Macs](./T2.md).
+:::
+
 # Once finished, head to [Booting OpenCore and macOS](./BOOT.md)

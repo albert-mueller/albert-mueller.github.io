@@ -37,4 +37,8 @@ Sobald die Erstellung abgeschlossen ist, wählst du das Laufwerk aus, auf dem in
 
 
 
+::: tip T2-Macs
+Auf einem T2-Mac müssen der sichere Start und SIP deaktiviert werden, bevor OpenCore booten kann. Sobald du den Bildschirm *Reboot to apply* erreichst, folge der [Anleitung für T2-Macs](./T2.md).
+:::
+
 # Wenn du fertig bist, geht es weiter mit [OpenCore und macOS booten](./BOOT.md)
