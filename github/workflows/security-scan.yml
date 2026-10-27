@@ -1,0 +1,253 @@
+name: CI - Security Scan
+
+# Scans the website for vulnerabilities every day and fixes what can be fixed
+# automatically.
+#
+# - dependencies: OSV-Scanner checks yarn.lock against the OSV database
+#   (GitHub Advisories, npm, ...). Vulnerable packages are raised to the
+#   nearest fixed version (scripts/security-fix.mjs), the site is test-built,
+#   and only if that build succeeds the fix is pushed to main and deployed.
+# - codeql: CodeQL scans the site's own code (VitePress theme, scripts, the
+#   notification service worker) and the GitHub workflows. Findings appear
+#   under Security > Code scanning, where "Generate fix" (Copilot Autofix)
+#   can suggest a patch.
+#
+# If anything is left that could not be fixed automatically, the run fails,
+# so GitHub sends a notification. Findings are only shown in the run summary
+# and the Security tab, never in a public issue.
+
+on:
+  schedule:
+    # Every day at 04:17 UTC
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - yarn.lock
+      - ".vitepress/**"
+      - "scripts/**"
+      - "public/**"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-scan
+  cancel-in-progress: false
+
+jobs:
+  dependencies:
+    name: Dependency vulnerabilities
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'albert-mueller'
+    permissions:
+      contents: write    # push the fix to main
+      actions: write     # start build-site.yml afterwards
+      discussions: read  # fetch-announcements.mjs during the test build
+    env:
+      OSV_SCANNER_VERSION: v2.7.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: main
+          # The write token is only handed to git in the push step, not
+          # while dependency code runs during the test build.
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: "yarn"
+          cache-dependency-path: yarn.lock
+
+      # Built from source with a pinned version; Go verifies the module
+      # against the public checksum database (sum.golang.org).
+      - name: Install OSV-Scanner
+        run: |
+          GOBIN="$RUNNER_TEMP/bin" go install "github.com/google/osv-scanner/v2/cmd/osv-scanner@${OSV_SCANNER_VERSION}"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Install current dependencies
+        run: yarn install --frozen-lockfile --ignore-scripts --non-interactive
+
+      - name: Scan and fix
+        id: fix
+        run: |
+          scan() {
+            set +e
+            osv-scanner scan source --lockfile yarn.lock --format json > "$1"
+            local rc=$?
+            set -e
+            # 0 = clean, 1 = vulnerabilities found, anything else = error
+            if [ "$rc" -gt 1 ]; then
+              echo "::error::OSV-Scanner failed (exit code $rc)"
+              exit "$rc"
+            fi
+          }
+
+          scan "$RUNNER_TEMP/osv.json"
+          if node scripts/security-fix.mjs "$RUNNER_TEMP/osv.json" > "$RUNNER_TEMP/found.md"; then
+            echo "## Dependencies: no known vulnerabilities" >> "$GITHUB_STEP_SUMMARY"
+            echo "remaining=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          {
+            echo "## Dependencies: vulnerabilities found"
+            cat "$RUNNER_TEMP/found.md"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          # Two passes: a fixed version can pull in another vulnerable package.
+          for pass in 1 2; do
+            node scripts/security-fix.mjs "$RUNNER_TEMP/osv.json" --apply > "$RUNNER_TEMP/applied-$pass.md" || true
+            yarn install --ignore-scripts --non-interactive
+            scan "$RUNNER_TEMP/osv.json"
+            if node scripts/security-fix.mjs "$RUNNER_TEMP/osv.json" > "$RUNNER_TEMP/left.md"; then
+              break
+            fi
+          done
+
+          {
+            echo "## Fix attempt"
+            cat "$RUNNER_TEMP"/applied-*.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if node scripts/security-fix.mjs "$RUNNER_TEMP/osv.json" > "$RUNNER_TEMP/left.md"; then
+            echo "remaining=false" >> "$GITHUB_OUTPUT"
+            echo "## All dependency vulnerabilities fixed" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "remaining=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Still vulnerable after the fix attempt"
+              cat "$RUNNER_TEMP/left.md"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- package.json yarn.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Changes in package.json"
+              echo '```diff'
+              git diff -- package.json
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # Same as in build-site.yml, so the test build sees the real content
+      - name: Fetch announcements from GitHub Discussions
+        if: steps.diff.outputs.changed == 'true'
+        run: node scripts/fetch-announcements.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.ANNOUNCEMENTS_TOKEN || github.token }}
+          ANNOUNCEMENTS_CATEGORY: announcements
+
+      - name: Test build with the fixed dependencies
+        if: steps.diff.outputs.changed == 'true'
+        run: yarn run build
+
+      - name: Commit and push to main
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          # Only the dependency files, never the generated build/feed files
+          git add package.json yarn.lock
+          git commit -m "fix(security): update vulnerable website dependencies"
+          git stash --include-untracked --quiet || true
+          git pull --rebase "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" main
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+
+      # Pushes made with the job token don't trigger other workflows, so the
+      # deploy is started explicitly (workflow_dispatch is allowed).
+      - name: Rebuild and deploy the website
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run build-site.yml --ref main
+
+      - name: Fail if vulnerabilities remain
+        if: steps.fix.outputs.remaining == 'true'
+        run: |
+          echo "::error::Some vulnerable dependencies could not be fixed automatically, see the run summary."
+          exit 1
+
+  codeql:
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'albert-mueller'
+    permissions:
+      contents: read
+      security-events: write  # upload the results to the Security tab
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language:
+          - javascript-typescript  # .vitepress theme, scripts/, public/*.js
+          - actions                # .github/workflows
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+          queries: security-extended
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  code-alerts:
+    name: Open code scanning alerts
+    runs-on: ubuntu-latest
+    needs: codeql
+    if: always() && github.repository_owner == 'albert-mueller'
+    permissions:
+      security-events: read
+    steps:
+      - name: List open alerts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Results can take a moment to be processed after the upload
+          sleep 60
+          gh api --paginate "repos/${GITHUB_REPOSITORY}/code-scanning/alerts?state=open&per_page=100" \
+            --jq '.[] | [(.rule.security_severity_level // .rule.severity // "unknown"), .rule.id, .most_recent_instance.location.path, (.most_recent_instance.location.start_line|tostring), .html_url] | @tsv' \
+            > alerts.tsv || { echo "::warning::Could not read code scanning alerts"; exit 0; }
+
+          if [ ! -s alerts.tsv ]; then
+            echo "## Code scanning: no open alerts" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          {
+            echo "## Code scanning: open alerts"
+            echo "Open an alert and click **Generate fix** for a suggested patch."
+            echo
+            echo "| Severity | Rule | Location | Alert |"
+            echo "|---|---|---|---|"
+            awk -F'\t' '{ printf "| %s | `%s` | `%s:%s` | [open](%s) |\n", $1, $2, $3, $4, $5 }' alerts.tsv
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if cut -f1 alerts.tsv | grep -qE '^(critical|high|error)$'; then
+            echo "::error::There are open high/critical code scanning alerts, see the run summary."
+            exit 1
+          fi
