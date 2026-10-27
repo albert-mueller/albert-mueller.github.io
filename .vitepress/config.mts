@@ -112,6 +112,23 @@ const announcements = loadAnnouncements()
 const discussions = loadDiscussions()
 const issues = loadIssues()
 
+// Titles and excerpts of discussions and issues come from anyone with a GitHub
+// account. VitePress renders sidebar `text` as raw HTML (v-html), so an
+// unescaped title like `<img src=x onerror=...>` would run script on the
+// site. Escape them before they reach the sidebar, and keep markup
+// characters out of the page <title>/meta description.
+const escapeHtml = (s: string) => String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+
+const plainText = (s: string) => String(s ?? '')
+    .replace(/</g, '‹')
+    .replace(/>/g, '›')
+    .replace(/["`]/g, '”')
+
 const RSS_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>RSS</title><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20 5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1Z"/></svg>'
 
 // Maps a source page (e.g. "BUILD.md", "index.md") to its public URL.
@@ -175,8 +192,8 @@ export default defineConfig({
     transformPageData(pageData) {
         // Announcement pages get their title/description from the discussion.
         if (/^(de\/)?(announcements|discussions|issues)\//.test(pageData.relativePath) && pageData.params?.title) {
-            pageData.title = pageData.params.title
-            pageData.description = pageData.params.excerpt
+            pageData.title = plainText(pageData.params.title)
+            pageData.description = plainText(pageData.params.excerpt)
         }
         const isDe = pageData.relativePath.startsWith('de/')
         const url = pageUrl(pageData.relativePath)
@@ -265,7 +282,7 @@ export default defineConfig({
                             items: [
                                 { text: 'Alle Ankündigungen', link: '/de/announcements/' },
                                 ...announcements.slice(0, 20).map((a) => ({
-                                    text: a.title,
+                                    text: escapeHtml(a.title),
                                     link: `/de/announcements/${a.number}`,
                                 })),
                             ],
@@ -277,7 +294,7 @@ export default defineConfig({
                             items: [
                                 { text: 'Alle Diskussionen', link: '/de/discussions/' },
                                 ...discussions.slice(0, 20).map((d) => ({
-                                    text: d.title,
+                                    text: escapeHtml(d.title),
                                     link: `/de/discussions/${d.number}`,
                                 })),
                             ],
@@ -289,7 +306,7 @@ export default defineConfig({
                             items: [
                                 { text: 'Alle Issues', link: '/de/issues/' },
                                 ...issues.slice(0, 20).map((i) => ({
-                                    text: i.title,
+                                    text: escapeHtml(i.title),
                                     link: `/de/issues/${i.number}`,
                                 })),
                             ],
@@ -363,7 +380,7 @@ export default defineConfig({
                     items: [
                         { text: 'All announcements', link: '/announcements/' },
                         ...announcements.slice(0, 20).map((a) => ({
-                            text: a.title,
+                            text: escapeHtml(a.title),
                             link: `/announcements/${a.number}`,
                         })),
                     ],
@@ -375,7 +392,7 @@ export default defineConfig({
                     items: [
                         { text: 'All discussions', link: '/discussions/' },
                         ...discussions.slice(0, 20).map((d) => ({
-                            text: d.title,
+                            text: escapeHtml(d.title),
                             link: `/discussions/${d.number}`,
                         })),
                     ],
@@ -387,7 +404,7 @@ export default defineConfig({
                     items: [
                         { text: 'All issues', link: '/issues/' },
                         ...issues.slice(0, 20).map((i) => ({
-                            text: i.title,
+                            text: escapeHtml(i.title),
                             link: `/issues/${i.number}`,
                         })),
                     ],
