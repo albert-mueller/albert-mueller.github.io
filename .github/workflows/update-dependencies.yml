@@ -1,0 +1,127 @@
+name: CI - Update Dependencies
+
+# Checks the website's npm dependencies for new releases. If there are any,
+# package.json and yarn.lock are updated, the site is test-built, and only if
+# that build succeeds the update is committed to main and deployed.
+#
+# By default only minor/patch updates are applied automatically. Major updates
+# (which can contain breaking changes, e.g. a new VitePress major) are only
+# listed in the run summary; start the workflow manually with
+# "include-major" ticked to apply them as well.
+
+on:
+  schedule:
+    # Every Monday at 05:41 UTC
+    - cron: "41 5 * * 1"
+  workflow_dispatch:
+    inputs:
+      include-major:
+        description: "Also apply major updates (may contain breaking changes)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-dependencies
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Update dependencies
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'albert-mueller'
+    permissions:
+      contents: write    # push the update commit to main
+      actions: write     # start build-site.yml afterwards
+      discussions: read  # fetch-announcements.mjs during the test build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: main
+          # Don't leave the write token in .git/config while third-party
+          # dependency code runs during the test build; it is only handed
+          # to git in the push step below.
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: "yarn"
+          cache-dependency-path: yarn.lock
+
+      - name: Install current dependencies
+        run: yarn install --frozen-lockfile --ignore-scripts --non-interactive
+
+      - name: List available updates
+        run: |
+          {
+            echo "## Available updates (incl. major)"
+            echo '```'
+            npx --yes npm-check-updates@17 --target latest || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Apply updates
+        env:
+          TARGET: ${{ inputs.include-major && 'latest' || 'minor' }}
+        run: |
+          echo "Update target: $TARGET"
+          # Raise the version ranges in package.json
+          npx --yes npm-check-updates@17 --target "$TARGET" --upgrade
+          yarn install --ignore-scripts --non-interactive
+          # Also refresh indirect dependencies to the newest versions their
+          # ranges (and the "resolutions" in package.json) allow
+          yarn upgrade --ignore-scripts --non-interactive
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- package.json yarn.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "All dependencies are up to date, nothing to do." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Changes in package.json"
+              echo '```diff'
+              git diff -- package.json
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # Same as in build-site.yml, so the test build sees the real content
+      - name: Fetch announcements from GitHub Discussions
+        if: steps.diff.outputs.changed == 'true'
+        run: node scripts/fetch-announcements.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.ANNOUNCEMENTS_TOKEN || github.token }}
+          ANNOUNCEMENTS_CATEGORY: announcements
+
+      - name: Test build with the updated dependencies
+        if: steps.diff.outputs.changed == 'true'
+        run: yarn run build
+
+      - name: Commit and push to main
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          # Only the dependency files, never the generated build/feed files
+          git add package.json yarn.lock
+          git commit -m "chore(deps): update website dependencies"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+
+      # Pushes made with the job token don't trigger other workflows, so the
+      # deploy is started explicitly (workflow_dispatch is allowed).
+      - name: Rebuild and deploy the website
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run build-site.yml --ref main
