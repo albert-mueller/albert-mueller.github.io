@@ -29,7 +29,7 @@ jobs:
   build:
     name: Build Site
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'albert-mueller'
+    if: github.repository_owner == 'oclp-t2'
     permissions:
       contents: read
       # Needed so the job token may read (public) GitHub Discussions at all.
@@ -75,7 +75,7 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    if: github.repository_owner == 'albert-mueller' && github.ref == 'refs/heads/main'
+    if: github.repository_owner == 'oclp-t2' && github.ref == 'refs/heads/main'
     permissions:
       pages: write
       id-token: write
