@@ -4,7 +4,7 @@ OpenCore ist ein ausgefeilter Bootloader, der Daten im Arbeitsspeicher statt auf
 
 Bei Fragen empfehlen wir einen Blick auf die Seite [OpenCore-Patcher-Terminologie](./TERMS.md).
 
-Zur Fehlerbehebung sieh dir unsere Fehlerbehebungsseiten unten an oder frag in unseren [GitHub Discussions](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/discussions).
+Zur Fehlerbehebung sieh dir unsere Fehlerbehebungsseiten unten an oder frag in unseren [GitHub Discussions](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/discussions).
 
 - [Fehlerbehebung: Anwendung](./TROUBLESHOOT-APP.md)
 - [Fehlerbehebung: Booten, Installer und Sonstiges](./TROUBLESHOOT-MISC.md)

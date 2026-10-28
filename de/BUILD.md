@@ -4,7 +4,7 @@ Jetzt, wo wir einen macOS-Installer haben, erstellen wir unsere OpenCore-Konfigu
 
 Falls du OpenCore Patcher noch nicht heruntergeladen hast, hol das jetzt nach:
 
-* [OpenCore Legacy Patcher T2 Releases](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/releases)
+* [OpenCore Legacy Patcher T2 Releases](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases)
 
 Starte als Nächstes die `OpenCore-Patcher-T2.app`.
 

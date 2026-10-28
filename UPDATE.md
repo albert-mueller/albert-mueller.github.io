@@ -9,7 +9,7 @@ When you open the app, it checks for a newer version. If an update is detected, 
 * You can also check for updates at any time with the `Check for updates` button inside Settings.
 * Automatic updates are disabled when running the app from source or on special builds.
 
-[You can also manually download the latest release here.](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/releases)
+[You can also manually download the latest release here.](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases)
 
 After the update, the application asks if you want to update OpenCore and root patches. 
 

@@ -11,7 +11,7 @@ next: false
 
 All open community discussions about OpenCore Legacy Patcher T2 (questions, ideas,
 guides and more), mirrored automatically from
-[GitHub Discussions](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/discussions):
+[GitHub Discussions](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/discussions):
 pinned ones first, then the newest. Official news from the maintainers is under
 [Announcements](/announcements/). To reply or start a new discussion, use GitHub.
 

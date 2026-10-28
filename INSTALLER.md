@@ -11,7 +11,7 @@ Before proceeding, please read the application and macOS installer creation requ
 
 To start off, you'll want to grab the app:
 
-* [OpenCore Legacy Patcher T2 Release Apps](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/releases)
+* [OpenCore Legacy Patcher T2 Release Apps](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases)
 
 Once downloaded, open the app and you should be greeted by the main menu. 
 

@@ -11,7 +11,7 @@ Bevor du fortfährst, lies bitte die Anforderungen an die Anwendung und an die E
 
 Zuerst brauchst du die App:
 
-* [OpenCore Legacy Patcher T2 Release-Apps](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/releases)
+* [OpenCore Legacy Patcher T2 Release-Apps](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases)
 
 Öffne die App nach dem Herunterladen, und du solltest vom Hauptmenü begrüßt werden.
 

@@ -10,7 +10,7 @@ next: false
 # Issues
 
 Alle offenen Issues von OpenCore Legacy Patcher T2, automatisch gespiegelt aus den
-[GitHub Issues](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/issues):
+[GitHub Issues](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/issues):
 angeheftete zuerst, danach die neuesten. Um zu kommentieren oder ein neues Problem zu melden, nutze GitHub.
 
 Die Beiträge selbst werden so angezeigt, wie sie auf GitHub verfasst wurden (meist auf Englisch).

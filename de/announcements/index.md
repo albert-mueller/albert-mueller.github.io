@@ -11,7 +11,7 @@ next: false
 
 Offizielle Ankündigungen der Maintainer von OpenCore Legacy Patcher T2, automatisch
 gespiegelt aus der Kategorie „Announcements“ der
-[GitHub Discussions](https://github.com/albert-mueller/OpenCore-Legacy-Patcher-T2/discussions/categories/announcements):
+[GitHub Discussions](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/discussions/categories/announcements):
 angeheftete zuerst, danach die neuesten. Du kannst jede davon auf GitHub kommentieren.
 Fragen, Ideen und alles andere aus der Community findest du unter [Diskussionen](/de/discussions/).
 
