@@ -86,17 +86,20 @@ const COPYRIGHT_DE = 'Copyright © Dortania 2020–2025 · T2-Fork © 2026 Alber
 // Shared with .vitepress/theme/index.ts.
 const LANG_KEY = 'oclp-t2-lang'
 
-// Runs in <head> before the page renders: marks Windows and Android devices
-// with the class "hide-mac-download" on <html>, which hides the homepage's
-// direct-download button for the macOS .pkg (see custom.css). Kept ES5 so it
-// also runs in old Safari versions.
+// Runs in <head> before the page renders: marks devices that can't run the
+// macOS .pkg (Windows, Android, iOS, iPadOS, watchOS) with the class
+// "hide-mac-download" on <html>, which hides the homepage's direct-download
+// button (see custom.css). iPadOS Safari pretends to be a Mac by default, so
+// it is recognised by its touch screen instead (real Macs report 0 touch
+// points). Kept ES5 so it also runs in old Safari versions.
 const HIDE_MAC_DOWNLOAD = `(function () {
   try {
     var ua = navigator.userAgent || '';
     var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
-    if (/Windows|Android/i.test(ua) || /^(Windows|Win32|Win64|Android)/i.test(platform)) {
-      document.documentElement.className += ' hide-mac-download';
-    }
+    var hide = /Windows|Android|iPhone|iPad|iPod|Watch/i.test(ua) ||
+      /^(Windows|Win32|Win64|Android|iPhone|iPad|iPod|iOS)/i.test(platform) ||
+      (/Mac/i.test(platform) && navigator.maxTouchPoints > 1);
+    if (hide) document.documentElement.className += ' hide-mac-download';
   } catch (e) {}
 })();`
 
