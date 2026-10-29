@@ -86,6 +86,20 @@ const COPYRIGHT_DE = 'Copyright © Dortania 2020–2025 · T2-Fork © 2026 Alber
 // Shared with .vitepress/theme/index.ts.
 const LANG_KEY = 'oclp-t2-lang'
 
+// Runs in <head> before the page renders: marks Windows and Android devices
+// with the class "hide-mac-download" on <html>, which hides the homepage's
+// direct-download button for the macOS .pkg (see custom.css). Kept ES5 so it
+// also runs in old Safari versions.
+const HIDE_MAC_DOWNLOAD = `(function () {
+  try {
+    var ua = navigator.userAgent || '';
+    var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+    if (/Windows|Android/i.test(ua) || /^(Windows|Win32|Win64|Android)/i.test(platform)) {
+      document.documentElement.className += ' hide-mac-download';
+    }
+  } catch (e) {}
+})();`
+
 // Runs in <head> before the page renders: on a device whose preferred language
 // is German, open the German version of the current page, unless the
 // visitor has already picked a language with the language switcher.
@@ -170,6 +184,7 @@ export default defineConfig({
     ignoreDeadLinks: true,
     head: [
         ['script', {}, LANG_REDIRECT],
+        ['script', {}, HIDE_MAC_DOWNLOAD],
         ['link', { rel: 'icon', href: '/favicon.ico?v=2' }],
         // Lets the site be installed as an app (needed for background checks of
         // the browser notifications, and for notifications at all on iOS).
