@@ -52,7 +52,8 @@
       "**/get-uri/basic-ftp": "^6.2.2",
       "markdownlint-cli/js-yaml": "^5.4.1",
       "markdownlint-cli/smol-toml": "^1.9.0",
-      "**/micromark-extension-math/katex": "^0.18.2"
+      "**/micromark-extension-math/katex": "^0.18.2",
+      "**/re2js": "^2.8.7"
    },
    "homepage": "https://oclp-t2.github.io/",
    "packageManager": "yarn@1.22.22",
