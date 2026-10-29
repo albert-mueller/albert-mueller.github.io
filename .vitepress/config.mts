@@ -89,16 +89,16 @@ const LANG_KEY = 'oclp-t2-lang'
 // Runs in <head> before the page renders: marks devices that can't run the
 // macOS .pkg (Windows, Android, iOS, iPadOS, watchOS) with the class
 // "hide-mac-download" on <html>, which hides the homepage's direct-download
-// button (see custom.css). iPadOS Safari pretends to be a Mac by default, so
-// it is recognised by its touch screen instead (real Macs report 0 touch
-// points). Kept ES5 so it also runs in old Safari versions.
+// button (see custom.css). iPads whose browser reports a macOS user agent
+// (the iPadOS Safari default) are deliberately treated as Macs: a touch-screen
+// check would also hide the button on touch-screen Macs and Macs with a touch
+// monitor. Kept ES5 so it also runs in old Safari versions.
 const HIDE_MAC_DOWNLOAD = `(function () {
   try {
     var ua = navigator.userAgent || '';
     var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
     var hide = /Windows|Android|iPhone|iPad|iPod|Watch/i.test(ua) ||
-      /^(Windows|Win32|Win64|Android|iPhone|iPad|iPod|iOS)/i.test(platform) ||
-      (/Mac/i.test(platform) && navigator.maxTouchPoints > 1);
+      /^(Windows|Win32|Win64|Android|iPhone|iPad|iPod|iOS)/i.test(platform);
     if (hide) document.documentElement.className += ' hide-mac-download';
   } catch (e) {}
 })();`
