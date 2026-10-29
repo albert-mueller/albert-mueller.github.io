@@ -14,6 +14,12 @@ hero:
     - theme: alt
       text: Announcements
       link: /announcements/
+    # Direct download of the newest release. /releases/latest/download/ always
+    # resolves to the latest (non-pre-)release on the server side, so it also
+    # works in old Safari versions that can't render github.com pages.
+    - theme: alt
+      text: Download latest version
+      link: https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases/latest/download/OpenCore-Patcher-T2.pkg
 
 features:
   - title: Near-native OTA updates

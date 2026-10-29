@@ -14,6 +14,10 @@ hero:
     - theme: alt
       text: Ankündigungen
       link: /de/announcements/
+    # Direkter Download der neuesten Version (siehe README.md).
+    - theme: alt
+      text: Neueste Version herunterladen
+      link: https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases/latest/download/OpenCore-Patcher-T2.pkg
 
 features:
   - title: Nahezu native OTA-Updates
