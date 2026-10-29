@@ -45,6 +45,7 @@ The below tables can be used to reference issues with a particular model, and se
 
 | Model Name | Identifier | Additional info |
 | :--- | :--- | :--- |
+| MacBook (13-inch, Early 2008)<br>MacBook (13-inch, Late 2008) | `MacBook4,1` | - **Root patching only** (from 4.0.0.1900019): OpenCore can't be built for this model, because its audio needs an AppleALC version that is not compatible with OpenCore 1.0.8. Support for building OpenCore will return once a much newer AppleALC supports this model<br>- Root patches for Intel GMA X3100 graphics, display backlight and audio<br>- [non-Metal GPU (macOS 11+)](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/108) |
 | MacBook (13-inch, Aluminum, Late 2008) | `MacBook5,1` | - [non-Metal GPU (macOS 11+)](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/108)<br>- [USB 1.1 (macOS 13+)](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1021)|
 | MacBook (13-inch, Early 2009)<br>MacBook (13-inch, Mid 2009) | `MacBook5,2` | - [non-Metal GPU (macOS 11+)](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/108)<br>- [USB 1.1 (macOS 13+)](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1021)<br>- Trackpad gestures are partially broken |
 | MacBook (13-inch, Late 2009) | `MacBook6,1` | - [non-Metal GPU (macOS 11+)](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/108)<br>- [USB 1.1 (macOS 13+)](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/1021) |
