@@ -29,7 +29,7 @@ jobs:
   build:
     name: Build Site
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'oclp-t2'
+    if: github.repository_owner == 'bridgepatcher'
     permissions:
       contents: read
       # Needed so the job token may read (public) GitHub Discussions at all.
@@ -43,7 +43,18 @@ jobs:
           # for "Last updated" and the sitemap's <lastmod> entries.
           fetch-depth: 0
 
+      # Automatic takedown: if the site contains known copyrighted artwork
+      # (see license-guard.yml), publish a maintenance page instead of the site.
+      # The next build after the fix (push or the hourly run) restores it.
+      - name: License Guard
+        id: guard
+        run: |
+          python3 -m venv /tmp/lg
+          /tmp/lg/bin/pip install --quiet --disable-pip-version-check "pillow==11.3.0"
+          REPORT_PATH=/tmp/license-report.md /tmp/lg/bin/python .github/scripts/license_guard.py HEAD
+
       - name: Setup Node
+        if: steps.guard.outputs.violations == '0'
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22"
@@ -51,6 +62,7 @@ jobs:
           cache-dependency-path: yarn.lock
 
       - name: Install Dependencies
+        if: steps.guard.outputs.violations == '0'
         run: yarn install --frozen-lockfile --ignore-scripts
 
       # Writes .vitepress/{announcements,discussions,issues}.json and the
@@ -60,13 +72,31 @@ jobs:
       # read-only Discussions access to OpenCore-Legacy-Patcher-T2),
       # otherwise the job's own token.
       - name: Fetch announcements from GitHub Discussions
+        if: steps.guard.outputs.violations == '0'
         run: node scripts/fetch-announcements.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.ANNOUNCEMENTS_TOKEN || github.token }}
           ANNOUNCEMENTS_CATEGORY: announcements
 
       - name: Build with VitePress
+        if: steps.guard.outputs.violations == '0'
         run: yarn run build
+
+      - name: Maintenance page instead of the site (license violation)
+        if: steps.guard.outputs.violations != '0'
+        run: |
+          mkdir -p .vitepress/dist
+          cp .github/maintenance/index.html .vitepress/dist/index.html
+          # Every other URL (old deep links) shows the same page.
+          cp .github/maintenance/index.html .vitepress/dist/404.html
+          {
+            echo "## ⛔ Website taken offline"
+            echo "License Guard found ${{ steps.guard.outputs.violations }} violation(s), so this build publishes the maintenance page."
+            echo "It is replaced by the real site automatically once the violations are fixed on main."
+            echo
+            cat /tmp/license-report.md
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "::warning::Website replaced by the maintenance page: License Guard found violations."
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
@@ -75,7 +105,7 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    if: github.repository_owner == 'oclp-t2' && github.ref == 'refs/heads/main'
+    if: github.repository_owner == 'bridgepatcher' && github.ref == 'refs/heads/main'
     permissions:
       pages: write
       id-token: write

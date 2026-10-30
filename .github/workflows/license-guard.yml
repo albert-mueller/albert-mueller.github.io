@@ -1,0 +1,134 @@
+name: License Guard
+
+# Scans the whole website for known copyrighted artwork (Dortania's OpenCore Legacy
+# Patcher icon, Apple's System Settings icon) and Dortania images hotlinked from
+# their servers. Same script as bridgepatcher/BridgePatcher (.github/scripts/
+# license_guard.py); copyright notices and licence text are covered by
+# attribution-guard.yml.
+#
+# PR: one sticky comment, and the check fails.
+# main: one issue labelled license-guard, closed automatically once clean.
+# While main has a violation, build-site.yml publishes a maintenance page
+# instead of the website (automatic takedown) until it is fixed.
+on:
+  # pull_request_target so it can comment on PRs from forks too.
+  # SAFE: only base-branch code is checked out and executed; the PR head is
+  # only read as data (git objects), never checked out or run.
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"   # weekly, Monday 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: license-guard-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  license-guard:
+    if: github.repository_owner == 'bridgepatcher'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (trusted base code)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.base.ref || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Fetch PR head (read as data only)
+        id: target
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT" = "pull_request_target" ]; then
+            git fetch --no-tags origin "+refs/pull/${PR_NUMBER}/head:refs/remotes/origin/pr-head"
+            echo "ref=origin/pr-head" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=HEAD" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Pillow
+        run: |
+          python3 -m venv /tmp/lg
+          /tmp/lg/bin/pip install --quiet --disable-pip-version-check "pillow==11.3.0"
+
+      - name: Scan
+        id: scan
+        env:
+          TARGET: ${{ steps.target.outputs.ref }}
+        run: /tmp/lg/bin/python .github/scripts/license_guard.py "$TARGET"
+
+      - name: Comment on PR / update issue
+        if: steps.scan.outcome == 'success'
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        env:
+          VIOLATIONS: ${{ steps.scan.outputs.violations }}
+          WARNINGS: ${{ steps.scan.outputs.warnings }}
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- license-guard -->';
+            const { owner, repo } = context.repo;
+            const violations = Number(process.env.VIOLATIONS || 0);
+            const warnings = Number(process.env.WARNINGS || 0);
+            let body = fs.readFileSync('license-report.md', 'utf8');
+            if (body.length > 60000) body = body.slice(0, 60000) + '\n\n…truncated, see the workflow log.';
+            const run = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+
+            if (context.eventName === 'pull_request_target') {
+              if (violations > 0) body += '\n\n> [!WARNING]\n> Merging this would take the website offline: while `main` has a violation, it is replaced by a maintenance page.';
+              body += `\n\n<sub>[Workflow run](${run})</sub>`;
+              const issue_number = context.payload.pull_request.number;
+              const comments = await github.paginate(github.rest.issues.listComments,
+                { owner, repo, issue_number, per_page: 100 });
+              const existing = comments.find(c => c.user?.type === 'Bot' && c.body?.includes(marker));
+              if (existing) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+              } else if (violations + warnings > 0) {
+                await github.rest.issues.createComment({ owner, repo, issue_number, body });
+              }
+              return;
+            }
+
+            const label = 'license-guard';
+            const open = await github.paginate(github.rest.issues.listForRepo,
+              { owner, repo, state: 'open', labels: label, per_page: 100 });
+            const issue = open.find(i => !i.pull_request);
+            if (violations === 0) {
+              if (issue) {
+                await github.rest.issues.createComment({ owner, repo, issue_number: issue.number,
+                  body: '✅ License Guard: no violations left. The next build publishes the website again, closing.' });
+                await github.rest.issues.update({ owner, repo, issue_number: issue.number, state: 'closed' });
+              }
+              return;
+            }
+            body += '\n\n> [!CAUTION]\n> **The website is offline** (maintenance page) until these violations are fixed on `main`. It comes back automatically with the next build after the fix.';
+            body += `\n\n<sub>[Workflow run](${run})</sub>`;
+            const title = `License Guard: ${violations} possible license violation(s), website offline`;
+            if (issue) {
+              if (issue.body !== body || issue.title !== title) {
+                await github.rest.issues.update({ owner, repo, issue_number: issue.number, title, body });
+              }
+            } else {
+              try {
+                await github.rest.issues.createLabel({ owner, repo, name: label, color: 'b60205',
+                  description: 'Possible license violation' });
+              } catch (e) { if (e.status !== 422) throw e; }
+              await github.rest.issues.create({ owner, repo, title, body, labels: [label] });
+            }
+
+      - name: Fail on violations
+        if: steps.scan.outputs.violations != '0'
+        run: |
+          echo "::error::License Guard found license violation(s) - see the PR comment / issue."
+          exit 1
