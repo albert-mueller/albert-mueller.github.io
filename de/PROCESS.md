@@ -1,6 +1,6 @@
 # Hintergrundprozess
 
-OpenCore Legacy Patcher T2 nutzt einen Hintergrundprozess, um:
+BridgePatcher nutzt einen Hintergrundprozess, um:
 - nicht passende Konfigurationen zu erkennen und den Benutzer zu warnen (z. B. eine MacBookPro11,1-Konfiguration, die auf einem MacBookPro11,5 installiert ist)
 - den Status der installierten Root-Patches und von OpenCore zu überwachen
 - dich zur Installation der Root-Patches aufzufordern, falls diese nicht erkannt werden (typischerweise nach einem Update)
@@ -10,4 +10,4 @@ OpenCore Legacy Patcher T2 nutzt einen Hintergrundprozess, um:
 
 Es wird empfohlen, den Hintergrundprozess aktiviert zu lassen, damit alles möglichst reibungslos funktioniert – z. B. um fehlgeschlagenes Patchen zu vermeiden, wenn kein neues KDK gefunden wird.
 
-Wenn du den Hintergrundprozess deaktivierst, muss das KDK für jedes Update manuell installiert werden. OCLPT2 kann dann außerdem beim Start keine Root-Patches erkennen, d. h. du musst die App manuell öffnen und die Root-Patches selbst installieren.
+Wenn du den Hintergrundprozess deaktivierst, muss das KDK für jedes Update manuell installiert werden. BridgePatcher kann dann außerdem beim Start keine Root-Patches erkennen, d. h. du musst die App manuell öffnen und die Root-Patches selbst installieren.

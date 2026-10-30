@@ -1,4 +1,4 @@
-# Erklärung der Patches in OpenCore Legacy Patcher T2
+# Erklärung der Patches in BridgePatcher
 
 In unserem Patcher kommen zahlreiche Patches zum Einsatz, um ein stabiles System sicherzustellen. Hier gehen wir durch, welche Patches verwendet werden und warum wir sie empfehlen oder sogar voraussetzen.
 
@@ -8,7 +8,7 @@ In unserem Patcher kommen zahlreiche Patches zum Einsatz, um ein stabiles System
 
 ## OpenCore-Einstellungen
 
-Im Folgenden ein Überblick über die Hauptlogik, mit der OpenCore Legacy Patcher T2 native Unterstützung in macOS erreicht. Die Konfiguration von OpenCore ist in [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg) dokumentiert sowie in einer von uns bereitgestellten Online-Version:
+Im Folgenden ein Überblick über die Hauptlogik, mit der BridgePatcher native Unterstützung in macOS erreicht. Die Konfiguration von OpenCore ist in [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg) dokumentiert sowie in einer von uns bereitgestellten Online-Version:
 
 * [OpenCorePkg-Online-Dokumentation](https://dortania.github.io/docs/latest/Configuration.html)
 
@@ -155,7 +155,7 @@ Im Folgenden ein Überblick über die Hauptlogik, mit der OpenCore Legacy Patche
 
 ## Eingeschleuste Kexts
 
-Im Folgenden wird erklärt, welche Kexts OpenCore Legacy Patcher T2 beim Start in den Arbeitsspeicher einschleust.
+Im Folgenden wird erklärt, welche Kexts BridgePatcher beim Start in den Arbeitsspeicher einschleust.
 
 ::: details Erklärung der eingeschleusten Kexts
 

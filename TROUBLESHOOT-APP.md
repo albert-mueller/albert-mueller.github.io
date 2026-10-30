@@ -1,15 +1,15 @@
 # Application issues
 
-* [OpenCore Legacy Patcher T2 not launching](#opencore-legacy-patcher-t2-not-launching)
+* [BridgePatcher not launching](#opencore-legacy-patcher-t2-not-launching)
 * ["You don't have permission to save..." error when creating USB installer](#you-don-t-have-permission-to-save-error-when-creating-usb-installer)
 * [Internal disk missing when building OpenCore](#internal-disk-missing-when-building-opencore)
 * ["Unable to resolve dependencies, error code 71" when root patching](#unable-to-resolve-dependencies-error-code-71-when-root-patching)
 * [System version mismatch error when root patching](#system-version-mismatch-error-when-root-patching)
 
 
-## OpenCore Legacy Patcher T2 not launching
+## BridgePatcher not launching
 
-If the application won't launch (e.g. icon will bounce in the Dock), try launching OpenCore Legacy Patcher T2 via Terminal by typing the following command.
+If the application won't launch (e.g. icon will bounce in the Dock), try launching BridgePatcher via Terminal by typing the following command.
 
 ```sh
 /Library/Application\ Support/albert-mueller/OpenCore-Patcher-T2/OpenCore-Patcher-T2.app/Contents/MacOS/OpenCore-Patcher-T2
@@ -26,7 +26,7 @@ In some cases, a following error saying "The bless of the installer disk failed"
 </div>
 
 
-To resolve this, you may try adding Full Disk Access permission for OpenCore Legacy Patcher T2. To add it, first go to the settings
+To resolve this, you may try adding Full Disk Access permission for BridgePatcher. To add it, first go to the settings
 
 * Ventura and Sonoma: Go to System Settings -> Privacy and Security -> Full Disk Access
 
@@ -34,13 +34,13 @@ To resolve this, you may try adding Full Disk Access permission for OpenCore Leg
 
 Enable OpenCore-Patcher-T2 in the list. If not found on the list, press the + sign to add a new entity and find OpenCore-Patcher-T2 from Applications.
 
-Restart OpenCore Legacy Patcher T2 and try creating your USB drive again.
+Restart BridgePatcher and try creating your USB drive again.
 
 Optional: After you've created your USB drive, you can remove OpenCore-Patcher-T2 from Full Disk Access again.
 
 ## Internal disk missing when building OpenCore
 
-If you're using a brand new disk that has not been used before or was never formatted in any macOS type, you may face the following error in OCLPT2 when trying to build on the internal disk.
+If you're using a brand new disk that has not been used before or was never formatted in any macOS type, you may face the following error in BridgePatcher when trying to build on the internal disk.
 
 <div align="left">
              <img src="./images/OCLP_Failed_to_find_applicable_disks.png" alt="Failed to find applicable disks" width="600" />
@@ -66,20 +66,20 @@ Semi-automated way:
 2. Type `sudo zsh`
 3. Type `cd "/Volumes/Macintosh HD/Library/Extensions" && ls | grep -v "HighPoint*\|SoftRAID*" | xargs rm -rf`
    * Make sure to rename "Macintosh HD" to what your drive name is
-4. Run OCLP root patcher again
+4. Run BridgePatcher root patcher again
    
 Manual way:
 
 1. Navigate to /Library/Extensions
 2. Delete everything **except** HighPointIOP.kext, HighPointRR.kext and SoftRAID.kext
-3. Run OCLP root patcher again
+3. Run BridgePatcher root patcher again
 
 If there is no success, navigate to "/Library/Developer/KDKs" and delete everything.
 
 If still no success, type `sudo bless --mount "/Volumes/Macintosh HD/" --bootefi --last-sealed-snapshot` 
 * Make sure again to rename "Macintosh HD" to what your drive name is
 
-Run OCLPT2 root patcher again.
+Run BridgePatcher root patcher again.
 
 ## System version mismatch error when root patching
 
@@ -87,19 +87,19 @@ Due to a change by Apple, updates now modify the system volume **already while d
 
 `SystemVersion.plist build version mismatch: found 15.4 (24E247), expected 13.7.5 (22H527)`
 
-In this example, it is telling that a version 13.7.5 (Ventura) is expected which is currently running but macOS has already staged an update to version 15.4 (Sequoia) and has already modified the filesystem to prepare for an update, including writing the new version in SystemVersion.plist where OCLP is able to read it from. The "version mismatch" error is a safeguard preventing OCLP from patching on a system that is in a weird liminal state, to avoid leading to a very likely boot failure.
+In this example, it is telling that a version 13.7.5 (Ventura) is expected which is currently running but macOS has already staged an update to version 15.4 (Sequoia) and has already modified the filesystem to prepare for an update, including writing the new version in SystemVersion.plist where BridgePatcher is able to read it from. The "version mismatch" error is a safeguard preventing BridgePatcher from patching on a system that is in a weird liminal state, to avoid leading to a very likely boot failure.
 
 There are few options to resolve it:
 
 1. Update/upgrade to the version already staged.
-   * This option works only if the newer version is currently supported by OCLP.
+   * This option works only if the newer version is currently supported by BridgePatcher.
 2. Reinstall macOS.
    * You can try doing an in-place install without wiping the disk to keep your data but this may not be possible due to the OS being partially on newer version and it will complain about downgrade.
 3. Use an experimental "PurgePendingUpdate" tool [from the Discord server](https://discord.gg/rqdPgH8xSN).
    * Navigate to `support-forum` and then to the `Information and known issues` post to find the link to the tool.
    * Download it and then run it in Terminal to get rid of a pending update, then repatch again. If "purge failed" appears, you can ignore it.
    * Sometimes you may have to give the file an execution permission with `chmod +x` and putting the application path after the command (type or drag the file) before the tool can be ran.
-   * This may be integrated into OCLP later on, however there is currently no ETA.
+   * This may be integrated into BridgePatcher later on, however there is currently no ETA.
 
 **Disabling automatic macOS updates is extremely recommended once recovered, to prevent it from happening again.**
 

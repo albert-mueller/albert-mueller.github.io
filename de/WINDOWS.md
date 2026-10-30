@@ -1,7 +1,7 @@
 # Windows im UEFI-Modus installieren
 
-Moderne Windows-Versionen unterstützen offiziell zwei Arten von Firmware: UEFI und BIOS. Wer Windows über den OCLP-Bootpicker starten möchte, sollte wissen, dass dort nur UEFI-Installationen von Windows angezeigt werden.
-Viele ältere Macs unterstützen UEFI-Installationen von Windows nicht „offiziell“, was zu fehlgeschlagenen Installationen und seltsamem Verhalten führt. Mit OCLP lassen sich jedoch fast alle dieser Probleme vermeiden.
+Moderne Windows-Versionen unterstützen offiziell zwei Arten von Firmware: UEFI und BIOS. Wer Windows über den BridgePatcher-Bootpicker starten möchte, sollte wissen, dass dort nur UEFI-Installationen von Windows angezeigt werden.
+Viele ältere Macs unterstützen UEFI-Installationen von Windows nicht „offiziell“, was zu fehlgeschlagenen Installationen und seltsamem Verhalten führt. Mit BridgePatcher lassen sich jedoch fast alle dieser Probleme vermeiden.
 
 ::: warning Warnung
 
@@ -93,11 +93,11 @@ Der Befehl `rsync` braucht eine Weile – hol dir also einen Kaffee und lehn dic
 
 ## Installation
 
-Nach dem Neustart solltest du im OCLP-Bootpicker eine neue Bootoption mit der Bezeichnung „EFI Boot“ oder „Windows“ sehen. Sie hat möglicherweise das Boot-Camp-Symbol.
+Nach dem Neustart solltest du im BridgePatcher-Bootpicker eine neue Bootoption mit der Bezeichnung „EFI Boot“ oder „Windows“ sehen. Sie hat möglicherweise das Boot-Camp-Symbol.
 
 :::warning Warnung
 
-Wenn du nicht über OCLP gebootet hast, siehst du eventuell **zwei** Bootoptionen namens „Windows“ und „EFI Boot“. Wähle keine davon, sondern boote OCLP, um fortzufahren.
+Wenn du nicht über BridgePatcher gebootet hast, siehst du eventuell **zwei** Bootoptionen namens „Windows“ und „EFI Boot“. Wähle keine davon, sondern boote BridgePatcher, um fortzufahren.
 
 :::
 
@@ -146,7 +146,7 @@ Wenn `dism` fertig ist, führe `bcdboot E:\Windows` aus und ersetze „E“ durc
 
 ![](../images/DISM-7.png)
 
-Windows ist jetzt installiert. Es sollte im OCLP-Bootpicker als „EFI Boot“ oder „Windows“ mit Boot-Camp-Symbol erkannt werden.
+Windows ist jetzt installiert. Es sollte im BridgePatcher-Bootpicker als „EFI Boot“ oder „Windows“ mit Boot-Camp-Symbol erkannt werden.
 
 :::warning Warnung
 
@@ -160,7 +160,7 @@ Auf MacPro4,1, MacPro5,1 und Xserve3,1 wird **DRINGEND EMPFOHLEN**, die Windows-
 
 Öffne in der Windows-Setup-Umgebung mit `cmd` ein Eingabeaufforderungsfenster.
 
-Wechsle dann mit `C:` in die EFI-Partition (ersetze „C“ durch den Laufwerksbuchstaben der EFI-Partition). Führe anschließend `cd EFI` aus, um in den EFI-Ordner zu wechseln. Führe dann `rmdir Boot /S /Q` aus, um die Bootdateien zu entfernen, die der Standard-Bootpicker erkennen kann. Der OCLP-Bootpicker kann Windows weiterhin erkennen und starten.
+Wechsle dann mit `C:` in die EFI-Partition (ersetze „C“ durch den Laufwerksbuchstaben der EFI-Partition). Führe anschließend `cd EFI` aus, um in den EFI-Ordner zu wechseln. Führe dann `rmdir Boot /S /Q` aus, um die Bootdateien zu entfernen, die der Standard-Bootpicker erkennen kann. Der BridgePatcher-Bootpicker kann Windows weiterhin erkennen und starten.
 
 ![](../images/DISM-8.png)
 

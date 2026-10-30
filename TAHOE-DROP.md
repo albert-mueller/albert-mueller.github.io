@@ -4,9 +4,9 @@
 
 *Here we are, the last for intel Macs*
 
-macOS 26 Tahoe is the last major macOS release that Apple ships for Intel Macs. It drops a large number of Intel Macs, most of them with a T2 security chip, which makes it the main focus of OpenCore Legacy Patcher T2.
+macOS 26 Tahoe is the last major macOS release that Apple ships for Intel Macs. It drops a large number of Intel Macs, most of them with a T2 security chip, which makes it the main focus of BridgePatcher.
 
-Support for macOS Tahoe in OpenCore Legacy Patcher T2 is currently in **alpha**. Expect bugs, and please report them on [GitHub Discussions](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/discussions).
+Support for macOS Tahoe in BridgePatcher is currently in **alpha**. Expect bugs, and please report them on [GitHub Discussions](https://github.com/oclp-t2/BridgePatcher/discussions).
 
 
 ## Newly dropped hardware
@@ -27,10 +27,10 @@ All of these models except the iMac (2019) have a T2 security chip.
 The only Intel Macs that still run Tahoe natively are the MacBook Pro (16-inch, 2019), MacBook Pro (13-inch, 2020, 4 Thunderbolt 3 ports), iMac (Retina 5K, 27-inch, 2020) and Mac Pro (2019).
 
 ## Current status
-OpenCore Legacy Patcher T2 supports Tahoe for the models below, however some challenges remain. You can find information about them further down this page
+BridgePatcher supports Tahoe for the models below, however some challenges remain. You can find information about them further down this page
 <img width="625" alt="" src="./images/OCLPT2-Tahoe-Support.png">
 
-For Macs **without** a T2 chip, OpenCore Legacy Patcher T2 can install macOS Tahoe and apply root patches, however some challenges remain. You can find information about them further down this page.
+For Macs **without** a T2 chip, BridgePatcher can install macOS Tahoe and apply root patches, however some challenges remain. You can find information about them further down this page.
 
 For **T2 Macs**, Tahoe does not work yet. See [T2 security chip](#t2-security-chip) below and [T2 Macs and macOS Tahoe](MODELS.md#t2-macs-and-macos-tahoe) for the current status.
 
@@ -60,19 +60,19 @@ Booting unsupported T2 Macs through OpenCorePkg used to end in a kernel panic, b
 panic(cpu 0 caller 0xffffff801cd12509): "AppleSEPManager panic for "AppleKeyStore": sks request timeout" @AppleSEPManagerIntel.cpp:809
 ```
 
-**This panic no longer occurs.** OpenCore Legacy Patcher T2 now gets past the AppleKeyStore timeouts on unsupported T2 Macs, so the machines boot into the Tahoe installer.
+**This panic no longer occurs.** BridgePatcher now gets past the AppleKeyStore timeouts on unsupported T2 Macs, so the machines boot into the Tahoe installer.
 
 The remaining issue is that the macOS installation currently ends with "Failed to install a software update" before it finishes. We cannot provide an estimate on when T2 installations will fully work yet.
 
-If you want to help test or share results, please use [GitHub Discussions](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/discussions).
+If you want to help test or share results, please use [GitHub Discussions](https://github.com/oclp-t2/BridgePatcher/discussions).
 
 ### Audio support
 
-macOS Tahoe no longer includes AppleHDA.kext, the driver used for built-in audio on Intel Macs. On affected Macs, OpenCore Legacy Patcher T2 restores audio through the "Modern Audio" root patch, so make sure to run root patching after installing Tahoe.
+macOS Tahoe no longer includes AppleHDA.kext, the driver used for built-in audio on Intel Macs. On affected Macs, BridgePatcher restores audio through the "Modern Audio" root patch, so make sure to run root patching after installing Tahoe.
 
 ### Dual socket CPUs with Mac Pro 2008 and Xserve 2008
 
-As with macOS Sequoia, booting Tahoe on Mac Pro 2008 (MacPro3,1) or Xserve 2008 (Xserve2,1) with more than 4 cores will cause a kernel panic. OpenCore Legacy Patcher T2 will automatically disable additional cores.
+As with macOS Sequoia, booting Tahoe on Mac Pro 2008 (MacPro3,1) or Xserve 2008 (Xserve2,1) with more than 4 cores will cause a kernel panic. BridgePatcher will automatically disable additional cores.
 
 **If building OpenCore for older OS, this limitation can be disabled in Settings -> Build -> "MacPro3,1/Xserve2,1 Workaround".**
 

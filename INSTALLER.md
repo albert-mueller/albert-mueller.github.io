@@ -4,14 +4,14 @@ This document is centered around downloading and writing the macOS installer to 
 
 * Note: A 32GB drive is recommended, later versions of Sonoma and Sequoia cannot fit installer and patches to a 16GB disk. 16GB drive may work for older versions.
 
-Before proceeding, please read the application and macOS installer creation requirements [from the FAQ.](FAQ.md#application-requirements) Newer macOS versions require you to be on a newer base OS before you can create an installer, due to requirements of Apple's `createinstallmedia` tool OCLP uses as its backbone.
+Before proceeding, please read the application and macOS installer creation requirements [from the FAQ.](FAQ.md#application-requirements) Newer macOS versions require you to be on a newer base OS before you can create an installer, due to requirements of Apple's `createinstallmedia` tool BridgePatcher uses as its backbone.
 
 
 ## Downloading the installer
 
 To start off, you'll want to grab the app:
 
-* [OpenCore Legacy Patcher T2 Release Apps](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases)
+* [BridgePatcher Release Apps](https://github.com/oclp-t2/BridgePatcher/releases)
 
 Once downloaded, open the app and you should be greeted by the main menu. 
 
@@ -21,7 +21,7 @@ For this example, we'll assume you'll need an installer. Select the "Download ma
 
 | Main menu | Installer creation menu | Available installers |
 | :--- | :--- | --- |
-| ![OCLP GUI Main Menu](./images/OCLP-GUI-Main-Menu.png) | ![OCLP GUI Installer Create Installer Menu](./images/OCLP-GUI-Create-Installer-Menu.png) | ![OCLP GUI Installer Download Listed Products](./images/OCLP-GUI-Installer-Download-Listed-Products.png) |
+| ![BridgePatcher GUI Main Menu](./images/OCLP-GUI-Main-Menu.png) | ![BridgePatcher GUI Installer Create Installer Menu](./images/OCLP-GUI-Create-Installer-Menu.png) | ![BridgePatcher GUI Installer Download Listed Products](./images/OCLP-GUI-Installer-Download-Listed-Products.png) |
 
 
 ## Creating the installer

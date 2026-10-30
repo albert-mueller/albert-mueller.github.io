@@ -9,7 +9,7 @@
 
 Nachdem du macOS über OpenCore installiert hast, kannst du booten und die normale Einrichtung durchlaufen. Ohne eingesteckten USB-Stick zu booten, ist ganz einfach:
 
-* Lade OpenCore Legacy Patcher T2 herunter
+* Lade BridgePatcher herunter
 * Passe die Patcher-Einstellungen nach Wunsch an
 * Erstelle OpenCore erneut
 * Installiere OpenCore auf dem internen Laufwerk
@@ -35,7 +35,7 @@ Nachdem du die Option deaktiviert hast, erstelle deine OpenCore-EFI erneut und i
 
 SIP (System Integrity Protection, Systemintegritätsschutz) muss auf Systemen gelockert werden, bei denen Root-Patching nötig ist, um Daten auf dem Laufwerk zu patchen. Das hängt von der macOS-Version und vom jeweiligen Modell ab.
 
-OCLP ermittelt standardmäßig die passenden SIP-Optionen für macOS-Version und Mac-Modell; in den meisten Fällen musst du an diesen Einstellungen nichts ändern.
+BridgePatcher ermittelt standardmäßig die passenden SIP-Optionen für macOS-Version und Mac-Modell; in den meisten Fällen musst du an diesen Einstellungen nichts ändern.
 
 :::warning Achtung
 
@@ -43,12 +43,12 @@ Wenn du unsicher bist, ob du die SIP-Einstellungen ändern solltest, lass sie, w
 
 :::
 
-| SIP aktiviert | SIP gelockert (OCLP-Standard) | SIP deaktiviert |
+| SIP aktiviert | SIP gelockert (BridgePatcher-Standard) | SIP deaktiviert |
 | :--- | :--- | :--- |
 | ![](../images/OCLP-GUI-Settings-SIP-Enabled.png) | ![](../images/OCLP-GUI-Settings-SIP-Root-Patch.png) | ![](../images/OCLP-GUI-Settings-SIP-Disabled.png) |
 
 
-Die Anleitung im aufklappbaren Bereich unten erklärt, wie die SIP-Einstellungen in OCLP funktionieren, wo gelockertes SIP nötig ist und wo vollständiges SIP aktiviert werden kann.
+Die Anleitung im aufklappbaren Bereich unten erklärt, wie die SIP-Einstellungen in BridgePatcher funktionieren, wo gelockertes SIP nötig ist und wo vollständiges SIP aktiviert werden kann.
 
 ::: details SIP manuell konfigurieren (zum Aufklappen klicken)
 
@@ -89,15 +89,15 @@ Dazu gehören zum Beispiel:
 - USB-1.1-Treiber
 - Weitere Patches für die Kompatibilität mit älteren Treibern
 
-OCLP patcht dein System automatisch, wenn der USB-Installationsstick mit OCLP erstellt und vor der Installer-Erstellung das richtige Modell ausgewählt wurde. Wenn du den USB-Stick nicht mit OCLP erstellt hast oder das automatische Patchen fehlgeschlagen ist, musst du OCLP manuell herunterladen und die Root-Patches installieren, da die App fehlt, wenn das automatische Patchen nicht erfolgreich war.
+BridgePatcher patcht dein System automatisch, wenn der USB-Installationsstick mit BridgePatcher erstellt und vor der Installer-Erstellung das richtige Modell ausgewählt wurde. Wenn du den USB-Stick nicht mit BridgePatcher erstellt hast oder das automatische Patchen fehlgeschlagen ist, musst du BridgePatcher manuell herunterladen und die Root-Patches installieren, da die App fehlt, wenn das automatische Patchen nicht erfolgreich war.
 
-**Root-Patches werden durch macOS-Updates entfernt und müssen nach jedem Update erneut installiert werden.** OCLP fordert dich nach macOS-Updates oder immer dann, wenn keine Patches auf dem System erkannt werden, zur Installation auf. Du kannst künftige Updates auch über den USB-Installer installieren; dabei greift das automatische Patchen, und du sparst dir das manuelle Patchen, das beim Aktualisieren über die Systemeinstellungen nötig ist.
+**Root-Patches werden durch macOS-Updates entfernt und müssen nach jedem Update erneut installiert werden.** BridgePatcher fordert dich nach macOS-Updates oder immer dann, wenn keine Patches auf dem System erkannt werden, zur Installation auf. Du kannst künftige Updates auch über den USB-Installer installieren; dabei greift das automatische Patchen, und du sparst dir das manuelle Patchen, das beim Aktualisieren über die Systemeinstellungen nötig ist.
 
 Im Post-Install-Menü siehst du, ob die passenden Patches installiert sind, einschließlich Datum und Version, mit der das System gepatcht wurde.
 
 ::: warning Wichtig
 
-In manchen Fällen muss OCLP Pakete aus dem Internet laden, etwa das KDK oder MetallibSupportPkg, falls sie noch nicht auf dem System vorhanden sind. Dann installiert OCLP beim ersten Patchvorgang unter Umständen nur den WLAN-Treiber, damit du dich mit dem Internet verbinden kannst – nach dem Neustart gibt es also noch keine Grafikbeschleunigung.
+In manchen Fällen muss BridgePatcher Pakete aus dem Internet laden, etwa das KDK oder MetallibSupportPkg, falls sie noch nicht auf dem System vorhanden sind. Dann installiert BridgePatcher beim ersten Patchvorgang unter Umständen nur den WLAN-Treiber, damit du dich mit dem Internet verbinden kannst – nach dem Neustart gibt es also noch keine Grafikbeschleunigung.
 
 Sobald eine Internetverbindung besteht und die nötigen Pakete geladen werden können, musst du das Root-Patching manuell erneut ausführen, um die übrigen Patches zu installieren. Du kannst auch Ethernet nutzen; dann sollten alle Patches auf einmal installiert werden.
 
@@ -165,7 +165,7 @@ Aufgerüstete Macs:
 
 ### Weitere Informationen
 
-Die folgenden Einträge zeigen GPUs, die nicht mehr nativ unterstützt werden, also Root-Volume-Patching mit OpenCore Legacy Patcher T2 benötigen:
+Die folgenden Einträge zeigen GPUs, die nicht mehr nativ unterstützt werden, also Root-Volume-Patching mit BridgePatcher benötigen:
 
 :::details GPUs, die in den verschiedenen macOS-Versionen gepatcht werden müssen
 

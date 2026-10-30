@@ -4,14 +4,14 @@ In diesem Dokument geht es darum, den macOS-Installer herunterzuladen und auf ei
 
 * Hinweis: Ein 32-GB-Stick wird empfohlen – bei neueren Versionen von Sonoma und Sequoia passen Installer und Patches nicht mehr auf einen 16-GB-Stick. Für ältere Versionen kann ein 16-GB-Stick funktionieren.
 
-Bevor du fortfährst, lies bitte die Anforderungen an die Anwendung und an die Erstellung des macOS-Installers [in der FAQ.](FAQ.md#anforderungen-der-app) Neuere macOS-Versionen setzen ein neueres Host-Betriebssystem voraus, bevor du einen Installer erstellen kannst. Das liegt an den Anforderungen von Apples `createinstallmedia`-Werkzeug, auf dem OCLP aufbaut.
+Bevor du fortfährst, lies bitte die Anforderungen an die Anwendung und an die Erstellung des macOS-Installers [in der FAQ.](FAQ.md#anforderungen-der-app) Neuere macOS-Versionen setzen ein neueres Host-Betriebssystem voraus, bevor du einen Installer erstellen kannst. Das liegt an den Anforderungen von Apples `createinstallmedia`-Werkzeug, auf dem BridgePatcher aufbaut.
 
 
 ## Installer herunterladen
 
 Zuerst brauchst du die App:
 
-* [OpenCore Legacy Patcher T2 Release-Apps](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases)
+* [BridgePatcher Release-Apps](https://github.com/oclp-t2/BridgePatcher/releases)
 
 Öffne die App nach dem Herunterladen, und du solltest vom Hauptmenü begrüßt werden.
 
@@ -21,7 +21,7 @@ Für dieses Beispiel gehen wir davon aus, dass du einen Installer brauchst. Wäh
 
 | Hauptmenü | Menü zur Installer-Erstellung | Verfügbare Installer |
 | :--- | :--- | --- |
-| ![OCLP-GUI Hauptmenü](../images/OCLP-GUI-Main-Menu.png) | ![OCLP-GUI Menü zur Installer-Erstellung](../images/OCLP-GUI-Create-Installer-Menu.png) | ![OCLP-GUI Liste verfügbarer Installer](../images/OCLP-GUI-Installer-Download-Listed-Products.png) |
+| ![BridgePatcher-GUI Hauptmenü](../images/OCLP-GUI-Main-Menu.png) | ![BridgePatcher-GUI Menü zur Installer-Erstellung](../images/OCLP-GUI-Create-Installer-Menu.png) | ![BridgePatcher-GUI Liste verfügbarer Installer](../images/OCLP-GUI-Installer-Download-Listed-Products.png) |
 
 
 ## Installer erstellen

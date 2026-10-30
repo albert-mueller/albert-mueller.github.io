@@ -152,7 +152,7 @@ Because of this, we recommend placing a USB 2.0/3.0 hub between your devices and
 
 ## Secondary CPU not visible on MacPro3,1/Xserve2,1
 
-Starting with macOS Sequoia, OCLP has to disable the secondary CPU in these systems to avoid a panic. This also means by default, only single CPU will be usable even on older versions. To re-enable both CPUs on older versions, do the following: 
+Starting with macOS Sequoia, BridgePatcher has to disable the secondary CPU in these systems to avoid a panic. This also means by default, only single CPU will be usable even on older versions. To re-enable both CPUs on older versions, do the following: 
 
 1. Open Settings -> `Build` tab.
 2. Untick `MacPro3,1/Xserve2,1 Workaround`.
@@ -167,13 +167,13 @@ Starting with macOS Sequoia, OCLP has to disable the secondary CPU in these syst
 
 If you finished installing macOS with the original card installed (to see bootpicker for example) and swapped your GPU to a Metal supported one, you may notice that you're missing acceleration. 
 
-To fix this, open OCLP and revert root patches to get your Metal-supported GPU work again. In macOS Ventura and newer, repatching is needed for most configurations after reversion. Reason why this happens is automatic root patching during USB install and the autopatcher assuming you will be using the original graphics card and therefore doing non-Metal patching. **Metal and non-Metal GPUs cannot be used at the same time** as Non-Metal patching completely bypasses Metal and requires removing some parts such as drivers for other cards, which causes Metal cards to not accelerate after swapping. 
+To fix this, open BridgePatcher and revert root patches to get your Metal-supported GPU work again. In macOS Ventura and newer, repatching is needed for most configurations after reversion. Reason why this happens is automatic root patching during USB install and the autopatcher assuming you will be using the original graphics card and therefore doing non-Metal patching. **Metal and non-Metal GPUs cannot be used at the same time** as Non-Metal patching completely bypasses Metal and requires removing some parts such as drivers for other cards, which causes Metal cards to not accelerate after swapping. 
 
 Alternatively, you can remove "AutoPkg-Assets.pkg" from /Library/Packages on the USB drive before proceeding with the installation. This package includes the assets for root patching and the system won't be autopatched if they aren't present. To see the folder, enable hidden files with `Command` + `Shift` + `.`
 
 ## Keyboard, Mouse and Trackpad not working in installer or after update
 
-Starting from macOS Ventura, USB 1.1 drivers are no longer provided in the operating system. For Macs using legacy USB 1.1 controllers, OpenCore Legacy Patcher T2 can only restore support once it has performed root volume patches which restore the drivers. Thus when installing macOS or after an update, you need to hook up a USB hub between your Mac and keyboard/mouse, forcing USB 2.0 mode in order to install the root patches.
+Starting from macOS Ventura, USB 1.1 drivers are no longer provided in the operating system. For Macs using legacy USB 1.1 controllers, BridgePatcher can only restore support once it has performed root volume patches which restore the drivers. Thus when installing macOS or after an update, you need to hook up a USB hub between your Mac and keyboard/mouse, forcing USB 2.0 mode in order to install the root patches.
 
 * For MacBook users, you'll need to find an external keyboard/mouse in addition to the USB hub
 
@@ -220,7 +220,7 @@ More information can be found here:
 
 If you notice your Touchbar etc not working, this means loss of T1 functionality. 
 
-Wiping the entire disk using Disk Utility with Sonoma or newer causes the T1 firmware to be removed, which due to removed support, the macOS Sonoma+ installer will not restore. If the firmware is missing from EFI, T1 will not work regardless whether OCLP reinstates the driver during root patching. To restore T1 functionality, Ventura or older has to be reinstalled. This can be done in another volume or external disk as well, as long as the OS is booted once. After this you can wipe the old OS or unplug the external disk.
+Wiping the entire disk using Disk Utility with Sonoma or newer causes the T1 firmware to be removed, which due to removed support, the macOS Sonoma+ installer will not restore. If the firmware is missing from EFI, T1 will not work regardless whether BridgePatcher reinstates the driver during root patching. To restore T1 functionality, Ventura or older has to be reinstalled. This can be done in another volume or external disk as well, as long as the OS is booted once. After this you can wipe the old OS or unplug the external disk.
 
 
 To prevent this from happening in the future, with T1 systems only wipe the volume containing the operating system.
@@ -254,7 +254,7 @@ In the event Apple removes 11.2.3 from their catalogue, we've provided a mirror 
 
 ## Unable to switch GPUs on 2011 15" and 17" MacBook Pros
 
-Currently, with OpenCore Legacy Patcher T2, GPU switching between the iGPU and dGPU is broken. The simplest way to set a specific GPU is to disable the dGPU when you wish to remain on the more power efficient iGPU.
+Currently, with BridgePatcher, GPU switching between the iGPU and dGPU is broken. The simplest way to set a specific GPU is to disable the dGPU when you wish to remain on the more power efficient iGPU.
 
 The best way to achieve this is to boot to Recovery (or Single User Mode if the dGPU refuses to function at all) and run the following command:
 
@@ -286,7 +286,7 @@ Applications that can set color depth are:
 
 ## Cannot Login on 2011 15" and 17" MacBook Pros
 
-By default, OpenCore Legacy Patcher T2 will assume MacBookPro8,2/3 have a faulty dGPU and disable acceleration. This is the safest option for most users as enabling dGPU acceleration on faulty Macs will result in failed booting.
+By default, BridgePatcher will assume MacBookPro8,2/3 have a faulty dGPU and disable acceleration. This is the safest option for most users as enabling dGPU acceleration on faulty Macs will result in failed booting.
 
 However, if your machine does not have the dGPU disabled via NVRAM, you'll experience a login loop. To work around this is quite simple:
 
@@ -294,7 +294,7 @@ However, if your machine does not have the dGPU disabled via NVRAM, you'll exper
     * Press Cmd+S in OpenCore's menu when you turn the Mac on
 2. When the command line prompt appears, enter the dGPU disabler argument (at the bottom)
 3. Reboot and patched macOS should work normally
-4. If you still want to use the dGPU, run OpenCore Legacy Patcher T2 and enable TS2 Acceleration from settings. Go to `Settings -> Root Patching -> TeraScale 2 Acceleration`, then root patch again.
+4. If you still want to use the dGPU, run BridgePatcher and enable TS2 Acceleration from settings. Go to `Settings -> Root Patching -> TeraScale 2 Acceleration`, then root patch again.
 5. Either Reset NVRAM or set `gpu-power-prefs` to zeros to re-enable the dGPU
 
 ```sh

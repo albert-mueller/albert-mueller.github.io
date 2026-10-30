@@ -39,13 +39,13 @@ Wenn du etwas wie 19.1.1 siehst, handelt es sich meist um eine kleine Fehlerbehe
 
 ## Wie stelle ich sicher, dass alles auf dem neuesten Stand ist?
 
-Das Aktualisieren der OCLP-Installation erfolgt in drei Schritten: zuerst die App, dann der Bootloader und schließlich die Root-Patches.
+Das Aktualisieren der BridgePatcher-Installation erfolgt in drei Schritten: zuerst die App, dann der Bootloader und schließlich die Root-Patches.
 
 Wie du App und Patches aktualisierst, erfährst du unter [OpenCore und Patches aktualisieren](UPDATE.md).
 
 ## Wo werden die Einstellungen der Oberfläche gespeichert?
 
-In jeder Version von OpenCore Legacy Patcher T2 werden die Einstellungen unter ```/Users/Shared/.com.dortania.opencore-legacy-patcher.plist``` gespeichert. Die App nutzt diese Datei, um Einstellungen über Neustarts und App-Updates hinweg beizubehalten, sodass du sie nicht jedes Mal neu konfigurieren musst. Die Oberfläche wird zurückgesetzt, wenn ein anderes Modell als „Host Model“ ausgewählt ist, da das Erstellen für ein anderes Modell andere Einstellungen erfordert.
+In jeder Version von BridgePatcher werden die Einstellungen unter ```/Users/Shared/.com.dortania.opencore-legacy-patcher.plist``` gespeichert. Die App nutzt diese Datei, um Einstellungen über Neustarts und App-Updates hinweg beizubehalten, sodass du sie nicht jedes Mal neu konfigurieren musst. Die Oberfläche wird zurückgesetzt, wenn ein anderes Modell als „Host Model“ ausgewählt ist, da das Erstellen für ein anderes Modell andere Einstellungen erfordert.
 
 Bei Problemen lösche die Datei und starte die App neu, um die Oberfläche auf die Standardeinstellungen zurückzusetzen. Erstelle OpenCore anschließend mit den neu konfigurierten Einstellungen neu.
 
@@ -53,7 +53,7 @@ Bei Problemen lösche die Datei und starte die App neu, um die Oberfläche auf d
 
 ::: warning Achtung
 
-Berücksichtigt werden nur Einstellungen, die in OCLP vorgenommen wurden. Änderungen, die außerhalb von OCLP direkt in der Datei ```config.plist``` auf der EFI-Partition gemacht werden, **werden weiterhin zurückgesetzt**. Außerdem kann das manuelle Bearbeiten der ```config.plist``` dazu führen, dass die in der Oberfläche angezeigten Einstellungen nicht mehr mit den tatsächlich verwendeten übereinstimmen, da die App nicht weiß, ob die Datei manuell verändert wurde.
+Berücksichtigt werden nur Einstellungen, die in BridgePatcher vorgenommen wurden. Änderungen, die außerhalb von BridgePatcher direkt in der Datei ```config.plist``` auf der EFI-Partition gemacht werden, **werden weiterhin zurückgesetzt**. Außerdem kann das manuelle Bearbeiten der ```config.plist``` dazu führen, dass die in der Oberfläche angezeigten Einstellungen nicht mehr mit den tatsächlich verwendeten übereinstimmen, da die App nicht weiß, ob die Datei manuell verändert wurde.
 
 :::
 
@@ -61,17 +61,17 @@ Berücksichtigt werden nur Einstellungen, die in OCLP vorgenommen wurden. Änder
 
 OpenCore-Konfigurationen sind gerätespezifisch, da verschiedene Systeme unterschiedliche Quirks benötigen. Wenn du OpenCore für ein anderes System erstellst als das, auf dem du gerade arbeitest, musst du vor dem Erstellen von OpenCore auf dem USB-Stick das Zielmodell in den Einstellungen auswählen.
 
-Beim Erstellen von OpenCore auf einem anderen System kann OCLP nicht die gesamte im Zielgerät verbaute Hardware kennen und verwendet daher sichere Standardwerte. Das ist aber möglicherweise nicht optimal, insbesondere bei nachgerüsteter Hardware. Daher wird empfohlen, OpenCore nach der Installation des Betriebssystems **auf dem Gerät selbst** neu zu erstellen, damit Einstellungen auf Basis der Hardwareerkennung angewendet werden.
+Beim Erstellen von OpenCore auf einem anderen System kann BridgePatcher nicht die gesamte im Zielgerät verbaute Hardware kennen und verwendet daher sichere Standardwerte. Das ist aber möglicherweise nicht optimal, insbesondere bei nachgerüsteter Hardware. Daher wird empfohlen, OpenCore nach der Installation des Betriebssystems **auf dem Gerät selbst** neu zu erstellen, damit Einstellungen auf Basis der Hardwareerkennung angewendet werden.
 
 ## Kann ich OTA-Updates nutzen?
 
 Ja. Für große Versionssprünge (z. B. von 13 auf 14) wird jedoch dringend empfohlen, einen USB-Stick zu verwenden, um größere Probleme zu vermeiden. Normale Updates sind meist unproblematisch; trotzdem ist es immer eine gute Idee, ein paar Tage abzuwarten, ob Patches kaputtgehen und repariert werden müssen.
 
-Mehr Informationen zum Aktualisieren findest du unter [OCLP auf ein macOS-Update vorbereiten](UPDATE.md#oclp-auf-ein-macos-update-vorbereiten).
+Mehr Informationen zum Aktualisieren findest du unter [BridgePatcher auf ein macOS-Update vorbereiten](UPDATE.md#bridgepatcher-auf-ein-macos-update-vorbereiten).
 
 ## Kann ich automatische Updates nutzen?
 
-Es wird dringend empfohlen, automatische Updates (auch das automatische Herunterladen) bei der Nutzung von OCLP zu deaktivieren, da Apple die Funktionsweise automatischer Updates kürzlich geändert hat. Updates werden jetzt schon während des Downloads vorbereitet und verändern bereits das Systemvolume. Das kann aus heiterem Himmel zu einem kaputten System führen, weil sich das Betriebssystem in einem Zwischenzustand zwischen zwei Versionen befindet. Du kannst ein Update trotzdem jederzeit manuell starten, wenn du bereit bist.
+Es wird dringend empfohlen, automatische Updates (auch das automatische Herunterladen) bei der Nutzung von BridgePatcher zu deaktivieren, da Apple die Funktionsweise automatischer Updates kürzlich geändert hat. Updates werden jetzt schon während des Downloads vorbereitet und verändern bereits das Systemvolume. Das kann aus heiterem Himmel zu einem kaputten System führen, weil sich das Betriebssystem in einem Zwischenzustand zwischen zwei Versionen befindet. Du kannst ein Update trotzdem jederzeit manuell starten, wenn du bereit bist.
 
 Zum verwandten Fehler „System version mismatch“ beim Root-Patching und für weitere Informationen siehe [Fehler „System version mismatch“ beim Root-Patching](TROUBLESHOOT-APP.md#fehler-„system-version-mismatch-beim-root-patching).
 
@@ -95,7 +95,7 @@ macOS verwendet standardmäßig ein versiegeltes, schreibgeschütztes Systemvolu
 
 ## Kann ich auf macOS-Betas aktualisieren?
 
-Die Entwicklung und das Testen der OCLP-Patches finden während der Betaphase statt, um eine stabile Version vorzubereiten. Daher kann OCLP Betas nicht richtig unterstützen, und ältere Versionen sind möglicherweise inkompatibel. Installiere eine Beta nur, wenn du weißt, was du tust, realistische Erwartungen hast und es dir nichts ausmacht, dein System zur Wiederherstellung komplett neu aufzusetzen.
+Die Entwicklung und das Testen der BridgePatcher-Patches finden während der Betaphase statt, um eine stabile Version vorzubereiten. Daher kann BridgePatcher Betas nicht richtig unterstützen, und ältere Versionen sind möglicherweise inkompatibel. Installiere eine Beta nur, wenn du weißt, was du tust, realistische Erwartungen hast und es dir nichts ausmacht, dein System zur Wiederherstellung komplett neu aufzusetzen.
 
 Beachte, dass wir keine Hilfe leisten, wenn eine Beta installiert wurde.
 
@@ -125,7 +125,7 @@ Neuere Betriebssysteme sind anspruchsvoller und können sich langsamer anfühlen
 
 Wenn du in der Aktivitätsanzeige siehst, dass ```kernel_task``` viel CPU-Leistung beansprucht (auch hier ist Darstellung -> Alle Prozesse nötig), wird das System gedrosselt – meist aus folgenden Gründen:
 
-Bei Laptops drosselt macOS die CPU ziemlich stark, wenn der Akku fehlt oder in schlechtem Zustand ist, um weiterzulaufen, da das Netzteil allein nicht genug Leistung für die Spitzenleistung liefern kann. Du kannst versuchen, die Drosselung in den OCLP-Einstellungen zu deaktivieren, das führt aber meist zu unerwarteten Abschaltungen unter Last, wenn das Netzteil nicht mehr genug Leistung liefern kann. Außerdem sind die Trackpad-Einstellungen auf Laptops ohne Akku nicht verfügbar.
+Bei Laptops drosselt macOS die CPU ziemlich stark, wenn der Akku fehlt oder in schlechtem Zustand ist, um weiterzulaufen, da das Netzteil allein nicht genug Leistung für die Spitzenleistung liefern kann. Du kannst versuchen, die Drosselung in den BridgePatcher-Einstellungen zu deaktivieren, das führt aber meist zu unerwarteten Abschaltungen unter Last, wenn das Netzteil nicht mehr genug Leistung liefern kann. Außerdem sind die Trackpad-Einstellungen auf Laptops ohne Akku nicht verfügbar.
 
 Auch thermische Probleme können die CPU drosseln. In diesem Fall kann es sinnvoll sein, die Wärmeleitpaste zu erneuern.
 
@@ -135,7 +135,7 @@ Mit [Intel Power Gadget (Web Archive)](https://web.archive.org/web/2022070116420
 
 Wenn das Absturzprotokoll den Text „illegal instruction“ enthält, benötigt die App in der Regel die CPU-Befehlssätze AVX oder AVX2.
 
-Seit macOS Ventura setzen alle davon unterstützten Macs AVX2 voraus. OCLP kann macOS zwar so patchen, dass es ohne AVX2 bootet, doch viele Apps nutzen in neueren Versionen ebenfalls AVX und AVX2, da alle unterstützten Macs diese Befehlssätze voraussichtlich haben. Das ist ein Problem für ältere Systeme, auf deren CPUs ohne diese Befehle manche Apps nicht laufen. Manche älteren Macs benötigen daher ältere App-Versionen und können nicht auf neuere aktualisieren. AVX wurde mit der CPU-Generation Sandy Bridge eingeführt, AVX2 mit Haswell.
+Seit macOS Ventura setzen alle davon unterstützten Macs AVX2 voraus. BridgePatcher kann macOS zwar so patchen, dass es ohne AVX2 bootet, doch viele Apps nutzen in neueren Versionen ebenfalls AVX und AVX2, da alle unterstützten Macs diese Befehlssätze voraussichtlich haben. Das ist ein Problem für ältere Systeme, auf deren CPUs ohne diese Befehle manche Apps nicht laufen. Manche älteren Macs benötigen daher ältere App-Versionen und können nicht auf neuere aktualisieren. AVX wurde mit der CPU-Generation Sandy Bridge eingeführt, AVX2 mit Haswell.
 
 Im Grunde altern manche Modelle dadurch jetzt schnell, und ein neueres Betriebssystem bietet wegen der Hardwareanforderungen nicht immer Unterstützung für neuere Apps. Unterstützt eine App noch macOS-Versionen vor Ventura, hat sie eine Chance, auf dem alten System mit einer älteren macOS-Version zu laufen, da manche Macs, die diese Versionen nativ ausführen, kein AVX2 unterstützen und die App dann einen anderen Codepfad nutzt.
 
@@ -167,7 +167,7 @@ Als Faustregel gilt: Macs, die älter als 2012 sind, sind Nicht-Metal-Macs – a
 
 ::: details macOS-GPU-Übersicht
 
-Die Intel-GMA-Serie wird überhaupt nicht unterstützt, auch nicht mit OpenCore Legacy Patcher T2.
+Die Intel-GMA-Serie wird überhaupt nicht unterstützt, auch nicht mit BridgePatcher.
 
 AMD-Navi-GPUs (Serie RX 5000–6000) funktionieren in Mac Pros von 2008 bis 2012 unter Ventura und neuer nicht, da diese kein AVX2 unterstützen.
 
@@ -197,7 +197,7 @@ Weitere Informationen findest du auf den folgenden Seiten:
 
 ## Was sind FeatureUnlock und mediaanalysisd?
 
-**Wichtig:** Diese Funktionen können an vielen Stellen Instabilität verursachen. Daher wurde entschieden, sie ab OpenCore Legacy Patcher 2.1.0 standardmäßig zu deaktivieren (mediaanalysisd nur auf 3802-basierten* Systemen). Wenn du diese Funktionen trotz möglicher zusätzlicher Instabilität nutzen möchtest, kannst du sie in den OCLP-Einstellungen aktivieren und OpenCore neu erstellen.
+**Wichtig:** Diese Funktionen können an vielen Stellen Instabilität verursachen. Daher wurde entschieden, sie ab OpenCore Legacy Patcher 2.1.0 standardmäßig zu deaktivieren (mediaanalysisd nur auf 3802-basierten* Systemen). Wenn du diese Funktionen trotz möglicher zusätzlicher Instabilität nutzen möchtest, kannst du sie in den BridgePatcher-Einstellungen aktivieren und OpenCore neu erstellen.
 
 FeatureUnlock kann außerdem bei manchen macOS-Versionen und Systemen wegen einer Race Condition beim Systemstart Probleme haben. Falls das bei dir auftritt, starte mehrmals neu oder probiere eine andere (ältere) macOS-Version, um zu sehen, ob das hilft.
 
@@ -233,7 +233,7 @@ Diese GPUs finden sich typischerweise in Systemen von 2012 bis 2015.
 
 ## Warum funktioniert iPhone-Synchronisierung nicht?
 
-iPhone-Synchronisierung (iPhone Mirroring) erfordert einen T2-Chip und ist daher auf mit OCLP gepatchten Systemen nicht verfügbar. Die Verbindung schlägt fehl, weil die T2-Attestierung nicht hergestellt werden kann. Auf nicht unterstützten T2-Macs ist iPhone-Synchronisierung möglicherweise ebenfalls nicht verfügbar, das muss aber noch getestet werden.
+iPhone-Synchronisierung (iPhone Mirroring) erfordert einen T2-Chip und ist daher auf mit BridgePatcher gepatchten Systemen nicht verfügbar. Die Verbindung schlägt fehl, weil die T2-Attestierung nicht hergestellt werden kann. Auf nicht unterstützten T2-Macs ist iPhone-Synchronisierung möglicherweise ebenfalls nicht verfügbar, das muss aber noch getestet werden.
 
 ## Wo ist Apple Intelligence?
 

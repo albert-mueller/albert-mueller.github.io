@@ -1,7 +1,7 @@
 {
-  "name": "OpenCore Legacy Patcher T2",
-  "short_name": "OCLP T2",
-  "description": "Guide and announcements for OpenCore Legacy Patcher T2",
+  "name": "BridgePatcher",
+  "short_name": "BridgePatcher",
+  "description": "Guide and announcements for BridgePatcher",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

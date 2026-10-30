@@ -152,7 +152,7 @@ Deshalb empfehlen wir, einen USB-2.0-/3.0-Hub zwischen deine Geräte und den Ans
 
 ## Zweite CPU auf MacPro3,1/Xserve2,1 nicht sichtbar
 
-Ab macOS Sequoia muss OCLP die zweite CPU in diesen Systemen deaktivieren, um eine Kernel Panic zu vermeiden. Das bedeutet auch, dass standardmäßig selbst unter älteren Versionen nur eine CPU nutzbar ist. Um unter älteren Versionen wieder beide CPUs zu aktivieren, gehe so vor:
+Ab macOS Sequoia muss BridgePatcher die zweite CPU in diesen Systemen deaktivieren, um eine Kernel Panic zu vermeiden. Das bedeutet auch, dass standardmäßig selbst unter älteren Versionen nur eine CPU nutzbar ist. Um unter älteren Versionen wieder beide CPUs zu aktivieren, gehe so vor:
 
 1. Öffne Settings -> Tab `Build`.
 2. Deaktiviere `MacPro3,1/Xserve2,1 Workaround`.
@@ -167,13 +167,13 @@ Ab macOS Sequoia muss OCLP die zweite CPU in diesen Systemen deaktivieren, um ei
 
 Wenn du die macOS-Installation mit der originalen Grafikkarte abgeschlossen hast (z. B. um den Bootpicker zu sehen) und danach auf eine Metal-fähige GPU gewechselt hast, fehlt dir möglicherweise die Beschleunigung.
 
-Um das zu beheben, öffne OCLP und entferne die Root-Patches, damit deine Metal-GPU wieder funktioniert. Unter macOS Ventura und neuer ist bei den meisten Konfigurationen nach dem Entfernen ein erneutes Patchen nötig. Der Grund: Bei der USB-Installation wird automatisch root-gepatcht, und der Autopatcher geht davon aus, dass du die originale Grafikkarte verwendest, und führt deshalb das Nicht-Metal-Patching durch. **Metal- und Nicht-Metal-GPUs können nicht gleichzeitig verwendet werden**, da das Nicht-Metal-Patching Metal vollständig umgeht und einige Teile wie Treiber für andere Karten entfernen muss – deshalb haben Metal-Karten nach dem Wechsel keine Beschleunigung.
+Um das zu beheben, öffne BridgePatcher und entferne die Root-Patches, damit deine Metal-GPU wieder funktioniert. Unter macOS Ventura und neuer ist bei den meisten Konfigurationen nach dem Entfernen ein erneutes Patchen nötig. Der Grund: Bei der USB-Installation wird automatisch root-gepatcht, und der Autopatcher geht davon aus, dass du die originale Grafikkarte verwendest, und führt deshalb das Nicht-Metal-Patching durch. **Metal- und Nicht-Metal-GPUs können nicht gleichzeitig verwendet werden**, da das Nicht-Metal-Patching Metal vollständig umgeht und einige Teile wie Treiber für andere Karten entfernen muss – deshalb haben Metal-Karten nach dem Wechsel keine Beschleunigung.
 
 Alternativ kannst du vor der Installation „AutoPkg-Assets.pkg“ aus /Library/Packages auf dem USB-Stick entfernen. Dieses Paket enthält die Dateien für das Root-Patching; fehlen sie, wird das System nicht automatisch gepatcht. Um den Ordner zu sehen, blende versteckte Dateien mit `Command` + `Shift` + `.` ein.
 
 ## Tastatur, Maus und Trackpad funktionieren im Installer oder nach einem Update nicht
 
-Ab macOS Ventura sind keine USB-1.1-Treiber mehr im Betriebssystem enthalten. Bei Macs mit älteren USB-1.1-Controllern kann OpenCore Legacy Patcher T2 die Unterstützung erst wiederherstellen, nachdem die Root-Volume-Patches mit den Treibern installiert wurden. Bei der macOS-Installation oder nach einem Update musst du daher einen USB-Hub zwischen Mac und Tastatur/Maus setzen, um den USB-2.0-Modus zu erzwingen und so die Root-Patches installieren zu können.
+Ab macOS Ventura sind keine USB-1.1-Treiber mehr im Betriebssystem enthalten. Bei Macs mit älteren USB-1.1-Controllern kann BridgePatcher die Unterstützung erst wiederherstellen, nachdem die Root-Volume-Patches mit den Treibern installiert wurden. Bei der macOS-Installation oder nach einem Update musst du daher einen USB-Hub zwischen Mac und Tastatur/Maus setzen, um den USB-2.0-Modus zu erzwingen und so die Root-Patches installieren zu können.
 
 * Als MacBook-Nutzer brauchst du zusätzlich zum USB-Hub eine externe Tastatur/Maus.
 
@@ -220,7 +220,7 @@ Weitere Informationen findest du hier:
 
 Wenn deine Touch Bar usw. nicht funktioniert, sind die T1-Funktionen verloren gegangen.
 
-Wird das gesamte Laufwerk mit dem Festplattendienstprogramm von Sonoma oder neuer gelöscht, wird die T1-Firmware entfernt, und der Installer von macOS Sonoma und neuer stellt sie mangels Unterstützung nicht wieder her. Fehlt die Firmware in der EFI, funktioniert der T1 nicht – unabhängig davon, ob OCLP den Treiber beim Root-Patching wiederherstellt. Um die T1-Funktionen zurückzubekommen, musst du Ventura oder älter erneut installieren. Das kann auch auf einem anderen Volume oder einem externen Laufwerk geschehen, solange das Betriebssystem einmal gebootet wird. Danach kannst du das alte System löschen bzw. das externe Laufwerk abziehen.
+Wird das gesamte Laufwerk mit dem Festplattendienstprogramm von Sonoma oder neuer gelöscht, wird die T1-Firmware entfernt, und der Installer von macOS Sonoma und neuer stellt sie mangels Unterstützung nicht wieder her. Fehlt die Firmware in der EFI, funktioniert der T1 nicht – unabhängig davon, ob BridgePatcher den Treiber beim Root-Patching wiederherstellt. Um die T1-Funktionen zurückzubekommen, musst du Ventura oder älter erneut installieren. Das kann auch auf einem anderen Volume oder einem externen Laufwerk geschehen, solange das Betriebssystem einmal gebootet wird. Danach kannst du das alte System löschen bzw. das externe Laufwerk abziehen.
 
 
 Damit das künftig nicht passiert, lösche bei T1-Systemen nur das Volume, das das Betriebssystem enthält.
@@ -254,7 +254,7 @@ Falls Apple 11.2.3 aus seinem Katalog entfernt, stellen wir unten einen Mirror b
 
 ## GPU-Umschaltung auf MacBook Pros 2011 mit 15" und 17" funktioniert nicht
 
-Derzeit funktioniert mit OpenCore Legacy Patcher T2 das Umschalten zwischen iGPU und dGPU nicht. Am einfachsten legst du eine bestimmte GPU fest, indem du die dGPU deaktivierst, wenn du bei der stromsparenderen iGPU bleiben möchtest.
+Derzeit funktioniert mit BridgePatcher das Umschalten zwischen iGPU und dGPU nicht. Am einfachsten legst du eine bestimmte GPU fest, indem du die dGPU deaktivierst, wenn du bei der stromsparenderen iGPU bleiben möchtest.
 
 Am besten bootest du dazu in die Recovery (oder in den Einzelbenutzermodus, falls die dGPU gar nicht mehr funktioniert) und führst folgenden Befehl aus:
 
@@ -286,7 +286,7 @@ Apps, mit denen sich die Farbtiefe einstellen lässt:
 
 ## Anmeldung auf MacBook Pros 2011 mit 15" und 17" nicht möglich
 
-Standardmäßig geht OpenCore Legacy Patcher T2 davon aus, dass MacBookPro8,2/3 eine defekte dGPU haben, und deaktiviert die Beschleunigung. Für die meisten Nutzer ist das die sicherste Option, da das Aktivieren der dGPU-Beschleunigung auf Macs mit defekter dGPU dazu führt, dass sie nicht booten.
+Standardmäßig geht BridgePatcher davon aus, dass MacBookPro8,2/3 eine defekte dGPU haben, und deaktiviert die Beschleunigung. Für die meisten Nutzer ist das die sicherste Option, da das Aktivieren der dGPU-Beschleunigung auf Macs mit defekter dGPU dazu führt, dass sie nicht booten.
 
 Ist bei deinem Gerät die dGPU jedoch nicht per NVRAM deaktiviert, landest du in einer Anmeldeschleife. Das lässt sich recht einfach umgehen:
 
@@ -294,7 +294,7 @@ Ist bei deinem Gerät die dGPU jedoch nicht per NVRAM deaktiviert, landest du in
     * Drücke Cmd+S im OpenCore-Menü, wenn du den Mac einschaltest
 2. Wenn die Eingabeaufforderung erscheint, gib das Argument zum Deaktivieren der dGPU ein (siehe unten)
 3. Starte neu – das gepatchte macOS sollte jetzt normal funktionieren
-4. Wenn du die dGPU trotzdem nutzen möchtest, starte OpenCore Legacy Patcher T2 und aktiviere in den Einstellungen die TS2-Beschleunigung. Gehe zu `Settings -> Root Patching -> TeraScale 2 Acceleration` und führe das Root-Patching erneut aus.
+4. Wenn du die dGPU trotzdem nutzen möchtest, starte BridgePatcher und aktiviere in den Einstellungen die TS2-Beschleunigung. Gehe zu `Settings -> Root Patching -> TeraScale 2 Acceleration` und führe das Root-Patching erneut aus.
 5. Setze entweder den NVRAM zurück oder setze `gpu-power-prefs` auf Nullen, um die dGPU wieder zu aktivieren
 
 ```sh

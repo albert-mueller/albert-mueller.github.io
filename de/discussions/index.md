@@ -1,6 +1,6 @@
 ---
 title: Diskussionen
-description: Offene Community-Diskussionen zu OpenCore Legacy Patcher T2, gespiegelt aus den GitHub Discussions.
+description: Offene Community-Diskussionen zu BridgePatcher, gespiegelt aus den GitHub Discussions.
 lastUpdated: false
 editLink: false
 prev: false
@@ -9,9 +9,9 @@ next: false
 
 # Diskussionen
 
-Alle offenen Community-Diskussionen zu OpenCore Legacy Patcher T2 (Fragen, Ideen,
+Alle offenen Community-Diskussionen zu BridgePatcher (Fragen, Ideen,
 Anleitungen und mehr), automatisch gespiegelt aus den
-[GitHub Discussions](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/discussions):
+[GitHub Discussions](https://github.com/oclp-t2/BridgePatcher/discussions):
 angeheftete zuerst, danach die neuesten. Offizielle Neuigkeiten der Maintainer findest du unter
 [Ankündigungen](/de/announcements/). Um zu antworten oder eine neue Diskussion zu starten, nutze GitHub.
 

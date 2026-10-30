@@ -6,7 +6,7 @@ Mit der Veröffentlichung von OpenCore Legacy Patcher v0.5.0 und neuer wurde ers
 
 ## Neu fallen gelassene Hardware
 
-Mit Ventura wurde eine große Menge Intel-Hardware fallen gelassen, sodass auf den folgenden Modellen (zusätzlich zu den bereits zuvor entfernten) OpenCore Legacy Patcher T2 nötig ist:
+Mit Ventura wurde eine große Menge Intel-Hardware fallen gelassen, sodass auf den folgenden Modellen (zusätzlich zu den bereits zuvor entfernten) BridgePatcher nötig ist:
 
 * iMac16,1 (21,5 Zoll, Ende 2015)
 * iMac16,2 (21,5 Zoll und 21,5 Zoll 4K, Ende 2015)
@@ -26,7 +26,7 @@ Mit Ventura wurde eine große Menge Intel-Hardware fallen gelassen, sodass auf d
 
 ## Aktueller Stand
 
-OpenCore Legacy Patcher T2 unterstützt Ventura auf den unten aufgeführten Modellen, einige Herausforderungen bleiben jedoch bestehen. Informationen dazu findest du weiter unten auf dieser Seite.
+BridgePatcher unterstützt Ventura auf den unten aufgeführten Modellen, einige Herausforderungen bleiben jedoch bestehen. Informationen dazu findest du weiter unten auf dieser Seite.
 
 <img width="625" alt="" src="../images/OCLP-060-Initial-Support.png">
 
@@ -46,7 +46,7 @@ Nutzer von Mac Pros aus den Jahren 2008 bis 2013 (MacPro3,1–6,1) und iMacs aus
 
 * CPUs mit AVX2.0-Unterstützung sind Haswell oder neuer – damit lässt sich kein Mac Pro vor 2019 aufrüsten.
 
-Derzeit unterstützt OpenCore Legacy Patcher T2 nur das Patchen des Grafik-Stacks für AMD Polaris und Vega, damit AVX2.0 nicht mehr benötigt wird. Wir haben kürzlich eine AMD RX 6600 gespendet bekommen, sodass das Projekt künftig hoffentlich auch AMD Navi auf Macs vor Haswell unterstützen kann. Einen Zeitrahmen können wir jedoch nicht nennen.
+Derzeit unterstützt BridgePatcher nur das Patchen des Grafik-Stacks für AMD Polaris und Vega, damit AVX2.0 nicht mehr benötigt wird. Wir haben kürzlich eine AMD RX 6600 gespendet bekommen, sodass das Projekt künftig hoffentlich auch AMD Navi auf Macs vor Haswell unterstützen kann. Einen Zeitrahmen können wir jedoch nicht nennen.
 
 Folgende GPUs sind betroffen:
 
@@ -94,7 +94,7 @@ Folgende Geräte wurden ab Werk mit diesen Karten ausgeliefert:
 * MacPro5,1 und älter
 
 
-BCM943224, BCM94331, BCM94360 und BCM943602 werden von OpenCore Legacy Patcher T2 weiterhin vollständig unterstützt. Ziehe nach Möglichkeit ein Upgrade auf eine dieser Karten in Betracht.
+BCM943224, BCM94331, BCM94360 und BCM943602 werden von BridgePatcher weiterhin vollständig unterstützt. Ziehe nach Möglichkeit ein Upgrade auf eine dieser Karten in Betracht.
 
 :::
 

@@ -6,7 +6,7 @@ Mit OpenCore Legacy Patcher v0.1.7 und neuer haben wir eine Beta-Unterstützung 
 
 ## Neu fallen gelassene Hardware
 
-Mit Monterey setzt Apple seinen recht rücksichtslosen Kurs fort, Intel-Hardware fallen zu lassen. Mit diesem Release wurden folgende Modelle entfernt und damit in OpenCore Legacy Patcher T2 aufgenommen:
+Mit Monterey setzt Apple seinen recht rücksichtslosen Kurs fort, Intel-Hardware fallen zu lassen. Mit diesem Release wurden folgende Modelle entfernt und damit in BridgePatcher aufgenommen:
 
 * iMac14,4
 * iMac15,1
@@ -33,13 +33,13 @@ Mit Monterey setzt Apple seinen recht rücksichtslosen Kurs fort, Intel-Hardware
 
 :::
 
-Alle diese Modelle werden jetzt von OpenCore Legacy Patcher T2 unterstützt.
+Alle diese Modelle werden jetzt von BridgePatcher unterstützt.
 
 ## Aktuelle Probleme unter Monterey
 
 ### Startproblem beim MacBookPro11,3 ohne Kepler-Beschleunigung
 
-Da das Display über die NVIDIA-Kepler-Karte angebunden ist, macOS aber auf der Intel-iGPU gerendert wird, haben Nutzer Probleme beim Booten ohne angewendete Post-Install-Patches ([weitere Informationen hier](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522)). Derzeit besteht die einzige Lösung darin, die Patches im abgesicherten Modus zu installieren, indem du `Shift+Enter` gedrückt hältst, wenn du macOS im OCLP-Bootpicker auswählst.
+Da das Display über die NVIDIA-Kepler-Karte angebunden ist, macOS aber auf der Intel-iGPU gerendert wird, haben Nutzer Probleme beim Booten ohne angewendete Post-Install-Patches ([weitere Informationen hier](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522)). Derzeit besteht die einzige Lösung darin, die Patches im abgesicherten Modus zu installieren, indem du `Shift+Enter` gedrückt hältst, wenn du macOS im BridgePatcher-Bootpicker auswählst.
 
 ## Früher nicht funktionierende Hardware
 
@@ -81,7 +81,7 @@ Folgende Modelle haben in macOS Monterey wegen ihres älteren WLAN-Chipsatzes di
   * MacBookPro6,x ist ausgenommen
 * MacPro5,1 und älter
 
-Hinweis: BCM943224, BCM94331, BCM94360 und BCM943602 werden von OpenCore Legacy Patcher T2 weiterhin vollständig unterstützt.
+Hinweis: BCM943224, BCM94331, BCM94360 und BCM943602 werden von BridgePatcher weiterhin vollständig unterstützt.
 
 :::
 
@@ -98,7 +98,7 @@ Folgende Modelle haben in macOS Monterey wegen ihres älteren Bluetooth-Chipsatz
 * MacBookPro8,1 und älter
 * MacPro5,1 und älter
 
-Hinweis: Native BRCM20702 und BRCM20703 werden von OpenCore Legacy Patcher T2 weiterhin vollständig unterstützt.
+Hinweis: Native BRCM20702 und BRCM20703 werden von BridgePatcher weiterhin vollständig unterstützt.
 
 ::: details Entfernte Firmwares
 
@@ -127,7 +127,7 @@ Folgende Firmwares hat macOS Monterey entfernt (früher in IOBluetoothUSBDFU.kex
 
 * Intel-HD4000-iGPUs werden nicht mehr unterstützt
 
-Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleunigung zu erhalten. OpenCore Legacy Patcher T2 kann die Unterstützung wiederherstellen, wegen des Root-Patchings kann SIP jedoch nicht mehr aktiviert werden:
+Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleunigung zu erhalten. BridgePatcher kann die Unterstützung wiederherstellen, wegen des Root-Patchings kann SIP jedoch nicht mehr aktiviert werden:
 
 * Macmini6,x
 * MacBookAir5,x
@@ -140,7 +140,7 @@ Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleuni
 
 * NVIDIA-Kepler-dGPUs werden nicht mehr unterstützt
 
-Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleunigung zu erhalten. OpenCore Legacy Patcher T2 kann die Unterstützung wiederherstellen, wegen des Root-Patchings kann SIP jedoch nicht mehr aktiviert werden:
+Diese Geräte benötigen unter Monterey Root-Volume-Patches, um Grafikbeschleunigung zu erhalten. BridgePatcher kann die Unterstützung wiederherstellen, wegen des Root-Patchings kann SIP jedoch nicht mehr aktiviert werden:
 
 * MacBookPro9,1
 * MacBookPro10,1

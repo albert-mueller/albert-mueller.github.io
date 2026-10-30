@@ -11,7 +11,7 @@ The easiest way to debug yourself is via Patcher Settings. Here there are many d
 * "Enable Kext DEBUG"
 
 <div align="left">
-             <img src="./images/ocdebugimage.png" alt="OCLP debug" width="600" />
+             <img src="./images/ocdebugimage.png" alt="BridgePatcher debug" width="600" />
 </div>
 
 
@@ -43,7 +43,7 @@ From there, you'll have a log on your desktop.
 
 ## Filing an issue with us
 
-Now that you have proper logs, you can now [file issues with us](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/issues). This is a reminder to include the following info:
+Now that you have proper logs, you can now [file issues with us](https://github.com/oclp-t2/BridgePatcher/issues). This is a reminder to include the following info:
 
 * Model that you're patching for (ie. MacBookPro10,1)
 * Target OS (ie. macOS 11.2.3)

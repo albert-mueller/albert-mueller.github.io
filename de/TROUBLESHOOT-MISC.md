@@ -6,7 +6,7 @@
 * [macOS bootet nicht ohne den USB-Stick](#macos-bootet-nicht-ohne-den-usb-stick)
 * [Endlosschleife beim Booten in die Recovery](#endlosschleife-beim-booten-in-die-recovery)
 * [Hängt beim Booten nach dem Root-Patching](#hangt-beim-booten-nach-dem-root-patching)
-* [Recovery über OpenCore Legacy Patcher T2 booten](#recovery-uber-opencore-legacy-patcher-t2-booten)
+* [Recovery über BridgePatcher booten](#recovery-uber-opencore-legacy-patcher-t2-booten)
 * [Schwarzer Bildschirm auf dem MacBookPro11,3 unter macOS Monterey](#schwarzer-bildschirm-auf-dem-macbookpro11-3-unter-macos-monterey)
 
 #### Installer
@@ -35,13 +35,13 @@ Erscheint das 🚫-Symbol jedoch erst, nachdem der Bootvorgang bereits begonnen 
 
 Standardmäßig installiert der OpenCore Patcher OpenCore während der Installation nicht selbst auf dem internen Laufwerk.
 
-Nach der Installation von macOS sollte OpenCore Legacy Patcher T2 dich automatisch auffordern, OpenCore auf dem internen Laufwerk zu installieren. Erscheint diese Aufforderung nicht, musst du OpenCore entweder [manuell](https://dortania.github.io/OpenCore-Post-Install/universal/oc2hdd.html) auf die EFI des internen Laufwerks übertragen oder erneut „Build and Install“ ausführen und dein internes Laufwerk auswählen.
+Nach der Installation von macOS sollte BridgePatcher dich automatisch auffordern, OpenCore auf dem internen Laufwerk zu installieren. Erscheint diese Aufforderung nicht, musst du OpenCore entweder [manuell](https://dortania.github.io/OpenCore-Post-Install/universal/oc2hdd.html) auf die EFI des internen Laufwerks übertragen oder erneut „Build and Install“ ausführen und dein internes Laufwerk auswählen.
 
 Denk daran, dass du OpenCore danach noch einmal im Bootpicker auswählen musst, damit sich deine Hardware diesen Eintrag merkt und ab dann automatisch davon bootet.
 
 ## Endlosschleife beim Booten in die Recovery
 
-Mit OpenCore Legacy Patcher T2 nutzen wir Apple Secure Boot, damit Betriebssystem-Updates unter Big Sur korrekt und zuverlässig funktionieren. Dabei werden allerdings NVRAM-Variablen gesetzt, die deinen Mac verwirren, wenn er ohne OpenCore läuft. Um das zu beheben, deinstalliere einfach OpenCore und [setze den NVRAM zurück](https://support.apple.com/de-de/HT201255).
+Mit BridgePatcher nutzen wir Apple Secure Boot, damit Betriebssystem-Updates unter Big Sur korrekt und zuverlässig funktionieren. Dabei werden allerdings NVRAM-Variablen gesetzt, die deinen Mac verwirren, wenn er ohne OpenCore läuft. Um das zu beheben, deinstalliere einfach OpenCore und [setze den NVRAM zurück](https://support.apple.com/de-de/HT201255).
 
 * Hinweis: Auch Geräte mit verändertem Root-Volume landen in einer endlosen Recovery-Schleife, bis die Integrität wiederhergestellt ist.
 
@@ -49,7 +49,7 @@ Mit OpenCore Legacy Patcher T2 nutzen wir Apple Secure Boot, damit Betriebssyste
 
 **Gilt für macOS Monterey und neuer. Big Sur unterstützt das Zurücksetzen von Snapshots nicht.**
 
-Boote in die Recovery, indem du die Leertaste drückst, während dein Laufwerk im OCLP-Bootpicker ausgewählt ist (falls du den Bootpicker ausgeblendet hast, halte beim Start ESC gedrückt).
+Boote in die Recovery, indem du die Leertaste drückst, während dein Laufwerk im BridgePatcher-Bootpicker ausgewählt ist (falls du den Bootpicker ausgeblendet hast, halte beim Start ESC gedrückt).
 
 * **Hinweis:** Wenn dein Laufwerk nicht „Macintosh HD“ heißt, passe den Pfad entsprechend an. Den Namen deines Laufwerks findest du mit `ls /Volumes` heraus.
 
@@ -75,7 +75,7 @@ cd "/Volumes/Macintosh HD - Data/Library/Extensions" && ls | grep -v "HighPoint*
 
 Starte dann neu. Dein System sollte jetzt auf den ungepatchten Snapshot zurückgesetzt sein und wieder booten.
 
-## Recovery über OpenCore Legacy Patcher T2 booten
+## Recovery über BridgePatcher booten
 
 Wenn du mit der normalen Tastenkombination (cmd+R) in die Recovery bootest, erscheint ein „Verboten“-Bildschirm, da die Prüfungen einen nicht unterstützten Mac erkennen.
 
@@ -83,9 +83,9 @@ Um die Recovery zu erreichen, musst du sie über OpenCore im Bootpicker starten.
 
 ## Schwarzer Bildschirm auf dem MacBookPro11,3 unter macOS Monterey
 
-Da Apple die Unterstützung für NVIDIA Kepler in macOS Monterey eingestellt hat, [hat der GMUX des MacBookPro11,3 Schwierigkeiten, zurück auf die iGPU zu wechseln, um macOS korrekt anzuzeigen.](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522) Um das zu umgehen, boote das MacBookPro11,3 im sicheren Modus und führe nach der Installation von macOS die Post-Install-Root-Patches von OCLP aus, um die GPU-Beschleunigung für die dedizierte NVIDIA-GPU zu aktivieren.
+Da Apple die Unterstützung für NVIDIA Kepler in macOS Monterey eingestellt hat, [hat der GMUX des MacBookPro11,3 Schwierigkeiten, zurück auf die iGPU zu wechseln, um macOS korrekt anzuzeigen.](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522) Um das zu umgehen, boote das MacBookPro11,3 im sicheren Modus und führe nach der Installation von macOS die Post-Install-Root-Patches von BridgePatcher aus, um die GPU-Beschleunigung für die dedizierte NVIDIA-GPU zu aktivieren.
 
-* Den sicheren Modus startest du, indem du `Shift` + `Enter` gedrückt hältst, während du macOS Monterey im Bootmenü von OCLP auswählst.
+* Den sicheren Modus startest du, indem du `Shift` + `Enter` gedrückt hältst, während du macOS Monterey im Bootmenü von BridgePatcher auswählst.
 
 ## Hängt bei der Laufwerksauswahl mit ausgegrauten Schaltflächen im Installer
 
@@ -135,7 +135,7 @@ Außerdem kann es helfen, FeatureUnlock unter Settings -> Misc Settings zu deakt
 
 ## SIP lässt sich in recoveryOS nicht deaktivieren
 
-Mit OCLP überschreibt der Patcher beim Booten immer den aktuellen SIP-Wert, damit Nutzer ihre Installation nach einem NVRAM-Reset nicht unbrauchbar machen. Wer SIP vollständig deaktivieren will, kann das aber ganz einfach tun.
+Mit BridgePatcher überschreibt der Patcher beim Booten immer den aktuellen SIP-Wert, damit Nutzer ihre Installation nach einem NVRAM-Reset nicht unbrauchbar machen. Wer SIP vollständig deaktivieren will, kann das aber ganz einfach tun.
 
 Öffne die Oberfläche, gehe zu den Patcher-Einstellungen und schalte die SIP-Bits aus, die du deaktivieren möchtest:
 
