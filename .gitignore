@@ -10,3 +10,5 @@ public/notify.json
 public/discussions.xml
 .vitepress/issues.json
 public/issues.xml
+.license-guard-art-cache.json
+license-report.md

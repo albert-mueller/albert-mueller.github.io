@@ -82,6 +82,7 @@ KNOWN_ART = {
     "dortania-oclp-icon": {
         "name": "Dortania's OpenCore Legacy Patcher icon",
         "holder": "Dortania",
+        "embedded": True,  # also searched for INSIDE larger images (screenshots, banners)
         "hashes": [
             "2002461d90f6233b0e0f18a718f71967196718e71ae70f8f271b90f6469c2002",
             "2002469d90fe233b0e0f18a718f7196719671ce71be70d8f233b10f60c0c0000",
@@ -97,10 +98,25 @@ KNOWN_ART = {
     "apple-system-settings-icon": {
         "name": "Apple's System Settings icon",
         "holder": "Apple",
+        "embedded": True,
         "hashes": [
             "200243bd8cce30f3231b2b4b09af1c8f1c8f09af2b4b231b30f38cc6001c2002",
             "300243bc9cce30f3231b2b4b09af5c8d5c8d49adcb49e319f0f17cc038000040",
             "40043b607cc1e0f0e31ccb4cc9acdc8cdc8cc9accb4cc31cc0f87cc138004004",
+        ],
+    },
+    # Apple's macOS wallpapers with the "macOS <name>" wordmark, as used for the
+    # release banners in Dortania's docs (Monterey ... Tahoe).
+    "apple-macos-wallpaper-banner": {
+        "name": "Apple's macOS wallpaper / release banner",
+        "holder": "Apple",
+        "hashes": [
+            "09de09de09fc09fc08dc04dc04bc04bc00bc803c82fce27df01d727d787d387f",  # Monterey
+            "c7cfe7cf67ce674e74ceb4ceb74eb2ce9aac59bc1b3409748fcc8feccfecc7ed",  # Ventura
+            "f48ffe46fa46ff43fcc2fcc4bd6472e0d370d074b2b6a2b6ef7e7b3f533f579f",  # Sonoma
+            "d03fc03fe03ee03ee01ec09fc01fc21fc03d813f813f003e001e000e000f000f",  # Sequoia
+            "383f703fd03fb03fa01fe01fc81fc81fd09f080f040f480f008f000700071007",  # Sequoia (crop)
+            "0dbb05f90bfc89c767cf971f973f873ecc3eb05ce05cc17cc7598ee91ff81ff2",  # Tahoe
         ],
     },
 }
@@ -108,10 +124,24 @@ KNOWN_ART = {
 # the logo 39-51, unrelated icons 59+.
 ART_COPY_MAX = 30      # -> violation
 ART_DERIVED_MAX = 52   # -> warning (probably contains the artwork, check by hand)
+# Embedded search (icon somewhere inside a screenshot/banner). Measured on this repo:
+# screenshots that show the icon 26-40, everything else 54+.
+EMBED_COPY_MAX = 44    # -> violation
+EMBED_WARN_MAX = 50    # -> warning
+EMBED_MIN_PX = 40      # smallest icon size searched for (after downscaling, see below)
+EMBED_MAX_DIM = 1400   # large screenshots are downscaled to this first (speed)
+# Results per blob, so the second scan of a PR (base branch) doesn't redo every image.
+ART_CACHE = os.environ.get("ART_CACHE", ".license-guard-art-cache.json")
 ART_MAX_BYTES = 20_000_000
 IMAGE_EXT = (".png", ".icns", ".jpg", ".jpeg", ".gif", ".webp", ".tif", ".tiff", ".bmp", ".ico")
-TEXT_EXT = (".md", ".markdown", ".html", ".htm", ".js", ".jsx", ".ts", ".tsx", ".vue", ".css",
+TEXT_EXT = (".md", ".markdown", ".html", ".htm", ".js", ".mjs", ".jsx", ".ts", ".mts", ".tsx", ".vue", ".css",
             ".scss", ".py", ".plist", ".json", ".yml", ".yaml", ".txt", ".rst")
+# The project's former name. "OpenCore Legacy Patcher T2" / "OCLP-T2" now counts as a typosquat
+# of BridgePatcher (and of Dortania's project), so it must not appear in page text any more.
+# Case-sensitive on purpose: lowercase URLs, anchors and storage keys (oclp-t2/...) are fine.
+OLD_NAME_RE = re.compile(r"(?<![\w/#.-])(?:OpenCore[ -]Legacy[ -]Patcher[ -]T2|OCLP[- ]T2)(?![\w])")
+OLD_NAME_EXT = (".md", ".markdown", ".html", ".htm", ".vue", ".mts", ".ts", ".js", ".json", ".webmanifest", ".xsl")
+
 # Dortania's images used directly from their repo or website (e.g. the old README logo).
 HOTLINK_RE = re.compile(
     r"(?:raw\.githubusercontent\.com/dortania/|github\.com/dortania/[^\s\"'()<>]*/(?:raw|blob)/"
@@ -133,6 +163,88 @@ def dhash256(data, bg):
     return bits
 
 
+def _bits(h):
+    import numpy as np
+    return np.array([(h >> (255 - i)) & 1 for i in range(256)], dtype=np.float32)
+
+
+def find_embedded(data, known_bits):
+    """Search for known icons INSIDE an image: a dHash over sliding windows at many sizes
+    (coarse pass), then a fine search around the promising spots. Returns
+    {key: (distance, size_px, x, y)} with the best match per artwork."""
+    import numpy as np
+    from numpy.lib.stride_tricks import sliding_window_view
+    from PIL import Image
+    with Image.open(io.BytesIO(data)) as im:
+        im.load()
+        im = im.convert("RGBA")
+    scale = 1.0
+    if max(im.size) > EMBED_MAX_DIM:
+        scale = EMBED_MAX_DIM / max(im.size)
+        im = im.resize((max(1, round(im.width * scale)), max(1, round(im.height * scale))), Image.LANCZOS)
+    base = Image.new("RGBA", im.size, (128, 128, 128, 255))
+    base.alpha_composite(im)
+    gray = base.convert("L")
+    W, H = gray.size
+
+    def dists(s, x0, y0, x1, y1):
+        cw, ch = s / 17, s / 16
+        w, h = int((x1 - x0) / cw), int((y1 - y0) / ch)
+        if w < 17 or h < 16:
+            return {}
+        g = np.asarray(gray.resize((w, h), Image.BILINEAR, box=(x0, y0, x0 + w * cw, y0 + h * ch),
+                                   reducing_gap=2.0), dtype=np.int16)
+        win = sliding_window_view(g[:, :-1] > g[:, 1:], (16, 16))
+        shape = win.shape[:2]
+        flat = win.reshape(-1, 256).astype(np.float32)
+        ones = flat.sum(1)
+        out = {}
+        for key, kb in known_bits.items():
+            # Hamming distance to every known hash at once: |a| + |b| - 2 a.b
+            d = (ones[:, None] + kb.sum(1)[None, :] - 2 * (flat @ kb.T)).min(1).reshape(shape)
+            i = np.unravel_index(np.argmin(d), shape)
+            out[key] = (int(d[i]), s, x0 + i[1] * cw, y0 + i[0] * ch)
+        return out
+
+    best, cands = {}, []
+    s = float(EMBED_MIN_PX)
+    while s <= min(W, H):
+        for key, r in dists(s, 0, 0, W, H).items():
+            if r[0] <= EMBED_WARN_MAX + 12:
+                cands.append((key, r))
+            if key not in best or r[0] < best[key][0]:
+                best[key] = r
+        s *= 1.15
+    for key, (_, s, x, y) in cands:
+        for s2 in np.geomspace(s / 1.12, s * 1.12, 7):
+            for fx in np.linspace(-0.5, 0.5, 5):
+                for fy in np.linspace(-0.5, 0.5, 5):
+                    x0 = max(0.0, x + fx * s2 / 8 - s2 / 17)
+                    y0 = max(0.0, y + fy * s2 / 8 - s2 / 16)
+                    r = dists(s2, x0, y0, min(W, x0 + s2 * 1.25), min(H, y0 + s2 * 1.25)).get(key)
+                    if r and r[0] < best[key][0]:
+                        best[key] = r
+    return {k: (d, round(sz / scale), round(x / scale), round(y / scale)) for k, (d, sz, x, y) in best.items()}
+
+
+def _load_cache():
+    import json
+    try:
+        with open(ART_CACHE, encoding="utf-8") as fh:
+            return json.load(fh)
+    except (FileNotFoundError, ValueError):
+        return {}
+
+
+def _save_cache(cache):
+    import json
+    try:
+        with open(ART_CACHE, "w", encoding="utf-8") as fh:
+            json.dump(cache, fh)
+    except OSError:
+        pass
+
+
 def scan_artwork(head, add):
     try:
         from PIL import Image
@@ -141,6 +253,14 @@ def scan_artwork(head, add):
         add("warning", "-", "Artwork check skipped: Pillow is not installed")
         return
     known = {k: [int(h, 16) for h in v["hashes"]] for k, v in KNOWN_ART.items()}
+    try:
+        import numpy  # noqa: F401
+        embedded_bits = {k: numpy.stack([_bits(h) for h in known[k]])
+                         for k, v in KNOWN_ART.items() if v.get("embedded")}
+    except ImportError:
+        embedded_bits = {}
+        add("warning", "-", "Embedded artwork check skipped: numpy is not installed")
+    cache = _load_cache()
     for row in git("ls-tree", "-r", "-l", head).splitlines():
         meta, path = row.split("\t", 1)
         _, kind, sha, size = meta.split()
@@ -153,23 +273,55 @@ def scan_artwork(head, add):
                 h = dhash256(data, (128, 128, 128))
             except Exception:
                 continue  # not a decodable image
+            whole = set()
             for key, hashes in known.items():
                 d = min(bin(h ^ x).count("1") for x in hashes)
                 art = KNOWN_ART[key]
                 if d <= ART_COPY_MAX:
+                    whole.add(key)
                     add("violation", path, f"Copyrighted artwork: {art['name']}",
                         [f"  Matches {art['holder']}'s artwork (distance {d}/256).",
                          "  Replace it with your own artwork."])
                 elif d <= ART_DERIVED_MAX:
+                    whole.add(key)
                     add("warning", path, f"Probably contains {art['name']}",
                         [f"  Similar to {art['holder']}'s artwork (distance {d}/256).",
                          "  Check by hand; if it embeds the artwork, replace it."])
+            if not embedded_bits:
+                continue
+            if sha in cache:
+                hits = {k: tuple(v) for k, v in cache[sha].items()}
+            else:
+                try:
+                    hits = find_embedded(data, embedded_bits)
+                except Exception:
+                    hits = {}
+                cache[sha] = hits
+            for key, (d, size_px, x, y) in hits.items():
+                if key in whole or d > EMBED_WARN_MAX:
+                    continue
+                art = KNOWN_ART[key]
+                where = f"  Found inside the image at x={x}, y={y}, about {size_px}px (distance {d}/256)."
+                if d <= EMBED_COPY_MAX:
+                    add("violation", path, f"Contains copyrighted artwork: {art['name']}",
+                        [where, f"  {art['holder']}'s artwork is part of this screenshot/graphic.",
+                         "  Retake the screenshot with your own icon, crop it out or remove the image."])
+                else:
+                    add("warning", path, f"Might contain {art['name']}",
+                        [where, "  Check by hand; if it shows the artwork, replace it."])
         elif low.endswith(TEXT_EXT):
             text = git("cat-file", "blob", sha)
             urls = sorted(set(m.group(0) for m in HOTLINK_RE.finditer(text)))
             if urls:
                 add("violation", path, "Dortania artwork used from Dortania's servers",
                     [f"- {u}" for u in urls[:10]])
+            if low.endswith(OLD_NAME_EXT):
+                lines = [l for l in text.splitlines() if OLD_NAME_RE.search(l)]
+                if lines:
+                    add("warning", path, "Former project name (OpenCore Legacy Patcher T2 / OCLP-T2)",
+                        [f"  {show(l)}" for l in lines[:5]] + (["  …"] if len(lines) > 5 else []) +
+                        ["  Use BridgePatcher instead; the old name is treated as a typosquat."])
+    _save_cache(cache)
 
 
 YEAR_RE = re.compile(r"\b(19|20)\d{2}\b")
