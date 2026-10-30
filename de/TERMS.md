@@ -1,6 +1,6 @@
-# OpenCore-Patcher-Terminologie
+# BridgePatcher-Terminologie
 
-Bei OpenCore Legacy Patcher T2 verwenden wir viele verschiedene Begriffe, um Hardware zu beschreiben, etwa `SSE4.1`, `32-Bit-Firmware` usw. Diese Seite soll dir helfen zu verstehen, was all diese verwirrenden Begriffe bedeuten.
+Bei BridgePatcher verwenden wir viele verschiedene Begriffe, um Hardware zu beschreiben, etwa `SSE4.1`, `32-Bit-Firmware` usw. Diese Seite soll dir helfen zu verstehen, was all diese verwirrenden Begriffe bedeuten.
 
 # Begriffe
 
@@ -14,7 +14,7 @@ Begriff | Beschreibung
 ---
 Begriff | Beschreibung
 --- | ---
-**OpenCore**   | Ein Bootmanager des [Acidanthera-Teams](https://github.com/acidanthera). Er lädt macOS auf Macs, die Apple nicht mehr unterstützt, bootet schneller und ist schlanker als ältere Bootmanager. OpenCore selbst kann macOS-Sicherheitsfunktionen wie SIP, FileVault und Apple Secure Boot funktionsfähig halten. **Mit OpenCore Legacy Patcher T2 werden einige davon bewusst geschwächt:** Root-Patching erfordert, SIP und das versiegelte Systemvolume teilweise zu deaktivieren, AMFI kann deaktiviert sein, und auf T2-Macs wird Apple Secure Boot abgeschaltet. Dein Mac ist dadurch schlechter geschützt als ein unterstützter Mac mit unverändertem macOS – nutze es also nur, wenn du diesen Kompromiss akzeptierst.
+**OpenCore**   | Ein Bootmanager des [Acidanthera-Teams](https://github.com/acidanthera). Er lädt macOS auf Macs, die Apple nicht mehr unterstützt, bootet schneller und ist schlanker als ältere Bootmanager. OpenCore selbst kann macOS-Sicherheitsfunktionen wie SIP, FileVault und Apple Secure Boot funktionsfähig halten. **Mit BridgePatcher werden einige davon bewusst geschwächt:** Root-Patching erfordert, SIP und das versiegelte Systemvolume teilweise zu deaktivieren, AMFI kann deaktiviert sein, und auf T2-Macs wird Apple Secure Boot abgeschaltet. Dein Mac ist dadurch schlechter geschützt als ein unterstützter Mac mit unverändertem macOS – nutze es also nur, wenn du diesen Kompromiss akzeptierst.
 **ACPI**   | In deiner Firmware definierte Tabellen, die deine Hardware und verschiedene Methoden beschreiben; direkt damit verknüpft, wie IOKit/IOService Geräte einrichtet.
 **NVRAM**   | Nichtflüchtiger Speicher, in dem viele Variablen abgelegt sind, darunter Standard-Bootoptionen, Ruhezustandsschlüssel, Secure-Boot-Informationen usw.
 ---

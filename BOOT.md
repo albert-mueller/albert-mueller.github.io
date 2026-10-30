@@ -35,9 +35,9 @@ The command should produce a list of drives installed in your system:
              <img src="./images/Unflashed-Boot-1.png" alt="Unflashed boot" width="800" />
 </div>
 
-Keep track of the drive with the OCLP install. You will need the drive identifer for later.
+Keep track of the drive with the BridgePatcher install. You will need the drive identifer for later.
 
-Now you'll want to mount the EFI partition (where OCLP is installed, though it may differ if you've installed OCLP to a FAT-32 volume).
+Now you'll want to mount the EFI partition (where BridgePatcher is installed, though it may differ if you've installed BridgePatcher to a FAT-32 volume).
 
 Run the following command (Replace X with the drive number):
 ```sh
@@ -62,7 +62,7 @@ Once the command is run, it should produce no output.
 
 If the command produces an output, ensure that you've typed it in correctly.
 
-Now you can reboot your machine. OCLP is now the default boot option!
+Now you can reboot your machine. BridgePatcher is now the default boot option!
 :::
 
 Now that you've loaded OpenCore, "select Install macOS":
@@ -74,7 +74,7 @@ Now that you've loaded OpenCore, "select Install macOS":
 </div>
 
 
-You will soon reach the installer screen! If you enabled verbose mode when building OCLP, a lot of text will run across the screen. From there, it's just like any normal macOS install. For an example of how the boot process looks, see the following video:
+You will soon reach the installer screen! If you enabled verbose mode when building BridgePatcher, a lot of text will run across the screen. From there, it's just like any normal macOS install. For an example of how the boot process looks, see the following video:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/AN3zsbQV_n4?si=VAB9ge7Snpj_GrAE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
@@ -107,7 +107,7 @@ If your Mac is looping back into the beginning of the setup after the first rebo
 
 ::: warning
 
-**MacBookPro11,3 Note**: When booting macOS Monterey, you'll need to boot into safe mode if acceleration patches are not installed yet. [Otherwise, you'll hit a black screen due to missing NVIDIA drivers.](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522) Safe Mode can be entered by holding `⇧` + `Enter` when selecting macOS Monterey in OCLP's Boot Menu.
+**MacBookPro11,3 Note**: When booting macOS Monterey, you'll need to boot into safe mode if acceleration patches are not installed yet. [Otherwise, you'll hit a black screen due to missing NVIDIA drivers.](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522) Safe Mode can be entered by holding `⇧` + `Enter` when selecting macOS Monterey in BridgePatcher's Boot Menu.
 
 :::
 

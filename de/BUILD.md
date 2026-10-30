@@ -4,7 +4,7 @@ Jetzt, wo wir einen macOS-Installer haben, erstellen wir unsere OpenCore-Konfigu
 
 Falls du OpenCore Patcher noch nicht heruntergeladen hast, hol das jetzt nach:
 
-* [OpenCore Legacy Patcher T2 Releases](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases)
+* [BridgePatcher Releases](https://github.com/oclp-t2/BridgePatcher/releases)
 
 Starte als Nächstes die `OpenCore-Patcher-T2.app`.
 
@@ -12,7 +12,7 @@ Hier wählen wir `OpenCore` und klicken auf `Install OpenCore`:
 
 
 <div align="left">
-             <img src="../images/OCLP-GUI-Main-Menu.png" alt="OCLP-GUI Hauptmenü" width="700" />
+             <img src="../images/OCLP-GUI-Main-Menu.png" alt="BridgePatcher-GUI Hauptmenü" width="700" />
 </div>
 
 ::: warning Warnung

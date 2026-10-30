@@ -6,7 +6,7 @@
 * [Cannot boot macOS without the USB](#cannot-boot-macos-without-the-usb)
 * [Infinite Recovery OS Booting](#infinite-recovery-os-booting)
 * [Stuck on boot after root patching](#stuck-on-boot-after-root-patching)
-* [Booting Recovery through OpenCore Legacy Patcher T2](#booting-recovery-through-opencore-legacy-patcher-t2)
+* [Booting Recovery through BridgePatcher](#booting-recovery-through-opencore-legacy-patcher-t2)
 * [Black Screen on MacBookPro11,3 in macOS Monterey](#black-screen-on-macbookpro11-3-in-macos-monterey)
 
 #### Installer
@@ -35,13 +35,13 @@ However, if the 🚫 Symbol only appears after the boot process has already star
 
 By default, the OpenCore Patcher won't install OpenCore onto the internal drive itself during installs.
 
-After installing macOS, OpenCore Legacy Patcher T2 should automatically prompt you to install OpenCore onto the internal drive. However, if it doesn't show the prompt, you'll need to either [manually transfer](https://dortania.github.io/OpenCore-Post-Install/universal/oc2hdd.html) OpenCore to the internal drive's EFI or Build and Install again and select your internal drive.
+After installing macOS, BridgePatcher should automatically prompt you to install OpenCore onto the internal drive. However, if it doesn't show the prompt, you'll need to either [manually transfer](https://dortania.github.io/OpenCore-Post-Install/universal/oc2hdd.html) OpenCore to the internal drive's EFI or Build and Install again and select your internal drive.
 
 Reminder that once this is done, you'll need to select OpenCore in the boot picker again for your hardware to remember this entry and auto boot from then on.
 
 ## Infinite Recovery OS Booting
 
-With OpenCore Legacy Patcher T2, we rely on Apple Secure Boot to ensure OS updates work correctly and reliably with Big Sur. However this installs NVRAM variables that will confuse your Mac if not running with OpenCore. To resolve this, simply uninstall OpenCore and [reset NVRAM](https://support.apple.com/en-mide/HT201255).
+With BridgePatcher, we rely on Apple Secure Boot to ensure OS updates work correctly and reliably with Big Sur. However this installs NVRAM variables that will confuse your Mac if not running with OpenCore. To resolve this, simply uninstall OpenCore and [reset NVRAM](https://support.apple.com/en-mide/HT201255).
 
 * Note: Machines with modified root volumes will also result in an infinite recovery loop until integrity is restored.
 
@@ -49,7 +49,7 @@ With OpenCore Legacy Patcher T2, we rely on Apple Secure Boot to ensure OS updat
 
 **Applies to macOS Monterey and newer. Big Sur does not support snapshot reversion.**
 
-Boot into recovery by pressing space when your disk is selected on the OCLP bootpicker (if you have it hidden, hold ESC while starting up)
+Boot into recovery by pressing space when your disk is selected on the BridgePatcher bootpicker (if you have it hidden, hold ESC while starting up)
 
 * **Note:** If your disk name is something else than "Macintosh HD", make sure to change the path accordingly. You can figure out your disk name by typing `ls /Volumes`.
 
@@ -75,7 +75,7 @@ cd "/Volumes/Macintosh HD - Data/Library/Extensions" && ls | grep -v "HighPoint*
 
 Then restart and now your system should be restored to the unpatched snapshot and should be able to boot again.
 
-## Booting Recovery through OpenCore Legacy Patcher T2
+## Booting Recovery through BridgePatcher
 
 Booting into Recovery through the regular key combination (cmd+r) will result in a "no entry" screen, due to the checks detecting an unsupported Mac. 
 
@@ -83,9 +83,9 @@ To access Recovery, you will have to boot it through OpenCore using the bootpick
 
 ## Black Screen on MacBookPro11,3 in macOS Monterey
 
-Due to Apple dropping NVIDIA Kepler support in macOS Monterey, [MacBookPro11,3's GMUX has difficulties switching back to the iGPU to display macOS correctly.](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522) To work-around this issue, boot the MacBookPro11,3 in Safe Mode and once macOS is installed, run OCLP's Post Install Root Patches to enable GPU Acceleration for the NVIDIA dGPU.
+Due to Apple dropping NVIDIA Kepler support in macOS Monterey, [MacBookPro11,3's GMUX has difficulties switching back to the iGPU to display macOS correctly.](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522) To work-around this issue, boot the MacBookPro11,3 in Safe Mode and once macOS is installed, run BridgePatcher's Post Install Root Patches to enable GPU Acceleration for the NVIDIA dGPU.
 
-* Safe Mode can be started by holding `Shift` + `Enter` when selecting macOS Monterey in OCLP's Boot Menu.
+* Safe Mode can be started by holding `Shift` + `Enter` when selecting macOS Monterey in BridgePatcher's Boot Menu.
 
 ## Stuck on hard disk selection with greyed out buttons in installer
 
@@ -135,7 +135,7 @@ Additionally, it can help to disable FeatureUnlock in Settings -> Misc Settings 
 
 ## Cannot Disable SIP in recoveryOS
 
-With OCLP, the patcher will always overwrite the current SIP value on boot to ensure that users don't brick an installation after an NVRAM reset. However, for users wanting to disable SIP entirely, this can be done easily.
+With BridgePatcher, the patcher will always overwrite the current SIP value on boot to ensure that users don't brick an installation after an NVRAM reset. However, for users wanting to disable SIP entirely, this can be done easily.
 
 Head into the GUI, go to Patcher Settings, and toggle the bits you need disabled from SIP:
 

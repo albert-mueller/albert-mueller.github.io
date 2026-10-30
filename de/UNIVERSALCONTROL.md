@@ -209,7 +209,7 @@ Bevor wir fortfahren: Bedenke, dass SMBIOS-Spoofing eine fortgeschrittene Funkti
 
 ::: details macOS Sequoia
 
-Starte zuerst OpenCore Legacy Patcher T2.
+Starte zuerst BridgePatcher.
 
 Öffne dann **Settings** und den Tab **SMBIOS** und setze das SMBIOS Spoof Level auf **Moderate**. Setze als SMBIOS Spoof Model **das Modell, das in der Tabelle der Spoofing-Modelle unten neben deinem nativen Modell steht.**
 
@@ -241,7 +241,7 @@ Spoofing auf jedes Modell mit nativer Sequoia-Unterstützung sollte funktioniere
 
 ::: details macOS Sonoma
 
-Starte zuerst OpenCore Legacy Patcher T2.
+Starte zuerst BridgePatcher.
 
 Öffne dann **Settings** und den Tab **SMBIOS** und setze das SMBIOS Spoof Level auf **Moderate**. Setze als SMBIOS Spoof Model **das Modell, das in der Tabelle der Spoofing-Modelle unten neben deinem nativen Modell steht.**
 
@@ -273,7 +273,7 @@ Spoofing auf jedes Modell mit nativer Sonoma-Unterstützung sollte funktionieren
 
 ::: details macOS Ventura
 
-Starte zuerst OpenCore Legacy Patcher T2.
+Starte zuerst BridgePatcher.
 
 Öffne dann **Settings** und den Tab **SMBIOS** und setze das SMBIOS Spoof Level auf **Moderate**. Setze als SMBIOS Spoof Model **das Modell, das in der Tabelle der Spoofing-Modelle unten neben deinem nativen Modell steht.**
 
@@ -305,7 +305,7 @@ Spoofing auf jedes Modell mit nativer Ventura-Unterstützung sollte funktioniere
 
 ::: details macOS Monterey
 
-Starte zuerst OpenCore Legacy Patcher T2. Öffne dann **Settings**, wechsle zum Tab **App** und hake **Allow native models** an.
+Starte zuerst BridgePatcher. Öffne dann **Settings**, wechsle zum Tab **App** und hake **Allow native models** an.
 
 [](../images/OCLP-App-Allow-Native-Models.png)
 
@@ -335,7 +335,7 @@ Jedes Modell nach den offiziell gesperrten Macs sollte unterstützt werden. Der 
 
 :::
 
-**Hinweis:** Sofern du OpenCore nicht auf einem anderen Gerät erstellst als dem Zielgerät, ändere das Modell in der Hauptansicht der Einstellungen **nicht**. Wichtig zu verstehen: OCLP richtet sich nach diesem Modell, unabhängig davon, welches Modell du per Spoofing vorgibst – dein Mac ist weiterhin das, was das native SMBIOS anzeigt.
+**Hinweis:** Sofern du OpenCore nicht auf einem anderen Gerät erstellst als dem Zielgerät, ändere das Modell in der Hauptansicht der Einstellungen **nicht**. Wichtig zu verstehen: BridgePatcher richtet sich nach diesem Modell, unabhängig davon, welches Modell du per Spoofing vorgibst – dein Mac ist weiterhin das, was das native SMBIOS anzeigt.
 
 Erstelle und installiere OpenCore abschließend erneut und starte wieder ins Betriebssystem. Aktiviere die universelle Steuerung wie im [Abschnitt „Universelle Steuerung aktivieren“](#universelle-steuerung-aktivieren) beschrieben.
 

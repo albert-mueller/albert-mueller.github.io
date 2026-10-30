@@ -29,9 +29,9 @@ const titles: Record<string, string> = {
     "WINDOWS": "Installing Windows in UEFI Mode",
     "UNIVERSALCONTROL": "Universal Control on unsupported Macs",
     "LICENSE": "OpenCore Legacy Patcher License",
-    "TERMS": "OpenCore Patcher Terminology",
-    "HOW": "Boot Process with OpenCore Legacy Patcher T2",
-    "PATCHEXPLAIN": "Explaining the patches in OpenCore Legacy Patcher T2"
+    "TERMS": "BridgePatcher Terminology",
+    "HOW": "Boot Process with BridgePatcher",
+    "PATCHEXPLAIN": "Explaining the patches in BridgePatcher"
 }
 
 // German sidebar titles for the pages under de/.
@@ -62,9 +62,9 @@ const titlesDe: Record<string, string> = {
     "WINDOWS": "Windows im UEFI-Modus installieren",
     "UNIVERSALCONTROL": "Universelle Steuerung auf nicht unterstützten Macs",
     "LICENSE": "Lizenz von OpenCore Legacy Patcher",
-    "TERMS": "OpenCore-Patcher-Terminologie",
-    "HOW": "Bootvorgang mit OpenCore Legacy Patcher T2",
-    "PATCHEXPLAIN": "Erklärung der Patches in OpenCore Legacy Patcher T2"
+    "TERMS": "BridgePatcher-Terminologie",
+    "HOW": "Bootvorgang mit BridgePatcher",
+    "PATCHEXPLAIN": "Erklärung der Patches in BridgePatcher"
 }
 
 // Guide pages that exist in every language. The mirrored announcements,
@@ -76,7 +76,7 @@ const TRANSLATED_PAGES = [...Object.keys(titles), 'TROUBLESHOOTING']
 // Used for the sitemap, canonical links and Open Graph tags so search engines
 // and link previews always see absolute, stable URLs.
 const SITE_URL = 'https://oclp-t2.github.io/'
-const SITE_TITLE = 'OpenCore Legacy Patcher T2'
+const SITE_TITLE = 'BridgePatcher'
 const SITE_DESCRIPTION = 'Guide to put macOS on unsupported devices'
 const SITE_DESCRIPTION_DE = 'Anleitung, um macOS auf nicht unterstützte Geräte zu bringen'
 const COPYRIGHT = 'Copyright © Dortania 2020-2025 · T2 fork © 2026 Albert Müller and OCLP-T2 contributors'
@@ -269,7 +269,7 @@ export default defineConfig({
                     { text: 'Issues', link: '/de/issues/', activeMatch: '^/de/issues/' },
                 ],
                 socialLinks: [
-                    { icon: 'github', link: 'https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/' },
+                    { icon: 'github', link: 'https://github.com/oclp-t2/BridgePatcher/' },
                     { icon: { svg: RSS_ICON }, link: `${SITE_URL}announcements.xml`, ariaLabel: 'RSS-Feed der Ankündigungen' },
                 ],
                 editLink: {
@@ -351,7 +351,7 @@ export default defineConfig({
         // The full title is too wide for the sidebar column and overflows past
         // its divider, so use a short name in the nav bar. `title` above is
         // still used for browser tabs and page metadata.
-        siteTitle: 'OCLP T2',
+        siteTitle: 'BridgePatcher',
         outline: [2, 2],
         nav: [
             { text: 'Guide', link: '/START' },
@@ -360,7 +360,7 @@ export default defineConfig({
             { text: 'Issues', link: '/issues/', activeMatch: '^/issues/' },
         ],
         socialLinks: [
-            { icon: 'github', link: 'https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/' },
+            { icon: 'github', link: 'https://github.com/oclp-t2/BridgePatcher/' },
             { icon: { svg: RSS_ICON }, link: `${SITE_URL}announcements.xml`, ariaLabel: 'Announcements RSS feed' },
         ],
         editLink: {

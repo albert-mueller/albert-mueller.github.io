@@ -2,11 +2,11 @@
 layout: home
 
 hero:
-  name: OpenCore Legacy Patcher T2
+  name: BridgePatcher
   tagline: Experience macOS just like before
   image:
     src: /homepage.png
-    alt: OpenCore Legacy Patcher T2
+    alt: BridgePatcher
   actions:
     - theme: brand
       text: Getting Started →
@@ -19,7 +19,7 @@ hero:
     # works in old Safari versions that can't render github.com pages.
     - theme: alt
       text: Download latest version
-      link: https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/releases/latest/download/OpenCore-Patcher-T2.pkg
+      link: https://github.com/oclp-t2/BridgePatcher/releases/latest/download/OpenCore-Patcher-T2.pkg
 
 features:
   - title: Near-native OTA updates

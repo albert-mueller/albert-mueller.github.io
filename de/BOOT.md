@@ -35,9 +35,9 @@ Der Befehl sollte eine Liste der in deinem System verbauten Laufwerke ausgeben:
              <img src="../images/Unflashed-Boot-1.png" alt="Booten ohne geflashte GPU" width="800" />
 </div>
 
-Merke dir das Laufwerk mit der OCLP-Installation. Die Laufwerkskennung brauchst du später.
+Merke dir das Laufwerk mit der BridgePatcher-Installation. Die Laufwerkskennung brauchst du später.
 
-Nun hängst du die EFI-Partition ein (dort ist OCLP installiert – das kann abweichen, wenn du OCLP auf einem FAT32-Volume installiert hast).
+Nun hängst du die EFI-Partition ein (dort ist BridgePatcher installiert – das kann abweichen, wenn du BridgePatcher auf einem FAT32-Volume installiert hast).
 
 Führe folgenden Befehl aus (ersetze X durch die Laufwerksnummer):
 ```sh
@@ -62,7 +62,7 @@ Nach dem Ausführen sollte der Befehl keine Ausgabe erzeugen.
 
 Falls der Befehl doch eine Ausgabe erzeugt, prüfe, ob du ihn korrekt eingegeben hast.
 
-Jetzt kannst du deinen Mac neu starten. OCLP ist nun die Standard-Bootoption!
+Jetzt kannst du deinen Mac neu starten. BridgePatcher ist nun die Standard-Bootoption!
 :::
 
 Nachdem OpenCore geladen ist, wähle „Install macOS“:
@@ -74,7 +74,7 @@ Nachdem OpenCore geladen ist, wähle „Install macOS“:
 </div>
 
 
-Bald erreichst du den Installationsbildschirm! Falls du beim Erstellen von OCLP den Verbose-Modus aktiviert hast, läuft viel Text über den Bildschirm. Ab hier verläuft alles wie bei einer normalen macOS-Installation. Ein Beispiel, wie der Bootvorgang aussieht, zeigt das folgende Video:
+Bald erreichst du den Installationsbildschirm! Falls du beim Erstellen von BridgePatcher den Verbose-Modus aktiviert hast, läuft viel Text über den Bildschirm. Ab hier verläuft alles wie bei einer normalen macOS-Installation. Ein Beispiel, wie der Bootvorgang aussieht, zeigt das folgende Video:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/AN3zsbQV_n4?si=VAB9ge7Snpj_GrAE" title="YouTube-Videoplayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
@@ -107,7 +107,7 @@ Falls dein Mac nach dem ersten Neustart immer wieder zum Anfang der Einrichtung 
 
 ::: warning Achtung
 
-**Hinweis zum MacBookPro11,3**: Beim Booten von macOS Monterey musst du in den sicheren Modus booten, solange die Beschleunigungs-Patches noch nicht installiert sind. [Andernfalls landest du wegen fehlender NVIDIA-Treiber bei einem schwarzen Bildschirm.](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522) In den sicheren Modus gelangst du, indem du `⇧` + `Enter` gedrückt hältst, während du macOS Monterey im Bootmenü von OCLP auswählst.
+**Hinweis zum MacBookPro11,3**: Beim Booten von macOS Monterey musst du in den sicheren Modus booten, solange die Beschleunigungs-Patches noch nicht installiert sind. [Andernfalls landest du wegen fehlender NVIDIA-Treiber bei einem schwarzen Bildschirm.](https://github.com/dortania/OpenCore-Legacy-Patcher/issues/522) In den sicheren Modus gelangst du, indem du `⇧` + `Enter` gedrückt hältst, während du macOS Monterey im Bootmenü von BridgePatcher auswählst.
 
 :::
 

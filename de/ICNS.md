@@ -52,9 +52,6 @@ Um Symbole für ältere Macs zu erzeugen, brauchst du Folgendes:
 
 * Einen Rechner mit macOS 10.4 bis 10.11
 * Icon Composer.app (für den offiziellen Download ist ein Apple-Developer-Konto nötig)
-  * Ohne Developer-Konto findest du hier Spiegel:
-    * [Icon Composer 10.6](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/docs/Icon-Composer-10.6.zip)
-    * [Icon Composer 10.11](https://github.com/dortania/OpenCore-Legacy-Patcher/blob/main/docs/Icon-Composer-10.11.zip)
 * Das PNG-Bild, das du umwandeln möchtest
 
 Öffne die Seite [More Downloads auf developer.apple.com](https://developer.apple.com/download/more/) und suche nach `Graphics Tools` in einer Version, die dein Betriebssystem unterstützt (bei 10.6 und älter steckt die App in den `Developer Tools`):

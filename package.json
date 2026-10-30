@@ -1,5 +1,5 @@
 {
-   "name": "OpenCore-Legacy-Patcher-T2",
+   "name": "BridgePatcher",
    "version": "0.0.1",
    "description": "Guide to put macOS on unsupported devices",
    "main": "",

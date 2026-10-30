@@ -1,6 +1,6 @@
 # Deinstallation
 
-Diese Anleitung zeigt dir verschiedene Wege, OCLP und/oder die Patches zu deinstallieren.
+Diese Anleitung zeigt dir verschiedene Wege, BridgePatcher und/oder die Patches zu deinstallieren.
 
 ## Alles löschen und zu nativem macOS zurückkehren
 
@@ -17,17 +17,17 @@ Diese Anleitung zeigt dir verschiedene Wege, OCLP und/oder die Patches zu deinst
 
 ## Manuelle Methoden
 
-Die manuelle Deinstallation von OCLP besteht aus drei Teilen: der Anwendung, OpenCore und den Root-Patches. Wenn du OCLP und die Patches vollständig entfernen möchtest, arbeite alle drei nacheinander ab. Andernfalls erledige nur die Teile, die du brauchst.
+Die manuelle Deinstallation von BridgePatcher besteht aus drei Teilen: der Anwendung, OpenCore und den Root-Patches. Wenn du BridgePatcher und die Patches vollständig entfernen möchtest, arbeite alle drei nacheinander ab. Andernfalls erledige nur die Teile, die du brauchst.
 
 ### Root-Patches entfernen
 
-Öffne die OCLP-Anwendung, gehe in das Menü „Post Install Root Patch“ und wähle „Revert Root Patches“.
+Öffne die BridgePatcher-Anwendung, gehe in das Menü „Post Install Root Patch“ und wähle „Revert Root Patches“.
 
 *  **Unterstützt ab Monterey. Big Sur unterstützt das Zurücksetzen von Snapshots nicht und erfordert eine Neuinstallation. Diese kann ohne Löschen erfolgen, wenn die verwendete macOS-Installer-Version gleich oder neuer ist.**
 
 ### Die Anwendung deinstallieren
 
-Um die OCLP-Anwendung einschließlich LaunchAgent und PrivilegedHelperTool zu deinstallieren, lade das Deinstallationspaket von [der Releases-Seite](https://github.com/dortania/OpenCore-Legacy-Patcher/releases) herunter.
+Um die BridgePatcher-Anwendung einschließlich LaunchAgent und PrivilegedHelperTool zu deinstallieren, lade das Deinstallationspaket von [der Releases-Seite](https://github.com/oclp-t2/BridgePatcher/releases) herunter.
 
 ### Den Bootloader deinstallieren
 

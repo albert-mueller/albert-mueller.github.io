@@ -11,7 +11,7 @@ Am einfachsten debuggst du selbst über die Patcher-Einstellungen. Dort gibt es 
 * „Enable Kext DEBUG“
 
 <div align="left">
-             <img src="../images/ocdebugimage.png" alt="OCLP-Debug" width="600" />
+             <img src="../images/ocdebugimage.png" alt="BridgePatcher-Debug" width="600" />
 </div>
 
 
@@ -43,7 +43,7 @@ Danach liegt das Log auf deinem Schreibtisch.
 
 ## Ein Issue bei uns melden
 
-Jetzt, wo du aussagekräftige Logs hast, kannst du [ein Issue bei uns erstellen](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/issues). Denk daran, folgende Informationen anzugeben:
+Jetzt, wo du aussagekräftige Logs hast, kannst du [ein Issue bei uns erstellen](https://github.com/oclp-t2/BridgePatcher/issues). Denk daran, folgende Informationen anzugeben:
 
 * Modell, für das du patchst (z. B. MacBookPro10,1)
 * Ziel-Betriebssystem (z. B. macOS 11.2.3)

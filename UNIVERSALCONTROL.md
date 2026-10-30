@@ -16,7 +16,7 @@ If you meet all the requirements, in most cases you can go to Display Preference
 
 | Display Preferences | Universal Control settings |
 | :--- | :--- |
-| ![](./images/UC-enable-1.png) | ![OCLP GUI Build Finished](./images/UC-enable-2.png) |
+| ![](./images/UC-enable-1.png) | ![BridgePatcher GUI Build Finished](./images/UC-enable-2.png) |
 
 
 Most Mac models from 2011 and above should work out of the box. However, older Macs like the 2008-2011 MacBook Pros require upgrading the Wi-Fi/Bluetooth card to a newer model. More info in the [requirements section.](#requirements-for-universal-control)
@@ -209,7 +209,7 @@ Before we continue, please keep in mind that SMBIOS Spoofing is an advanced feat
 
 ::: details macOS Sequoia
 
-Firstly run OpenCore Legacy Patcher T2.
+Firstly run BridgePatcher.
 
 Then go to **Settings** and **SMBIOS** tab, set SMBIOS Spoof Level to **Moderate**. Set SMBIOS Spoof Model **one listed next to your native model in the table for spoofed models below.**
 
@@ -241,7 +241,7 @@ Spoofing to any model with native Sequoia support should work, but these are the
 
 ::: details macOS Sonoma
 
-Firstly run OpenCore Legacy Patcher T2.
+Firstly run BridgePatcher.
 
 Then go to **Settings** and **SMBIOS** tab, set SMBIOS Spoof Level to **Moderate**. Set SMBIOS Spoof Model **one listed next to your native model in the table for spoofed models below.**
 
@@ -273,7 +273,7 @@ Spoofing to any model with native Sonoma support should work, but these are the 
 
 ::: details macOS Ventura
 
-Firstly run OpenCore Legacy Patcher T2.
+Firstly run BridgePatcher.
 
 Then go to **Settings** and **SMBIOS** tab, set SMBIOS Spoof Level to **Moderate**. Set SMBIOS Spoof Model **one listed next to your native model in the table for spoofed models below.**
 
@@ -305,7 +305,7 @@ Spoofing to any model with native Ventura support should work, but these are the
 
 ::: details macOS Monterey
 
-Firstly, run OpenCore Legacy Patcher T2. Secondly, go to **Settings** then the **App** tab and tick **Allow native models**.
+Firstly, run BridgePatcher. Secondly, go to **Settings** then the **App** tab and tick **Allow native models**.
 
 [](./images/OCLP-App-Allow-Native-Models.png)
 
@@ -335,7 +335,7 @@ Any model after the list of officially blacklisted Macs should be supported, but
 
 :::
 
-**Note:** Unless you are building OpenCore on a different machine than it's targeted for, **do not** change the model in the main settings view. It is important to understand that OCLP targets this model regardless of what you may have spoofed to, as your Mac is still what the Native SMBIOS shows.
+**Note:** Unless you are building OpenCore on a different machine than it's targeted for, **do not** change the model in the main settings view. It is important to understand that BridgePatcher targets this model regardless of what you may have spoofed to, as your Mac is still what the Native SMBIOS shows.
 
 Lastly, Build and install OpenCore again, and reboot back to the OS. Enable Universal Control as explained in the [Enabling Universal Control section.](#enabling-universal-control)
 

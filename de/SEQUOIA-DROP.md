@@ -18,7 +18,7 @@ OpenCore Legacy Patcher 2.0.0 unterstützt Sequoia auf den unten aufgeführten M
 
 <img width="625" alt="" src="../images/OCLP-200-Initial-Support.png">
 
-Die T2-bezogene AppleKeyStore-Panic, die die kürzlich fallen gelassenen MacBookAir8,x-Modelle (und andere nicht unterstützte T2-Macs) am Booten über OpenCorePkg gehindert hat, wurde in OpenCore Legacy Patcher T2 behoben. Die T2-Unterstützung befindet sich aber noch im Alpha-Stadium: Die Installation wird noch nicht abgeschlossen. Den aktuellen Stand findest du unten unter [T2-Sicherheitschip](#t2-sicherheitschip).
+Die T2-bezogene AppleKeyStore-Panic, die die kürzlich fallen gelassenen MacBookAir8,x-Modelle (und andere nicht unterstützte T2-Macs) am Booten über OpenCorePkg gehindert hat, wurde in BridgePatcher behoben. Die T2-Unterstützung befindet sich aber noch im Alpha-Stadium: Die Installation wird noch nicht abgeschlossen. Den aktuellen Stand findest du unten unter [T2-Sicherheitschip](#t2-sicherheitschip).
 
 ## Nicht funktionierende Funktionen
 
@@ -36,7 +36,7 @@ iPhone Mirroring benötigt den T2 zur Attestierung und Apple Intelligence eine N
 
 ### Dual-Socket-CPUs bei Mac Pro 2008 und Xserve 2008
 
-Das Booten von Sequoia auf einem Mac Pro 2008 (MacPro3,1) oder Xserve 2008 (Xserve2,1) mit mehr als 4 Kernen führt zu einer Kernel Panic. OpenCore Legacy Patcher T2 deaktiviert die zusätzlichen Kerne automatisch.
+Das Booten von Sequoia auf einem Mac Pro 2008 (MacPro3,1) oder Xserve 2008 (Xserve2,1) mit mehr als 4 Kernen führt zu einer Kernel Panic. BridgePatcher deaktiviert die zusätzlichen Kerne automatisch.
 
 Das liegt an der Dual-Socket-Bauweise dieser Geräte und wahrscheinlich an einer Inkompatibilität in Firmware bzw. ACPI-Tabellen.
 
@@ -59,11 +59,11 @@ Das Booten von T2-Macs wie der MacBookAir8,x-Reihe (2018/19) über OpenCorePkg e
 panic(cpu 0 caller 0xffffff801cd12509): "AppleSEPManager panic for "AppleKeyStore": sks request timeout" @AppleSEPManagerIntel.cpp:809
 ```
 
-**Diese Panic tritt nicht mehr auf.** OpenCore Legacy Patcher T2 kommt auf nicht unterstützten T2-Macs inzwischen an den AppleKeyStore-Timeouts vorbei, sodass die Geräte in den Installer booten.
+**Diese Panic tritt nicht mehr auf.** BridgePatcher kommt auf nicht unterstützten T2-Macs inzwischen an den AppleKeyStore-Timeouts vorbei, sodass die Geräte in den Installer booten.
 
 Die T2-Unterstützung befindet sich jedoch noch im **Alpha**-Stadium. Das verbleibende Problem: Die macOS-Installation endet derzeit vor dem Abschluss mit „Failed to install a software update“. Wir können noch nicht abschätzen, wann T2-Installationen vollständig funktionieren werden.
 
-Wenn du beim Testen helfen oder Ergebnisse teilen möchtest, nutze bitte die [GitHub Discussions](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/discussions).
+Wenn du beim Testen helfen oder Ergebnisse teilen möchtest, nutze bitte die [GitHub Discussions](https://github.com/oclp-t2/BridgePatcher/discussions).
 
 ### Unterstützung für USB 1.1 (OHCI/UHCI)
 

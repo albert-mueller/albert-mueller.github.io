@@ -1,6 +1,6 @@
-# Boot Process with OpenCore Legacy Patcher T2
+# Boot Process with BridgePatcher
 
-OpenCore Legacy Patcher T2 itself is actually quite a "dumb" program. It essentially edits a config.plist file and moves files around, actually having little logic regarding the boot process.  The real magic of OCLP is [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg), our back-end, and what makes this patcher so powerful.
+BridgePatcher itself is actually quite a "dumb" program. It essentially edits a config.plist file and moves files around, actually having little logic regarding the boot process.  The real magic of BridgePatcher is [OpenCorePkg](https://github.com/acidanthera/OpenCorePkg), our back-end, and what makes this patcher so powerful.
 
 ## Boot Process with OpenCore
 

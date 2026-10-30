@@ -1,12 +1,12 @@
 # Supported Models
 
-Any Intel-based Mac listed below can install and make use of OpenCore Legacy Patcher T2. To check your hardware model, open System Information and look for the `Model Identifier` key.
+Any Intel-based Mac listed below can install and make use of BridgePatcher. To check your hardware model, open System Information and look for the `Model Identifier` key.
 * This applies even if Apple supports the model natively.
-* OpenCore Legacy Patcher T2 does not support PowerPC- or Apple Silicon-based Macs.
+* BridgePatcher does not support PowerPC- or Apple Silicon-based Macs.
 * If your model is not listed below, it is not supported by this patcher.
 
 ::: warning Note
-It is **extremely recommended** to update your Mac to its latest native version before using OpenCore Legacy Patcher T2, to ensure you're on the highest firmware.
+It is **extremely recommended** to update your Mac to its latest native version before using BridgePatcher, to ensure you're on the highest firmware.
 :::
 
 ::: warning 3GB+ RAM required for installing macOS Sonoma and newer
@@ -26,9 +26,9 @@ macOS 26 Tahoe natively supports only these Intel Macs: MacBook Pro (16-inch, 20
 * iMac Pro (2017)
 
 ::: danger Alpha: research is still ongoing
-Bringing macOS Tahoe to these T2 Macs is the main goal of OpenCore Legacy Patcher T2, and research is still ongoing. At the moment, the Tahoe installer stops with "Failed to install a software update" when sealing the root volume, so these models cannot run Tahoe yet.
+Bringing macOS Tahoe to these T2 Macs is the main goal of BridgePatcher, and research is still ongoing. At the moment, the Tahoe installer stops with "Failed to install a software update" when sealing the root volume, so these models cannot run Tahoe yet.
 
-We hope to have these Macs booting to the desktop soon. Until then, OpenCore Legacy Patcher T2 is considered alpha software.
+We hope to have these Macs booting to the desktop soon. Until then, BridgePatcher is considered alpha software.
 :::
 
 The below tables can be used to reference issues with a particular model, and see which OS would work best on your machine.

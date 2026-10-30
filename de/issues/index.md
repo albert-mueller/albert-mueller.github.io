@@ -1,6 +1,6 @@
 ---
 title: Issues
-description: Offene Issues von OpenCore Legacy Patcher T2, gespiegelt von GitHub.
+description: Offene Issues von BridgePatcher, gespiegelt von GitHub.
 lastUpdated: false
 editLink: false
 prev: false
@@ -9,8 +9,8 @@ next: false
 
 # Issues
 
-Alle offenen Issues von OpenCore Legacy Patcher T2, automatisch gespiegelt aus den
-[GitHub Issues](https://github.com/oclp-t2/OpenCore-Legacy-Patcher-T2/issues):
+Alle offenen Issues von BridgePatcher, automatisch gespiegelt aus den
+[GitHub Issues](https://github.com/oclp-t2/BridgePatcher/issues):
 angeheftete zuerst, danach die neuesten. Um zu kommentieren oder ein neues Problem zu melden, nutze GitHub.
 
 Die Beiträge selbst werden so angezeigt, wie sie auf GitHub verfasst wurden (meist auf Englisch).

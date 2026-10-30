@@ -9,7 +9,7 @@
 
 Once you've installed macOS through OpenCore, you can boot up and go through the regular install process. To boot without the USB drive plugged in is quite simple:
 
-* Download OpenCore Legacy Patcher T2
+* Download BridgePatcher
 * Change Patcher settings as you'd like
 * Build OpenCore again
 * Install OpenCore to internal drive
@@ -35,7 +35,7 @@ Once you've toggled it off, build your OpenCore EFI once again and install to yo
 
 SIP, or System Integrity Protection, needs to be lowered on systems where root patching is required to patch data on disk. This will vary between OS versions and the model in question. 
 
-OCLP by default will determine the proper SIP options for the OS version and Mac model, in most cases the user has no need to touch these settings.
+BridgePatcher by default will determine the proper SIP options for the OS version and Mac model, in most cases the user has no need to touch these settings.
 
 :::warning
 
@@ -43,12 +43,12 @@ If you're unsure whether you should change the SIP settings, leave them as-is. S
 
 :::
 
-| SIP Enabled | SIP Lowered (OCLP default) | SIP Disabled |
+| SIP Enabled | SIP Lowered (BridgePatcher default) | SIP Disabled |
 | :--- | :--- | :--- |
 | ![](./images/OCLP-GUI-Settings-SIP-Enabled.png) | ![](./images/OCLP-GUI-Settings-SIP-Root-Patch.png) | ![](./images/OCLP-GUI-Settings-SIP-Disabled.png) |
 
 
-The guide in the dropdown below explains how the SIP settings work in OCLP, where lowered SIP is needed and where full SIP could be enabled.
+The guide in the dropdown below explains how the SIP settings work in BridgePatcher, where lowered SIP is needed and where full SIP could be enabled.
 
 ::: details Configuring SIP manually (click to expand)
 
@@ -89,15 +89,15 @@ These patches include things such as:
 - USB 1.1 drivers
 - Other patches for compatibility with older drivers
 
-OCLP will automatically root patch your system if the USB install media was created within OCLP and the proper model was selected before installer creation. If you did not use OCLP to create the USB drive or autopatching failed, you will need to download OCLP manually and install root patches, since the application will be missing if autopatching wasn't successful.
+BridgePatcher will automatically root patch your system if the USB install media was created within BridgePatcher and the proper model was selected before installer creation. If you did not use BridgePatcher to create the USB drive or autopatching failed, you will need to download BridgePatcher manually and install root patches, since the application will be missing if autopatching wasn't successful.
 
-**Root patches will be wiped by macOS updates and have to be reinstalled after each update.** OCLP will prompt to install these patches after macOS updates or whenever patches are not detected on the system. The USB installer method can also be used to install future updates, utilizing the autopatching process and avoiding the manual patching which is required when updating through System Settings.
+**Root patches will be wiped by macOS updates and have to be reinstalled after each update.** BridgePatcher will prompt to install these patches after macOS updates or whenever patches are not detected on the system. The USB installer method can also be used to install future updates, utilizing the autopatching process and avoiding the manual patching which is required when updating through System Settings.
 
 In the Post-Install Menu, you can see whether applicable patches have been installed, including the date and version the system was root patched with.
 
 ::: warning Important
 
-In some cases OCLP may require packages to be obtained from the internet, such as KDK or MetallibSupportPkg if they do not already exist on the system. In these cases OCLP may only install the WiFi driver on first patch run to ensure you can connect to the internet, which means no graphics acceleration 
+In some cases BridgePatcher may require packages to be obtained from the internet, such as KDK or MetallibSupportPkg if they do not already exist on the system. In these cases BridgePatcher may only install the WiFi driver on first patch run to ensure you can connect to the internet, which means no graphics acceleration 
 after reboot. 
 
 Root patching has to be ran again manually to install the rest of the required patches after internet connection is established to obtain the required packages. You can also utilize Ethernet, which should ensure that all patches will be installed at once.
@@ -166,7 +166,7 @@ Upgraded Macs:
 
 ### Other information
 
-Below entries represent GPUs no longer natively supported, ie. requiring root volume patching with OpenCore Legacy Patcher T2:
+Below entries represent GPUs no longer natively supported, ie. requiring root volume patching with BridgePatcher:
 
 :::details GPUs requiring patching in different macOS versions
 

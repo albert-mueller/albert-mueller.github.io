@@ -1,12 +1,12 @@
 # Unterstützte Modelle
 
-Jeder unten aufgeführte Intel-Mac kann OpenCore Legacy Patcher T2 installieren und nutzen. Um dein Hardwaremodell herauszufinden, öffne die Systeminformationen und suche nach dem Eintrag `Modell-Identifizierung` (`Model Identifier`).
+Jeder unten aufgeführte Intel-Mac kann BridgePatcher installieren und nutzen. Um dein Hardwaremodell herauszufinden, öffne die Systeminformationen und suche nach dem Eintrag `Modell-Identifizierung` (`Model Identifier`).
 * Das gilt auch dann, wenn Apple das Modell nativ unterstützt.
-* OpenCore Legacy Patcher T2 unterstützt keine Macs mit PowerPC oder Apple Silicon.
+* BridgePatcher unterstützt keine Macs mit PowerPC oder Apple Silicon.
 * Wenn dein Modell unten nicht aufgeführt ist, wird es von diesem Patcher nicht unterstützt.
 
 ::: warning Hinweis
-Es wird **dringend empfohlen**, deinen Mac vor der Nutzung von OpenCore Legacy Patcher T2 auf seine neueste native macOS-Version zu aktualisieren, damit du die neueste Firmware hast.
+Es wird **dringend empfohlen**, deinen Mac vor der Nutzung von BridgePatcher auf seine neueste native macOS-Version zu aktualisieren, damit du die neueste Firmware hast.
 :::
 
 ::: warning Mindestens 3 GB RAM für die Installation von macOS Sonoma und neuer erforderlich
@@ -26,9 +26,9 @@ macOS 26 Tahoe unterstützt nativ nur diese Intel-Macs: MacBook Pro (16 Zoll, 20
 * iMac Pro (2017)
 
 ::: danger Alpha: Die Forschung läuft noch
-macOS Tahoe auf diese T2-Macs zu bringen, ist das Hauptziel von OpenCore Legacy Patcher T2, und die Forschung daran läuft noch. Derzeit bricht der Tahoe-Installer beim Versiegeln des Root-Volumes mit „Failed to install a software update“ ab, daher können diese Modelle Tahoe noch nicht ausführen.
+macOS Tahoe auf diese T2-Macs zu bringen, ist das Hauptziel von BridgePatcher, und die Forschung daran läuft noch. Derzeit bricht der Tahoe-Installer beim Versiegeln des Root-Volumes mit „Failed to install a software update“ ab, daher können diese Modelle Tahoe noch nicht ausführen.
 
-Wir hoffen, diese Macs bald bis zum Schreibtisch booten zu können. Bis dahin gilt OpenCore Legacy Patcher T2 als Alpha-Software.
+Wir hoffen, diese Macs bald bis zum Schreibtisch booten zu können. Bis dahin gilt BridgePatcher als Alpha-Software.
 :::
 
 Anhand der folgenden Tabellen kannst du bekannte Probleme eines bestimmten Modells nachschlagen und sehen, welches Betriebssystem auf deinem Gerät am besten läuft.
