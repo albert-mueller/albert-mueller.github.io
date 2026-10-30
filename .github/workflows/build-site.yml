@@ -29,7 +29,7 @@ jobs:
   build:
     name: Build Site
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'oclp-t2'
+    if: github.repository_owner == 'bridgepatcher'
     permissions:
       contents: read
       # Needed so the job token may read (public) GitHub Discussions at all.
@@ -43,7 +43,72 @@ jobs:
           # for "Last updated" and the sitemap's <lastmod> entries.
           fetch-depth: 0
 
+      # License Guard (same check as .github/workflows/license-guard.yml). If it finds any
+      # violation, the real site is NOT built; an "offline" page is published instead,
+      # until a later build (push, or the hourly schedule) finds no violations again.
+      - name: Set up Python (License Guard)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check "pillow==11.3.0"
+
+      - name: License Guard
+        id: license
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPSTREAM_REPO: dortania/OpenCore-Legacy-Patcher
+          REPORT_PATH: ${{ runner.temp }}/license-report.md
+        run: |
+          set -euo pipefail
+          BRANCH=$(gh api "repos/$UPSTREAM_REPO" --jq .default_branch)
+          git fetch --no-tags "https://github.com/$UPSTREAM_REPO.git" "+refs/heads/$BRANCH:refs/remotes/upstream/$BRANCH"
+          python3 .github/scripts/license_guard.py "upstream/$BRANCH:docs..HEAD" > /dev/null
+          V=$(grep -m1 '^violations=' "$GITHUB_OUTPUT" | cut -d= -f2)
+          if [ "${V:-0}" != "0" ]; then
+            echo "::error::License Guard found $V violation(s) - publishing the offline page instead of the site."
+          fi
+
+      - name: Build offline page (license violations)
+        if: steps.license.outputs.violations != '0'
+        run: |
+          mkdir -p .vitepress/dist
+          cat > .vitepress/dist/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta name="robots" content="noindex">
+          <title>BridgePatcher – temporarily offline</title>
+          <style>
+            :root { color-scheme: light dark; --bg: #ffffff; --fg: #1d1d1f; --muted: #6e6e73; --link: #0066cc; }
+            @media (prefers-color-scheme: dark) { :root { --bg: #1b1b1f; --fg: #f5f5f7; --muted: #a1a1a6; --link: #4da3ff; } }
+            body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--fg);
+                   font: 17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+            main { max-width: 36rem; padding: 2rem; }
+            h1 { font-size: 1.6rem; margin: 0 0 .5rem; }
+            p { margin: .5rem 0; } .de { color: var(--muted); margin-top: 1.5rem; } a { color: var(--link); }
+          </style>
+          </head>
+          <body>
+          <main>
+            <h1>Temporarily offline</h1>
+            <p>This website is offline while we fix a licensing issue. It will be back automatically once the fix is in.</p>
+            <p>The patcher itself is still on <a href="https://github.com/bridgepatcher/BridgePatcher">GitHub</a>.</p>
+            <div class="de" lang="de">
+              <p><strong>Vorübergehend offline.</strong> Die Website ist offline, während wir ein Lizenzproblem beheben.
+              Sobald es behoben ist, ist sie automatisch wieder da.</p>
+            </div>
+          </main>
+          </body>
+          </html>
+          HTML
+          cp .vitepress/dist/index.html .vitepress/dist/404.html
+
       - name: Setup Node
+        if: steps.license.outputs.violations == '0'
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22"
@@ -51,6 +116,7 @@ jobs:
           cache-dependency-path: yarn.lock
 
       - name: Install Dependencies
+        if: steps.license.outputs.violations == '0'
         run: yarn install --frozen-lockfile --ignore-scripts
 
       # Writes .vitepress/{announcements,discussions,issues}.json and the
@@ -60,12 +126,14 @@ jobs:
       # read-only Discussions access to OpenCore-Legacy-Patcher-T2),
       # otherwise the job's own token.
       - name: Fetch announcements from GitHub Discussions
+        if: steps.license.outputs.violations == '0'
         run: node scripts/fetch-announcements.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.ANNOUNCEMENTS_TOKEN || github.token }}
           ANNOUNCEMENTS_CATEGORY: announcements
 
       - name: Build with VitePress
+        if: steps.license.outputs.violations == '0'
         run: yarn run build
 
       - name: Upload artifact
@@ -75,7 +143,7 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    if: github.repository_owner == 'oclp-t2' && github.ref == 'refs/heads/main'
+    if: github.repository_owner == 'bridgepatcher' && github.ref == 'refs/heads/main'
     permissions:
       pages: write
       id-token: write
