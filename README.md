@@ -19,7 +19,7 @@ hero:
     # works in old Safari versions that can't render github.com pages.
     - theme: alt
       text: Download latest version
-      link: https://github.com/oclp-t2/BridgePatcher/releases/latest/download/OpenCore-Patcher-T2.pkg
+      link: https://github.com/bridgepatcher/BridgePatcher/releases/latest/download/BridgPatcher.pkg
 
 features:
   - title: Near-native OTA updates
@@ -32,7 +32,7 @@ features:
     details: "Unlock some newer features such as Sidecar, AirPlay to Mac, Night Shift, and Universal Control, even on natively supported models!"
   - title: A helpful community
     details: "Whether it's getting started or learning the specifics, you can always find answers with our amazing community of tinkerers, developers, and dreamers."
-footer: Copyright © Dortania 2020-2025 · T2 fork © 2026 Albert Müller and OCLP-T2 contributors
+footer: Copyright © Dortania 2020-2025 · BridgePatcher © 2026 Albert Müller and BridgePatcher contributors
 ---
 
 <HomeAnnouncements />
