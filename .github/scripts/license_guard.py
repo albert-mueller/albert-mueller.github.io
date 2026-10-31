@@ -140,6 +140,17 @@ TEXT_EXT = (".md", ".markdown", ".html", ".htm", ".js", ".mjs", ".jsx", ".ts", "
 # of BridgePatcher (and of Dortania's project), so it must not appear in page text any more.
 # Case-sensitive on purpose: lowercase URLs, anchors and storage keys (oclp-t2/...) are fine.
 OLD_NAME_RE = re.compile(r"(?<![\w/#.-])(?:OpenCore[ -]Legacy[ -]Patcher[ -]T2|OCLP[- ]T2)(?![\w])")
+# Dortania's app name used as the name of THIS project in page text, titles or config
+# ("With OpenCore Legacy Patcher 2.0.0 we ...", a window title, a nav label). BSD licence:
+# the upstream name must not be used to endorse or promote the fork. Allowed only where the
+# line clearly refers to Dortania's project: copyright/credit lines, lines that name Dortania,
+# the licence's own title, and "based on"/"fork of" statements. Slugs and URLs without
+# spaces (OpenCore-Legacy-Patcher) are literal names and never matched.
+UPSTREAM_NAME_RE = re.compile(r"(?i)(?<![\w/#.-])Open\s?Core[ \t]+Legacy[ \t]+Patcher(?![\w-])")
+UPSTREAM_NAME_OK_RE = re.compile(
+    r"(?i)dortania|©|\(c\)\s*\d|copyright|contributors|mitwirkende"
+    r"|OpenCore Legacy Patcher Licen[sc]e|Lizenz von OpenCore Legacy Patcher"
+    r"|\b(?:based on|fork of|forked from|derived from|basiert auf|Fork von|abgeleitet von)\b")
 OLD_NAME_EXT = (".md", ".markdown", ".html", ".htm", ".vue", ".mts", ".ts", ".js", ".json", ".webmanifest", ".xsl")
 
 # Dortania's images used directly from their repo or website (e.g. the old README logo).
@@ -236,11 +247,13 @@ def find_embedded(data, known_bits):
 IMG_NAME_RE = re.compile(r"(?i)\bOpen\s?Core\s+Legacy\s+Patcher\b")
 IMG_NAME_WRAP = (re.compile(r"(?i)\bOpen\s?Core(\s+Legacy)?\s*$"), re.compile(r"(?i)^\s*(Legacy\s+)?Patcher\b"))
 IMG_COPYRIGHT_RE = re.compile(r"(?i)(©|\(c\))\s*\d|copyright|contributors")
-OCR_VERSION = 1   # bump to invalidate cached OCR results after changing the OCR settings
+OCR_VERSION = 2   # bump to invalidate cached OCR results after changing the OCR settings
 
 
 def ocr_lines(data):
-    """Text lines in an image (normal + inverted pass, so light-on-dark text is read too)."""
+    """Text lines in an image (normal + inverted pass, so light-on-dark text is read too, plus a
+    binarized pass for dim text such as a dark-mode window title: grey ~80 on ~33 is too faint
+    for tesseract otherwise)."""
     from PIL import Image, ImageOps
     with Image.open(io.BytesIO(data)) as im:
         im.load()
@@ -251,8 +264,19 @@ def ocr_lines(data):
     s = 3 if max(g.size) <= 1200 else 2 if max(g.size) <= 1800 else 1   # small UI text needs upscaling
     if s > 1:
         g = g.resize((g.width * s, g.height * s), Image.LANCZOS)
+    images = [g, ImageOps.invert(g)]
+    hist = g.histogram()
+    half, acc, median = sum(hist) / 2, 0, 0
+    for median, n in enumerate(hist):
+        acc += n
+        if acc >= half:
+            break
+    if median < 100:     # dark UI: anything clearly brighter than the background is text
+        images.append(g.point(lambda v: 0 if v > median + 25 else 255))
+    elif median > 160:   # light UI: anything clearly darker than the background is text
+        images.append(g.point(lambda v: 0 if v < median - 40 else 255))
     passes = []
-    for img in (g, ImageOps.invert(g)):
+    for img in images:
         buf = io.BytesIO()
         img.save(buf, "PNG")
         r = subprocess.run(["tesseract", "stdin", "stdout", "--psm", "11", "tsv"], input=buf.getvalue(),
@@ -407,12 +431,23 @@ def scan_artwork(head, add):
             if urls:
                 add("violation", path, "Dortania artwork used from Dortania's servers",
                     [f"- {u}" for u in urls[:10]])
-            if low.endswith(OLD_NAME_EXT):
-                lines = [l for l in text.splitlines() if OLD_NAME_RE.search(l)]
-                if lines:
-                    add("warning", path, "Former project name (OpenCore Legacy Patcher T2 / OCLP-T2)",
-                        [f"  {show(l)}" for l in lines[:5]] + (["  …"] if len(lines) > 5 else []) +
+            # The licence pages themselves name Dortania's project on purpose - they must stay as they are.
+            if low.endswith(OLD_NAME_EXT) and not LICENSE_FILE_RE.search(path):
+                old, upstream = [], []
+                for n, l in enumerate(text.splitlines(), 1):
+                    if OLD_NAME_RE.search(l):
+                        old.append((n, l))
+                    elif UPSTREAM_NAME_RE.search(l) and not UPSTREAM_NAME_OK_RE.search(l):
+                        upstream.append((n, l))
+                if old:
+                    add("violation", path, "Former project name (OpenCore Legacy Patcher T2 / OCLP-T2)",
+                        [f"  line {n}: {show(l)}" for n, l in old[:5]] + (["  …"] if len(old) > 5 else []) +
                         ["  Use BridgePatcher instead; the old name is treated as a typosquat."])
+                if upstream:
+                    add("violation", path, "Dortania's app name used for this project (OpenCore Legacy Patcher)",
+                        [f"  line {n}: {show(l)}" for n, l in upstream[:5]] + (["  …"] if len(upstream) > 5 else []) +
+                        ["  Say BridgePatcher, or make clear it is Dortania's project",
+                         "  (e.g. \"Dortania's OpenCore Legacy Patcher 2.0.0\"). Copyright/credit lines are fine."])
     _save_cache(cache)
 
 
@@ -574,7 +609,10 @@ def main():
             "Year bumps like `2020-2024` → `2020-2026` are ignored.", "",
             "Artwork such as Dortania's OpenCore Legacy Patcher icon, Apple's System Settings icon or Apple's "
             "macOS wallpapers is not covered by the code license and must not be shipped or hotlinked; use your "
-            "own artwork. Screenshots and banners must not show Dortania's app name either.",
+            "own artwork. Screenshots and banners must not show Dortania's app name either.", "",
+            "The licence also forbids using the upstream name to endorse or promote the fork, so pages, titles and "
+            "screenshots must say BridgePatcher, not \"OpenCore Legacy Patcher\" (or the former name OCLP-T2). "
+            "Naming Dortania's project when crediting it or referring to its releases is fine.",
             "", "</details>"]
 
     report = "\n".join(out) + "\n"
