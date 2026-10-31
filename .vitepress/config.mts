@@ -79,8 +79,8 @@ const SITE_URL = 'https://oclp-t2.github.io/'
 const SITE_TITLE = 'BridgePatcher'
 const SITE_DESCRIPTION = 'Guide to put macOS on unsupported devices'
 const SITE_DESCRIPTION_DE = 'Anleitung, um macOS auf nicht unterstützte Geräte zu bringen'
-const COPYRIGHT = 'Copyright © Dortania 2020-2025 · T2 fork © 2026 Albert Müller and OCLP-T2 contributors'
-const COPYRIGHT_DE = 'Copyright © Dortania 2020–2025 · T2-Fork © 2026 Albert Müller und OCLP-T2-Mitwirkende'
+const COPYRIGHT = 'Copyright © Dortania 2020-2025 · BridgePatcher © 2026 Albert Müller and BridgePatcher contributors'
+const COPYRIGHT_DE = 'Copyright © Dortania 2020–2025 · BridgePatcher © 2026 Albert Müller und BridgePatcher-Mitwirkende'
 
 // localStorage key holding the visitor's language choice ('en' or 'de').
 // Shared with .vitepress/theme/index.ts.

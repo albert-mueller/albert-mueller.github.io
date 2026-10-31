@@ -4,7 +4,7 @@
 
 Another year, another release.
 
-This time Apple dropped surprisingly few amount of Macs. With the release of OpenCore Legacy Patcher 2.0.0, early support for macOS Sequoia has been implemented.
+This time Apple dropped surprisingly few amount of Macs. With the release of Dortania's OpenCore Legacy Patcher 2.0.0, early support for macOS Sequoia has been implemented.
 
 
 ## Newly dropped hardware
@@ -14,7 +14,7 @@ This time Apple dropped surprisingly few amount of Macs. With the release of Ope
 
 ## Current status
 
-OpenCore Legacy Patcher 2.0.0 supports Sequoia for the models below, however some challenges remain. You can find information about them further down this page.
+Dortania's OpenCore Legacy Patcher 2.0.0 supports Sequoia for the models below, however some challenges remain. You can find information about them further down this page.
 
 <img width="625" alt="" src="./images/OCLP-200-Initial-Support.png">
 

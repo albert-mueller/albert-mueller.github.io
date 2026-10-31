@@ -4,7 +4,7 @@
 
 *Da sind wir wieder, es ist uns immer ein Vergnügen~*
 
-Apple hat erneut eine Reihe von Modellen fallen gelassen und setzt damit den Ausstieg aus Intel-Macs fort. Mit der Veröffentlichung von OpenCore Legacy Patcher 1.0.0 wurde erste Unterstützung für macOS Sonoma implementiert.
+Apple hat erneut eine Reihe von Modellen fallen gelassen und setzt damit den Ausstieg aus Intel-Macs fort. Mit der Veröffentlichung von Dortanias OpenCore Legacy Patcher 1.0.0 wurde erste Unterstützung für macOS Sonoma implementiert.
 
 ## Neu fallen gelassene Hardware
 
@@ -18,7 +18,7 @@ Apple hat erneut eine Reihe von Modellen fallen gelassen und setzt damit den Aus
 
 ## Aktueller Stand
 
-OpenCore Legacy Patcher 1.0.0 unterstützt Sonoma auf allen unten aufgeführten Modellen, einige Herausforderungen bleiben jedoch bestehen. Informationen dazu findest du weiter unten auf dieser Seite.
+Dortanias OpenCore Legacy Patcher 1.0.0 unterstützt Sonoma auf allen unten aufgeführten Modellen, einige Herausforderungen bleiben jedoch bestehen. Informationen dazu findest du weiter unten auf dieser Seite.
 
 <img width="625" alt="" src="../images/OCLP-100-Initial-Support.png">
 
