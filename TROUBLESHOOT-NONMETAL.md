@@ -3,7 +3,6 @@
 The below page is for users experiencing issues with their overall usage of macOS Big Sur and newer and the Legacy Graphics Acceleration patches. For those unfamiliar with what is considered a non-Metal GPU, see the chart in [FAQ](FAQ.md#what-is-metal-and-non-metal)
 
 * [Broken Firefox and Thunderbird (HD 3000)](#broken-firefox-and-thunderbird-hd-3000)
-* [Broken Background Blurs](#broken-background-blurs)
 * [Downloading older non-Metal Apps](#downloading-older-non-metal-apps)
 * [Unable to run Zoom](#unable-to-run-zoom)
 * [Unable to grant special permissions to apps (ie. Camera Access to Zoom)](#unable-to-grant-special-permissions-to-apps-ie-camera-access-to-zoom)
@@ -24,17 +23,6 @@ Firefox and Thunderbird are now broken on HD 3000 [due to removal of HD 3000 sup
 
 :::
 
-## Broken Background Blurs
-
-By default with the non-Metal acceleration patches, many background blur menus may act distorted when moving a cursor over it. With 0.4.1 and newer, users can enable a new Beta Blur feature to try and resolve the issue:
-
-![]()
-
-<div align="left">
-             <img src="./images/OCLP-GUI-Settings-Beta-Blur.png" alt="Beta Blur settings" width="600" />
-</div>
-
-Do note that enabling beta blurs can be more demanding on slower hardware
 ## Downloading older non-Metal Apps
 
 Many Apple apps now have direct reliance on Metal for proper functioning, however legacy builds of these apps still do work in Big Sur. See below for archive of many apps such as Pages, iMovie, GarageBand.

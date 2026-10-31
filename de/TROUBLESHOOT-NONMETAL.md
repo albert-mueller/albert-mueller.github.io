@@ -3,7 +3,6 @@
 Diese Seite richtet sich an Nutzer, die allgemein Probleme mit macOS Big Sur und neuer sowie den Legacy-Grafikbeschleunigungs-Patches haben. Falls du nicht weißt, was als Nicht-Metal-GPU gilt, sieh dir die Übersicht in der [FAQ](FAQ.md#was-bedeutet-metal-und-nicht-metal) an.
 
 * [Firefox und Thunderbird funktionieren nicht (HD 3000)](#firefox-und-thunderbird-funktionieren-nicht-hd-3000)
-* [Fehlerhafte Hintergrund-Unschärfe](#fehlerhafte-hintergrund-unscharfe)
 * [Ältere Nicht-Metal-Apps herunterladen](#altere-nicht-metal-apps-herunterladen)
 * [Zoom startet nicht](#zoom-startet-nicht)
 * [Apps können keine Sonderberechtigungen erteilt werden (z. B. Kamerazugriff für Zoom)](#apps-konnen-keine-sonderberechtigungen-erteilt-werden-z-b-kamerazugriff-fur-zoom)
@@ -24,17 +23,6 @@ Firefox und Thunderbird funktionieren auf HD 3000 nicht mehr, [da Mozilla die Un
 
 :::
 
-## Fehlerhafte Hintergrund-Unschärfe
-
-Mit den Nicht-Metal-Beschleunigungs-Patches werden viele Menüs mit Hintergrund-Unschärfe standardmäßig verzerrt dargestellt, wenn du den Mauszeiger darüber bewegst. Ab Version 0.4.1 kannst du die neue Funktion „Beta Blur“ aktivieren, um das Problem zu beheben:
-
-![]()
-
-<div align="left">
-             <img src="../images/OCLP-GUI-Settings-Beta-Blur.png" alt="Einstellungen für Beta Blur" width="600" />
-</div>
-
-Beachte, dass „Beta Blur“ langsamere Hardware stärker belasten kann.
 ## Ältere Nicht-Metal-Apps herunterladen
 
 Viele Apple-Apps sind inzwischen direkt auf Metal angewiesen, ältere Builds dieser Apps funktionieren unter Big Sur aber weiterhin. Unten findest du ein Archiv vieler Apps wie Pages, iMovie und GarageBand.
