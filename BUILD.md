@@ -21,9 +21,7 @@ If you're building OpenCore for a different model than you're currently running,
 :::
 
 
-| Start Building | Finished Building |
-| :--- | :--- |
-| <img src="./images/OCLP-GUI-Build-Start.png" alt="Build start" width="600" /> | <img src="./images/OCLP-GUI-Build-Finished.png" alt="Build finished" width="600" /> |
+<img src="./images/OCLP-GUI-Build-Start.png" alt="Build start" width="600" />
 
 
 Once it finishes building, you'll want to select the disk to install to:

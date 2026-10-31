@@ -43,35 +43,56 @@ jobs:
           # for "Last updated" and the sitemap's <lastmod> entries.
           fetch-depth: 0
 
-      # License Guard (same check as .github/workflows/license-guard.yml). If it finds any
-      # violation, the real site is NOT built; an "offline" page is published instead,
+      # License Guard (same check as .github/workflows/license-guard.yml). Only if it actually
+      # FINDS a violation, the real site is NOT built and an "offline" page is published instead,
       # until a later build (push, or the hourly schedule) finds no violations again.
+      # If the guard itself fails to run (network, upstream fetch, crash), the normal site is
+      # built anyway - the separate License Guard workflow still reports the problem.
       - name: Set up Python (License Guard)
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install Pillow
-        run: python -m pip install --disable-pip-version-check "pillow==11.3.0"
+      # Same tools as license-guard.yml, so the site goes offline for exactly the same
+      # findings (numpy: artwork inside images, tesseract: Dortania's app name in images).
+      - name: Install Pillow, numpy and tesseract
+        run: |
+          python -m pip install --disable-pip-version-check "pillow==11.3.0" "numpy==2.2.6"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends tesseract-ocr tesseract-ocr-eng
+
+      # Shares the per-image OCR/artwork cache with license-guard.yml, so the hourly
+      # rebuilds only scan new or changed images.
+      - name: Restore artwork/OCR cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/license-guard-art-cache.json
+          key: license-guard-art-${{ hashFiles('.github/scripts/license_guard.py') }}-site-${{ github.run_id }}
+          restore-keys: |
+            license-guard-art-${{ hashFiles('.github/scripts/license_guard.py') }}-
 
       - name: License Guard
         id: license
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           UPSTREAM_REPO: dortania/OpenCore-Legacy-Patcher
           REPORT_PATH: ${{ runner.temp }}/license-report.md
+          ART_CACHE: ${{ runner.temp }}/license-guard-art-cache.json
         run: |
           set -euo pipefail
           BRANCH=$(gh api "repos/$UPSTREAM_REPO" --jq .default_branch)
           git fetch --no-tags "https://github.com/$UPSTREAM_REPO.git" "+refs/heads/$BRANCH:refs/remotes/upstream/$BRANCH"
           python3 .github/scripts/license_guard.py "upstream/$BRANCH:docs..HEAD" > /dev/null
           V=$(grep -m1 '^violations=' "$GITHUB_OUTPUT" | cut -d= -f2)
-          if [ "${V:-0}" != "0" ]; then
+          if [ -n "${V:-}" ] && [ "$V" != "0" ]; then
             echo "::error::License Guard found $V violation(s) - publishing the offline page instead of the site."
           fi
+          # Single decision used by the steps below: offline only for real findings.
+          if [ -n "${V:-}" ] && [ "$V" != "0" ]; then echo "offline=true" >> "$GITHUB_OUTPUT"; else echo "offline=false" >> "$GITHUB_OUTPUT"; fi
 
       - name: Build offline page (license violations)
-        if: steps.license.outputs.violations != '0'
+        if: steps.license.outputs.offline == 'true'
         run: |
           mkdir -p .vitepress/dist
           cat > .vitepress/dist/index.html <<'HTML'
@@ -108,7 +129,7 @@ jobs:
           cp .vitepress/dist/index.html .vitepress/dist/404.html
 
       - name: Setup Node
-        if: steps.license.outputs.violations == '0'
+        if: steps.license.outputs.offline != 'true'
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22"
@@ -116,7 +137,7 @@ jobs:
           cache-dependency-path: yarn.lock
 
       - name: Install Dependencies
-        if: steps.license.outputs.violations == '0'
+        if: steps.license.outputs.offline != 'true'
         run: yarn install --frozen-lockfile --ignore-scripts
 
       # Writes .vitepress/{announcements,discussions,issues}.json and the
@@ -126,14 +147,14 @@ jobs:
       # read-only Discussions access to OpenCore-Legacy-Patcher-T2),
       # otherwise the job's own token.
       - name: Fetch announcements from GitHub Discussions
-        if: steps.license.outputs.violations == '0'
+        if: steps.license.outputs.offline != 'true'
         run: node scripts/fetch-announcements.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.ANNOUNCEMENTS_TOKEN || github.token }}
           ANNOUNCEMENTS_CATEGORY: announcements
 
       - name: Build with VitePress
-        if: steps.license.outputs.violations == '0'
+        if: steps.license.outputs.offline != 'true'
         run: yarn run build
 
       - name: Upload artifact

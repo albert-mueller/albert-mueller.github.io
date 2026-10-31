@@ -21,9 +21,7 @@ Wenn du OpenCore für ein anderes Modell erstellst als das, auf dem du gerade ar
 :::
 
 
-| Erstellung starten | Erstellung abgeschlossen |
-| :--- | :--- |
-| <img src="../images/OCLP-GUI-Build-Start.png" alt="Erstellung starten" width="600" /> | <img src="../images/OCLP-GUI-Build-Finished.png" alt="Erstellung abgeschlossen" width="600" /> |
+<img src="../images/OCLP-GUI-Build-Start.png" alt="Erstellung starten" width="600" />
 
 
 Sobald die Erstellung abgeschlossen ist, wählst du das Laufwerk aus, auf dem installiert werden soll:
