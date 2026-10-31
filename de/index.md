@@ -30,7 +30,7 @@ features:
     details: "Schalte neuere Funktionen wie Sidecar, AirPlay zum Mac, Night Shift und die universelle Steuerung frei – sogar auf nativ unterstützten Modellen!"
   - title: Eine hilfsbereite Community
     details: "Ob beim Einstieg oder bei den Details: Antworten findest du jederzeit in unserer großartigen Community aus Bastlern, Entwicklern und Träumern."
-footer: Copyright © Dortania 2020–2025 · T2-Fork © 2026 Albert Müller und OCLP-T2-Mitwirkende
+footer: Copyright © Dortania 2020–2025 · BridgePatcher © 2026 Albert Müller und BridgePatcher-Mitwirkende
 ---
 
 <HomeAnnouncements />

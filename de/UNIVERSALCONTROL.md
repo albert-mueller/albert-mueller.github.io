@@ -31,7 +31,7 @@ Technische Anforderungen:
 * Bluetooth 4.0
 * macOS Monterey 12.4 oder neuer
 * iPadOS 15.4 oder neuer (falls zutreffend)
-* OpenCore Legacy Patcher 0.4.3 oder neuer
+* Dortanias OpenCore Legacy Patcher 0.4.3 oder neuer bzw. jede BridgePatcher-Version
 
 In der [Modelltabelle](#modelltabelle) unten siehst du, ob du Hardware aufrüsten musst und welche Hardware bei den betroffenen Macs genau ausgetauscht werden muss. Hilfe zum Austausch der WLAN-Karte in älteren Modellen von 2008 bis 2011 findest du bei Bedarf im Kanal `#hardware` auf dem [Discord-Server](https://discord.gg/rqdPgH8xSN).
 

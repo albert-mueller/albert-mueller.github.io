@@ -271,7 +271,7 @@ Hinweis: Dieser Treiber bietet unter macOS nur eingeschränkte Unterstützung; v
 
 ## Fehlerhafte Farben auf ATI-TeraScale-2-GPUs (HD5000/HD6000)
 
-Behoben mit OpenCore Legacy Patcher v0.4.2.
+Behoben mit Dortanias OpenCore Legacy Patcher v0.4.2.
 
 ::: details Alte Lösung (vor 0.4.2)
 

@@ -2,7 +2,7 @@
 
 ![](../images/ventura.png)
 
-Mit der Veröffentlichung von OpenCore Legacy Patcher v0.5.0 und neuer wurde erste Unterstützung für macOS Ventura auf den meisten Metal-fähigen Macs implementiert. Diese Seite informiert über aktuelle Probleme und wird aktualisiert, sobald neue Patch-Sets entwickelt und in den Patcher aufgenommen werden.
+Mit der Veröffentlichung von Dortanias OpenCore Legacy Patcher v0.5.0 und neuer wurde erste Unterstützung für macOS Ventura auf den meisten Metal-fähigen Macs implementiert. Diese Seite informiert über aktuelle Probleme und wird aktualisiert, sobald neue Patch-Sets entwickelt und in den Patcher aufgenommen werden.
 
 ## Neu fallen gelassene Hardware
 

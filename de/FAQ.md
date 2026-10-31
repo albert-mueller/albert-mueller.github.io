@@ -197,7 +197,7 @@ Weitere Informationen findest du auf den folgenden Seiten:
 
 ## Was sind FeatureUnlock und mediaanalysisd?
 
-**Wichtig:** Diese Funktionen können an vielen Stellen Instabilität verursachen. Daher wurde entschieden, sie ab OpenCore Legacy Patcher 2.1.0 standardmäßig zu deaktivieren (mediaanalysisd nur auf 3802-basierten* Systemen). Wenn du diese Funktionen trotz möglicher zusätzlicher Instabilität nutzen möchtest, kannst du sie in den BridgePatcher-Einstellungen aktivieren und OpenCore neu erstellen.
+**Wichtig:** Diese Funktionen können an vielen Stellen Instabilität verursachen. Daher wurde entschieden, sie ab Dortanias OpenCore Legacy Patcher 2.1.0 standardmäßig zu deaktivieren (mediaanalysisd nur auf 3802-basierten* Systemen). Wenn du diese Funktionen trotz möglicher zusätzlicher Instabilität nutzen möchtest, kannst du sie in den BridgePatcher-Einstellungen aktivieren und OpenCore neu erstellen.
 
 FeatureUnlock kann außerdem bei manchen macOS-Versionen und Systemen wegen einer Race Condition beim Systemstart Probleme haben. Falls das bei dir auftritt, starte mehrmals neu oder probiere eine andere (ältere) macOS-Version, um zu sehen, ob das hilft.
 

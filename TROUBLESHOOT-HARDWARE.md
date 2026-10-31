@@ -271,7 +271,7 @@ Note: This driver only provides partial support in macOS, full graphics accelera
 
 ## Erratic Colours on ATI TeraScale 2 GPUs (HD5000/HD6000)
 
-Resolved with OpenCore Legacy Patcher v0.4.2
+Resolved with Dortania's OpenCore Legacy Patcher v0.4.2
 
 ::: details Legacy Fix (prior to 0.4.2)
 
