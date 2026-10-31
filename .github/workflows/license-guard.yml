@@ -74,6 +74,24 @@ jobs:
       - name: Install Pillow and numpy
         run: python -m pip install --disable-pip-version-check "pillow==11.3.0" "numpy==2.2.6"
 
+      # tesseract reads the text in screenshots/banners, so Dortania's app name
+      # ("OpenCore Legacy Patcher") shown inside an image is found too.
+      - name: Install tesseract (OCR for the image text check)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends tesseract-ocr tesseract-ocr-eng
+          tesseract --version | head -1
+
+      # OCR and the embedded-artwork search are cached per image blob, so only new or
+      # changed images are scanned again on the next run.
+      - name: Restore artwork/OCR cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/license-guard-art-cache.json
+          key: license-guard-art-${{ hashFiles('.github/scripts/license_guard.py') }}-${{ github.run_id }}
+          restore-keys: |
+            license-guard-art-${{ hashFiles('.github/scripts/license_guard.py') }}-
+
       - name: Scan fork against upstream
         id: scan
         env:

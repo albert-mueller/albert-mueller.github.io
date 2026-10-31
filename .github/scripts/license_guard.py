@@ -227,6 +227,66 @@ def find_embedded(data, known_bits):
     return {k: (d, round(sz / scale), round(x / scale), round(y / scale)) for k, (d, sz, x, y) in best.items()}
 
 
+# The upstream app's NAME shown inside an image (screenshots of Dortania's app, banners):
+# "OpenCore Legacy Patcher" (also "... T2" / "...-T2"). Found with OCR (tesseract), so it only runs
+# where tesseract is installed. Lines with a copyright notice are skipped on purpose - the upstream
+# notice ("Copyright © 2020-2026 Dortania and OpenCore Legacy Patcher contributors") must stay.
+# Technical identifiers written without spaces (OCLP-Version, OpenCore-Legacy-Patcher repo/folder,
+# Dortania's URLs) are not matched: they are literal names, not the product name.
+IMG_NAME_RE = re.compile(r"(?i)\bOpen\s?Core\s+Legacy\s+Patcher\b")
+IMG_NAME_WRAP = (re.compile(r"(?i)\bOpen\s?Core(\s+Legacy)?\s*$"), re.compile(r"(?i)^\s*(Legacy\s+)?Patcher\b"))
+IMG_COPYRIGHT_RE = re.compile(r"(?i)(©|\(c\))\s*\d|copyright|contributors")
+OCR_VERSION = 1   # bump to invalidate cached OCR results after changing the OCR settings
+
+
+def ocr_lines(data):
+    """Text lines in an image (normal + inverted pass, so light-on-dark text is read too)."""
+    from PIL import Image, ImageOps
+    with Image.open(io.BytesIO(data)) as im:
+        im.load()
+        im = im.convert("RGBA")
+    base = Image.new("RGBA", im.size, (255, 255, 255, 255))
+    base.alpha_composite(im)   # translucent dialogs: read them as shown on a light page
+    g = base.convert("L")
+    s = 3 if max(g.size) <= 1200 else 2 if max(g.size) <= 1800 else 1   # small UI text needs upscaling
+    if s > 1:
+        g = g.resize((g.width * s, g.height * s), Image.LANCZOS)
+    passes = []
+    for img in (g, ImageOps.invert(g)):
+        buf = io.BytesIO()
+        img.save(buf, "PNG")
+        r = subprocess.run(["tesseract", "stdin", "stdout", "--psm", "11", "tsv"], input=buf.getvalue(),
+                           capture_output=True, env={**os.environ, "OMP_THREAD_LIMIT": "1"})
+        lines = {}
+        for row in r.stdout.decode("utf-8", "replace").splitlines()[1:]:
+            c = row.split("\t")
+            if len(c) == 12 and c[0] == "5" and c[11].strip() and float(c[10]) > 0:
+                lines.setdefault((int(c[2]), int(c[3]), int(c[4])), []).append(c[11].strip())
+        passes.append([" ".join(v) for _, v in sorted(lines.items())])
+    return passes
+
+
+def find_old_name_in_image(passes):
+    hits = []
+    for lines in passes:
+        for i, line in enumerate(lines):
+            if IMG_COPYRIGHT_RE.search(line):
+                continue
+            nxt = lines[i + 1] if i + 1 < len(lines) else ""
+            if IMG_NAME_RE.search(line) or (IMG_NAME_WRAP[0].search(line) and IMG_NAME_WRAP[1].search(nxt)
+                                            and not IMG_COPYRIGHT_RE.search(nxt)):
+                if line not in hits:
+                    hits.append(line)
+    return hits
+
+
+def tesseract_available():
+    try:
+        return subprocess.run(["tesseract", "--version"], capture_output=True).returncode == 0
+    except FileNotFoundError:
+        return False
+
+
 def _load_cache():
     import json
     try:
@@ -261,7 +321,32 @@ def scan_artwork(head, add):
         embedded_bits = {}
         add("warning", "-", "Embedded artwork check skipped: numpy is not installed")
     cache = _load_cache()
-    for row in git("ls-tree", "-r", "-l", head).splitlines():
+    rows = git("ls-tree", "-r", "-l", head).splitlines()
+    ocr_on = tesseract_available()
+    if not ocr_on:
+        add("warning", "-", "Image text check skipped: tesseract is not installed")
+    else:
+        # OCR is slow, so run all uncached images in parallel up front (tesseract is a subprocess).
+        from concurrent.futures import ThreadPoolExecutor
+        todo = {}
+        for row in rows:
+            meta, path = row.split("\t", 1)
+            _, kind, sha, size = meta.split()
+            if (kind == "blob" and not is_self(path) and size != "-" and int(size) <= ART_MAX_BYTES
+                    and path.lower().endswith(IMAGE_EXT) and f"ocr{OCR_VERSION}:{sha}" not in cache):
+                todo[sha] = path
+
+        def run(sha):
+            data = subprocess.run(["git", "cat-file", "blob", sha], capture_output=True, check=True).stdout
+            try:
+                return sha, ocr_lines(data)
+            except Exception:
+                return sha, [[], []]
+
+        with ThreadPoolExecutor(max_workers=os.cpu_count() or 2) as ex:
+            for sha, passes in ex.map(run, todo):
+                cache[f"ocr{OCR_VERSION}:{sha}"] = passes
+    for row in rows:
         meta, path = row.split("\t", 1)
         _, kind, sha, size = meta.split()
         if kind != "blob" or is_self(path) or size == "-" or int(size) > ART_MAX_BYTES:
@@ -287,6 +372,13 @@ def scan_artwork(head, add):
                     add("warning", path, f"Probably contains {art['name']}",
                         [f"  Similar to {art['holder']}'s artwork (distance {d}/256).",
                          "  Check by hand; if it embeds the artwork, replace it."])
+            if ocr_on:
+                names = find_old_name_in_image(cache.get(f"ocr{OCR_VERSION}:{sha}", [[], []]))
+                if names:
+                    add("violation", path, "Upstream app name in image (OpenCore Legacy Patcher)",
+                        [f"  Text read in the image: {show(n)}" for n in names[:3]] +
+                        ["  Screenshots/banners must show BridgePatcher, not Dortania's app name.",
+                         "  Retake the screenshot or edit the text. Copyright lines are not affected."])
             if not embedded_bits:
                 continue
             if sha in cache:
@@ -480,8 +572,9 @@ def main():
             "the license text in redistributed source (e.g. BSD 3-Clause, clause 1). Adding your own "
             "copyright line *alongside* the existing ones is fine; replacing or removing them is not. "
             "Year bumps like `2020-2024` → `2020-2026` are ignored.", "",
-            "Artwork such as Dortania's OpenCore Legacy Patcher icon or Apple's System Settings icon is "
-            "not covered by the code license and must not be shipped or hotlinked; use your own artwork.",
+            "Artwork such as Dortania's OpenCore Legacy Patcher icon, Apple's System Settings icon or Apple's "
+            "macOS wallpapers is not covered by the code license and must not be shipped or hotlinked; use your "
+            "own artwork. Screenshots and banners must not show Dortania's app name either.",
             "", "</details>"]
 
     report = "\n".join(out) + "\n"
