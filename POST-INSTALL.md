@@ -3,6 +3,7 @@
 * [Booting without USB drive](#booting-without-usb-drive)
 * [Booting seamlessly without Boot Picker](#booting-seamlessly-without-boot-picker)
 * [SIP settings](#sip-settings)
+  * [What is SIP?](#what-is-sip)
 * [Applying Post Install Volume Patches](#applying-post-install-volume-patches)
 
 ## Booting without USB drive
@@ -33,6 +34,19 @@ Once you've toggled it off, build your OpenCore EFI once again and install to yo
 
 ## SIP settings
 
+### What is SIP?
+
+System Integrity Protection (SIP) is a macOS security feature, introduced in OS X El Capitan. It protects the parts of macOS that no app should change, even one running with administrator (root) rights:
+
+* System files and folders such as `/System`, `/usr` (except `/usr/local`), `/bin`, `/sbin` and the apps that come with macOS can't be modified.
+* Kernel extensions that aren't properly signed can't be loaded.
+* Apps can't attach to Apple's system processes or inject code into them.
+* Important NVRAM settings, such as the startup disk, are protected.
+
+On a regular Mac, SIP is changed in macOS Recovery with `csrutil`. With OpenCore, SIP is set by the `csr-active-config` value in the OpenCore configuration, which is why changing SIP in BridgePatcher means rebuilding OpenCore. The value is a bitmask: each bit turns off one protection. To see the current state, run `csrutil status` in Terminal.
+
+### SIP and root patching
+
 SIP, or System Integrity Protection, needs to be lowered on systems where root patching is required to patch data on disk. This will vary between OS versions and the model in question. 
 
 BridgePatcher by default will determine the proper SIP options for the OS version and Mac model, in most cases the user has no need to touch these settings.
@@ -40,6 +54,16 @@ BridgePatcher by default will determine the proper SIP options for the OS versio
 :::warning
 
 If you're unsure whether you should change the SIP settings, leave them as-is. Systems where you have already ran the Post Install Root Patching cannot enable SIP without potentially breaking the current install.
+
+:::
+
+::: danger Never disable SIP just because a stranger told you to
+
+If someone on the internet (in a Discord server, a forum, a YouTube comment or a direct message) tells you to set SIP to `0xFFF`, or to "fully disable SIP", so that an app will run, and can't explain why that app needs it, **treat the app as likely malware.**
+
+`0xFFF` turns off every SIP protection at once. Ordinary apps don't need SIP lowered at all. Legitimate tools that do need it, like BridgePatcher, tell you exactly which protections they lower and why. Malware asks for it because with SIP off it can change system files, load its own kernel extensions and hide itself from you.
+
+If you have already done it: don't run that app, set SIP back to BridgePatcher's default in the Security tab, rebuild OpenCore, and ask in BridgePatcher's [Discussions](/discussions/) if you're unsure whether your Mac is affected.
 
 :::
 
